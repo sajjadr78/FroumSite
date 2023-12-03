@@ -65,7 +65,7 @@ namespace FroumSite
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Users}/{action=Index}/{id?}");
+                    pattern: "{controller=Subjects}/{action=Index}/{id?}");
             });
         }
     }
