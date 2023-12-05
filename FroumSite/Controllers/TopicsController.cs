@@ -20,9 +20,26 @@ namespace FroumSite.Controllers
         }
 
         // GET: Topics
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int Id)
         {
-            return View(await _context.Topics.ToListAsync());
+            var topicsIncludedPosts = await _context.Topics.Where(t => t.RoomId == Id)
+                .Include(t=>t.Posts)
+                .ToListAsync();
+
+            string roomName = _context.Rooms.Find(Id).Title;
+
+            var postsIncludedUsers = await _context.Posts
+                .Include(p => p.Uploader)
+                .ToListAsync();
+
+            TopicViewModel vm = new TopicViewModel
+            {
+                TopicsIncludedPosts = topicsIncludedPosts,
+                RoomName = roomName,
+                PostsIncludedUsers = postsIncludedUsers
+            };
+
+            return View(vm);
         }
 
         // GET: Topics/Details/5

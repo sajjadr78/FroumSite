@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FroumSite.Models
 {
@@ -19,8 +20,20 @@ namespace FroumSite.Models
         [Required]
         public int LikeCount { get; set; }
 
-        //Navigation Properties
+        #region Foreign Keys
+
+        public int UserId { get; set; }
+        public int TopicId { get; set; }
+
+        #endregion
+
+        #region NavigationProperties
+
+        [ForeignKey("UserId")]
         public User Uploader { get; set; }
+        [ForeignKey("TopicId")]
         public Topic Topic { get; set; }
+
+        #endregion
     }
 }
