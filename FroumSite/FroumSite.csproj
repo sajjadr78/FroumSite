@@ -5,12 +5,45 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Abstractions\**" />
+    <Compile Remove="Data\Repositories\**" />
+    <Content Remove="Data\Abstractions\**" />
+    <Content Remove="Data\Repositories\**" />
+    <EmbeddedResource Remove="Data\Abstractions\**" />
+    <EmbeddedResource Remove="Data\Repositories\**" />
+    <None Remove="Data\Abstractions\**" />
+    <None Remove="Data\Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20231203164547_InitRecords.cs" />
     <Compile Remove="Migrations\20231203164547_InitRecords.Designer.cs" />
     <Compile Remove="Migrations\20231203164727_InitRecords.cs" />
     <Compile Remove="Migrations\20231203164727_InitRecords.Designer.cs" />
     <Compile Remove="Migrations\20231203164856_InitRecords.cs" />
     <Compile Remove="Migrations\20231203164856_InitRecords.Designer.cs" />
+    <Compile Remove="Migrations\20231204113321_RemoveKeys.cs" />
+    <Compile Remove="Migrations\20231204113321_RemoveKeys.Designer.cs" />
+    <Compile Remove="Migrations\20231205115057_InitMoreData.cs" />
+    <Compile Remove="Migrations\20231205115057_InitMoreData.Designer.cs" />
+    <Compile Remove="Migrations\20231205115727_InitMoreData.cs" />
+    <Compile Remove="Migrations\20231205115727_InitMoreData.Designer.cs" />
+    <Compile Remove="Migrations\20231205120701_InitMoreData.cs" />
+    <Compile Remove="Migrations\20231205120701_InitMoreData.Designer.cs" />
+    <Compile Remove="Migrations\20231205133256_InitMoreData.cs" />
+    <Compile Remove="Migrations\20231205133256_InitMoreData.Designer.cs" />
+    <Compile Remove="Migrations\20231205133451_InitMoreData1.cs" />
+    <Compile Remove="Migrations\20231205133451_InitMoreData1.Designer.cs" />
+    <Compile Remove="Migrations\20231205133809_InitMoreData11.cs" />
+    <Compile Remove="Migrations\20231205133809_InitMoreData11.Designer.cs" />
+    <Compile Remove="Migrations\20231205134420_a.cs" />
+    <Compile Remove="Migrations\20231205134420_a.Designer.cs" />
+    <Compile Remove="Migrations\20231205173039_q.cs" />
+    <Compile Remove="Migrations\20231205173039_q.Designer.cs" />
+    <Compile Remove="Migrations\20231205174028_InitMoreData.cs" />
+    <Compile Remove="Migrations\20231205174028_InitMoreData.Designer.cs" />
+    <Compile Remove="Migrations\20231205174658_InitMoreData.cs" />
+    <Compile Remove="Migrations\20231205174658_InitMoreData.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +63,25 @@
 	  <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
 	  <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
 	  <PackageReference Include="ZarinpalSandbox" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap-rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap-rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap4\js\bootstrap.min.js.map" />
   </ItemGroup>
 
 

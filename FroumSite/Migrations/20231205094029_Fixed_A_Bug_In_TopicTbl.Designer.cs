@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FroumSite.Migrations
 {
     [DbContext(typeof(FroumContext))]
-    [Migration("20231203165153_InitRecords")]
-    partial class InitRecords
+    [Migration("20231205094029_Fixed_A_Bug_In_TopicTbl")]
+    partial class Fixed_A_Bug_In_TopicTbl
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,20 +36,20 @@ namespace FroumSite.Migrations
                     b.Property<int>("LikeCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TopicId")
+                    b.Property<int>("TopicId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UploadDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UploaderId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TopicId");
 
-                    b.HasIndex("UploaderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Posts");
 
@@ -59,7 +59,9 @@ namespace FroumSite.Migrations
                             Id = 1,
                             Caption = "خانواده اولین گروهی است که ما تجربه می کنیم",
                             LikeCount = 0,
-                            UploadDate = new DateTime(2023, 12, 3, 20, 21, 52, 946, DateTimeKind.Local).AddTicks(279)
+                            TopicId = 1,
+                            UploadDate = new DateTime(2023, 12, 5, 13, 10, 29, 339, DateTimeKind.Local).AddTicks(8910),
+                            UserId = 1
                         });
                 });
 
@@ -70,7 +72,7 @@ namespace FroumSite.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("SubjectId")
+                    b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -88,6 +90,7 @@ namespace FroumSite.Migrations
                         new
                         {
                             Id = 1,
+                            SubjectId = 1,
                             Title = "روابط در خانواده"
                         });
                 });
@@ -127,7 +130,7 @@ namespace FroumSite.Migrations
                         .HasColumnType("nvarchar(300)")
                         .HasMaxLength(300);
 
-                    b.Property<int?>("RoomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -135,14 +138,14 @@ namespace FroumSite.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
-                    b.Property<int?>("UploaderId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("UploaderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Topics");
 
@@ -151,7 +154,9 @@ namespace FroumSite.Migrations
                         {
                             Id = 1,
                             Description = "روابط پدر با فرزندان باید صمیمانه باشد",
-                            Title = "روابط پدر با فرزندان"
+                            RoomId = 1,
+                            Title = "روابط پدر با فرزندان",
+                            UserId = 1
                         });
                 });
 
@@ -203,7 +208,7 @@ namespace FroumSite.Migrations
                             Name = "سجاد",
                             Password = "123",
                             PhoneNumber = "09136941387",
-                            RegisterDate = new DateTime(2023, 12, 3, 20, 21, 52, 948, DateTimeKind.Local).AddTicks(5334),
+                            RegisterDate = new DateTime(2023, 12, 5, 13, 10, 29, 338, DateTimeKind.Local).AddTicks(464),
                             Sex = 0
                         });
                 });
@@ -211,30 +216,40 @@ namespace FroumSite.Migrations
             modelBuilder.Entity("FroumSite.Models.Post", b =>
                 {
                     b.HasOne("FroumSite.Models.Topic", "Topic")
-                        .WithMany()
-                        .HasForeignKey("TopicId");
+                        .WithMany("Posts")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FroumSite.Models.User", "Uploader")
                         .WithMany("SharedPosts")
-                        .HasForeignKey("UploaderId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FroumSite.Models.Room", b =>
                 {
                     b.HasOne("FroumSite.Models.Subject", "Subject")
                         .WithMany("Rooms")
-                        .HasForeignKey("SubjectId");
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FroumSite.Models.Topic", b =>
                 {
                     b.HasOne("FroumSite.Models.Room", "Room")
                         .WithMany("Topics")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FroumSite.Models.User", "Uploader")
                         .WithMany("SharedTopics")
-                        .HasForeignKey("UploaderId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

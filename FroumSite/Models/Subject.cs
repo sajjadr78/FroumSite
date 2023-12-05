@@ -19,7 +19,10 @@ namespace FroumSite.Models
         public string Title { get; set; }
 
 
-        //Navigation Properties
+        #region Navigation Properties
+
         public List<Room> Rooms { get; set; }
+
+        #endregion
     }
 }

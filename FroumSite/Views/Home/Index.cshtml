@@ -1,8 +1,18 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<FroumSite.Models.Subject>
+
+@{
+    ViewData["Title"] = "انجمن سجاد";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    @foreach (var item in Model)
+    {
+        <a asp-action="Index" class="btn" asp-controller="Rooms" asp-route-Id="@item.Id">
+            <div class="card text-white bg-success col-lg-1 " style="max-width: 20rem;">
+                <div class="card-body">
+                    <h4 class="card-title">@item.Title</h4>
+                </div>
+            </div>
+        </a>
+    }
 </div>

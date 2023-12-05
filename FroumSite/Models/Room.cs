@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FroumSite.Models
 {
@@ -18,9 +19,18 @@ namespace FroumSite.Models
         [Required(ErrorMessage ="لطفا عنوان تالار را وارد کنید")]
         public string Title { get; set; }
 
+        #region FroeignKeys
 
-        //Navigation Properties
+        public int SubjectId { get; set; }
+
+        #endregion
+
+        #region Navigation Properties
+
+        [ForeignKey("SubjectId")]
         public Subject Subject { get; set; }
         public List<Topic> Topics { get; set; }
+
+        #endregion
     }
 }

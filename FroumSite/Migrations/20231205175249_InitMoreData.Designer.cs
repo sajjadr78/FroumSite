@@ -4,14 +4,16 @@ using FroumSite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FroumSite.Migrations
 {
     [DbContext(typeof(FroumContext))]
-    partial class FroumContextModelSnapshot : ModelSnapshot
+    [Migration("20231205175249_InitMoreData")]
+    partial class InitMoreData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +60,7 @@ namespace FroumSite.Migrations
                             Caption = "خانواده اولین گروهی است که ما تجربه می کنیم",
                             LikeCount = 0,
                             TopicId = 1,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(1399),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(3598),
                             UserId = 1
                         },
                         new
@@ -67,7 +69,7 @@ namespace FroumSite.Migrations
                             Caption = "بهتر است فضای خانواده صمیمی باشد",
                             LikeCount = 0,
                             TopicId = 1,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2229),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4426),
                             UserId = 10
                         },
                         new
@@ -76,7 +78,7 @@ namespace FroumSite.Migrations
                             Caption = "فردوسی زحمات زیادی برای ادبیات ایران کشید",
                             LikeCount = 0,
                             TopicId = 2,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2254),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4450),
                             UserId = 9
                         },
                         new
@@ -85,7 +87,7 @@ namespace FroumSite.Migrations
                             Caption = "شاهنامه بسیار پر مفهوم است",
                             LikeCount = 0,
                             TopicId = 2,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2256),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4452),
                             UserId = 4
                         },
                         new
@@ -94,7 +96,7 @@ namespace FroumSite.Migrations
                             Caption = "گوشی جدید شیائومی به سیستم عامل اختصاصی این شرکت مجهر است",
                             LikeCount = 0,
                             TopicId = 3,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2258),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4454),
                             UserId = 3
                         },
                         new
@@ -103,7 +105,7 @@ namespace FroumSite.Migrations
                             Caption = "امسال ، برای اپل سال نحسی بود!",
                             LikeCount = 0,
                             TopicId = 4,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2259),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4455),
                             UserId = 6
                         },
                         new
@@ -112,7 +114,7 @@ namespace FroumSite.Migrations
                             Caption = "اختلاس چای دبش به کجا رسید؟",
                             LikeCount = 0,
                             TopicId = 5,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2261),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4457),
                             UserId = 2
                         },
                         new
@@ -121,7 +123,7 @@ namespace FroumSite.Migrations
                             Caption = "آیا اروپا امسال هم زمستان سختی خواهد داشت؟",
                             LikeCount = 0,
                             TopicId = 5,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2263),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4459),
                             UserId = 3
                         },
                         new
@@ -130,7 +132,7 @@ namespace FroumSite.Migrations
                             Caption = "5 ماه اول شیردهی چقدر مهم است؟",
                             LikeCount = 0,
                             TopicId = 6,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2264),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4460),
                             UserId = 2
                         },
                         new
@@ -139,7 +141,7 @@ namespace FroumSite.Migrations
                             Caption = "استرس در دوران بارداری",
                             LikeCount = 0,
                             TopicId = 6,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2266),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4461),
                             UserId = 4
                         },
                         new
@@ -148,7 +150,7 @@ namespace FroumSite.Migrations
                             Caption = "تغذیه در دوران بارداری",
                             LikeCount = 0,
                             TopicId = 6,
-                            UploadDate = new DateTime(2023, 12, 5, 21, 25, 6, 465, DateTimeKind.Local).AddTicks(2267),
+                            UploadDate = new DateTime(2023, 12, 5, 21, 22, 48, 886, DateTimeKind.Local).AddTicks(4463),
                             UserId = 4
                         });
                 });
@@ -343,7 +345,7 @@ namespace FroumSite.Migrations
                             Description = "اهمیت فردوسی برای ایران",
                             RoomId = 12,
                             Title = "فردوسی",
-                            UserId = 2
+                            UserId = 1
                         },
                         new
                         {
@@ -351,7 +353,7 @@ namespace FroumSite.Migrations
                             Description = "خداحافظی با اندروید",
                             RoomId = 4,
                             Title = "شیائومی ، تافته ی جدا بافته",
-                            UserId = 3
+                            UserId = 1
                         },
                         new
                         {
@@ -359,7 +361,7 @@ namespace FroumSite.Migrations
                             Description = "تیم کوک حتی فکرش را هم نمی کرد",
                             RoomId = 3,
                             Title = "سرنوشت اپل در سال 2023",
-                            UserId = 4
+                            UserId = 1
                         },
                         new
                         {
@@ -367,7 +369,7 @@ namespace FroumSite.Migrations
                             Description = "چند وقته اخبار دنبال نمی کنم ، هر چیزی میدونید به منم بگید",
                             RoomId = 6,
                             Title = "از سیاست چه خبر",
-                            UserId = 5
+                            UserId = 1
                         },
                         new
                         {
@@ -375,7 +377,7 @@ namespace FroumSite.Migrations
                             Description = "این موضوع از اهمیت بالایی برخوردار است",
                             RoomId = 8,
                             Title = "سلامتی در دوران بارداری و شیردهی",
-                            UserId = 6
+                            UserId = 1
                         });
                 });
 
@@ -427,7 +429,7 @@ namespace FroumSite.Migrations
                             Name = "سجاد",
                             Password = "123",
                             PhoneNumber = "09136941387",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 463, DateTimeKind.Local).AddTicks(2194),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 884, DateTimeKind.Local).AddTicks(4801),
                             Sex = 0
                         },
                         new
@@ -471,7 +473,7 @@ namespace FroumSite.Migrations
                             Name = "شیلا",
                             Password = "123",
                             PhoneNumber = "09136547156",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 464, DateTimeKind.Local).AddTicks(308),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 885, DateTimeKind.Local).AddTicks(2793),
                             Sex = 1
                         },
                         new
@@ -482,7 +484,7 @@ namespace FroumSite.Migrations
                             Name = "الناز",
                             Password = "123",
                             PhoneNumber = "09136512036",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 464, DateTimeKind.Local).AddTicks(326),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 885, DateTimeKind.Local).AddTicks(2811),
                             Sex = 1
                         },
                         new
@@ -493,7 +495,7 @@ namespace FroumSite.Migrations
                             Name = "شهرام",
                             Password = "123",
                             PhoneNumber = "09123650942",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 464, DateTimeKind.Local).AddTicks(329),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 885, DateTimeKind.Local).AddTicks(2814),
                             Sex = 0
                         },
                         new
@@ -504,7 +506,7 @@ namespace FroumSite.Migrations
                             Name = "محمود",
                             Password = "123",
                             PhoneNumber = "09425558182",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 464, DateTimeKind.Local).AddTicks(332),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 885, DateTimeKind.Local).AddTicks(2817),
                             Sex = 0
                         },
                         new
@@ -515,7 +517,7 @@ namespace FroumSite.Migrations
                             Name = "شهلا",
                             Password = "123",
                             PhoneNumber = "09116951478",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 464, DateTimeKind.Local).AddTicks(334),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 885, DateTimeKind.Local).AddTicks(2819),
                             Sex = 1
                         },
                         new
@@ -526,7 +528,7 @@ namespace FroumSite.Migrations
                             Name = "زهرا",
                             Password = "123",
                             PhoneNumber = "09362012361",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 464, DateTimeKind.Local).AddTicks(337),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 885, DateTimeKind.Local).AddTicks(2822),
                             Sex = 1
                         },
                         new
@@ -537,7 +539,7 @@ namespace FroumSite.Migrations
                             Name = "امیر",
                             Password = "123",
                             PhoneNumber = "09352142314",
-                            RegisterDate = new DateTime(2023, 12, 5, 21, 25, 6, 464, DateTimeKind.Local).AddTicks(339),
+                            RegisterDate = new DateTime(2023, 12, 5, 21, 22, 48, 885, DateTimeKind.Local).AddTicks(2825),
                             Sex = 0
                         });
                 });

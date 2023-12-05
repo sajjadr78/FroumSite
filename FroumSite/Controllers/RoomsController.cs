@@ -20,9 +20,26 @@ namespace FroumSite.Controllers
         }
 
         // GET: Rooms
-        public async Task<IActionResult> Index()
+        [Route("Rooms/{Id}")]
+        public async Task<IActionResult> Index(int Id)
         {
-            return View(await _context.Rooms.ToListAsync());
+            var rooms = await _context.Rooms
+                .Where(r => r.SubjectId == Id)
+                .Include(r => r.Topics)
+                .ToListAsync();
+
+            string subjectName = _context.Subjects.Find(Id).Title;
+
+            var topics = _context.Topics.Include(t => t.Uploader).ToList();
+
+            RoomViewModel vm = new RoomViewModel
+            {
+                Rooms = rooms,
+                SubjectName = subjectName,
+                Topics = topics
+            };
+
+            return View(vm);
         }
 
         // GET: Rooms/Details/5
