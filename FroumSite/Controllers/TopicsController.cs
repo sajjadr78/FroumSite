@@ -7,12 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FroumSite.Data;
 using FroumSite.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace FroumSite.Controllers
 {
     public class TopicsController : Controller
     {
         private readonly FroumContext _context;
+        static int roomId;
+        static int topicId;
 
         public TopicsController(FroumContext context)
         {
@@ -23,10 +27,10 @@ namespace FroumSite.Controllers
         public async Task<IActionResult> Index(int Id)
         {
             var topicsIncludedPosts = await _context.Topics.Where(t => t.RoomId == Id)
-                .Include(t=>t.Posts)
+                .Include(t => t.Posts)
                 .ToListAsync();
 
-            string roomName = _context.Rooms.Find(Id).Title;
+            var room = _context.Rooms.Find(Id);
 
             var postsIncludedUsers = await _context.Posts
                 .Include(p => p.Uploader)
@@ -35,7 +39,7 @@ namespace FroumSite.Controllers
             TopicViewModel vm = new TopicViewModel
             {
                 TopicsIncludedPosts = topicsIncludedPosts,
-                RoomName = roomName,
+                Room = room,
                 PostsIncludedUsers = postsIncludedUsers
             };
 
@@ -50,20 +54,64 @@ namespace FroumSite.Controllers
                 return NotFound();
             }
 
-            var topic = await _context.Topics
+
+
+            var topicIncludedPosts = await _context.Topics
+                .Include(p => p.Posts)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (topic == null)
+
+            var topicIncludedUsers = await _context.Topics
+                .Include(p => p.Uploader)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            topicId = topicIncludedPosts.Id;
+
+            var users = _context.Users.ToList();
+
+            ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
+            {
+                TopicIncludedPosts = topicIncludedPosts,
+                TopicIncludedUploader = topicIncludedPosts,
+                Users = users
+            };
+
+            if (topicIncludedPosts == null)
             {
                 return NotFound();
             }
 
-            return View(topic);
+            return View(vm);
+        }
+        // GET: Topics/Create
+        [Authorize]
+        public IActionResult Create(int id)
+        {
+            CreateTopicViewModel vm = new CreateTopicViewModel();
+            roomId = id;
+
+            return View(vm);
         }
 
-        // GET: Topics/Create
-        public IActionResult Create()
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SavePost(ShowTopicAndSavePostViewModel vm)
         {
-            return View();
+            int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
+
+
+            Post post = new Post
+            {
+                Caption = vm.Caption,
+                LikeCount = 0,
+                TopicId = topicId,
+                UploadDate = DateTime.Now,
+                UserId = userId
+            };
+
+            _context.Posts.Add(post);
+            var result = await _context.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { Id = topicId });
         }
 
         // POST: Topics/Create
@@ -71,15 +119,25 @@ namespace FroumSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description")] Topic topic)
+        public async Task<IActionResult> Create([Bind("RoomId,UserId,Title,Description")] CreateTopicViewModel vm)
         {
-            if (ModelState.IsValid)
+
+            int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
+            string description = vm.Description;
+            string title = vm.Title;
+
+            Topic topic = new Topic
             {
-                _context.Add(topic);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(topic);
+                Description = description,
+                Title = title,
+                RoomId = roomId,
+                UserId = userId
+            };
+
+            _context.Topics.Add(topic);
+            await _context.SaveChangesAsync();
+
+            return Content("success");
         }
 
         // GET: Topics/Edit/5

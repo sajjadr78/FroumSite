@@ -1,4 +1,5 @@
-﻿@model FroumSite.Models.Topic
+﻿@using FroumSite.Utilities;
+@model FroumSite.Models.ShowTopicAndSavePostViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -6,25 +7,160 @@
 
 <h1>Details</h1>
 
-<div>
-    <h4>Topic</h4>
+<div class="col-12 row   p-3 mb-3" style="background-color:lightpink">
+    <div class="col-3">
+        <a href="https://google.com">@Model.TopicIncludedUploader.Uploader.Name</a>
+
+        <div class="row">
+            <span>
+                عضویت :
+            </span>
+            <span>
+                @Model.TopicIncludedUploader.Uploader.RegisterDate.ToShamsi()
+            </span>
+        </div>
+
+        <div class="row">
+            <span>
+                تعداد پست :
+            </span>
+            <span>
+                @Model.TopicIncludedUploader.Uploader.SharedPosts.Count
+            </span>
+        </div>
+    </div>
+    <div class="col-9">
+        <div>
+            <h4>عنوان : @Model.TopicIncludedPosts.Title</h4>
+        </div>
+        <div>
+            <span class="text-muted card-subtitle">@Model.TopicIncludedPosts.Posts.Count پست</span>
+        </div>
+
+        <hr />
+
+        <div>
+            @Model.TopicIncludedPosts.Description
+        </div>
+        <hr />
+        @* i'll fix lines below later *@
+        <div>
+            0 نفر لایک کرده اند
+        </div>
+
+        <div>
+            آپلود شده در تاریخ 0/0/0
+        </div>
+    </div>
+
+</div>
+
+<hr />
+
+
+@foreach (var item in Model.TopicIncludedPosts.Posts)
+{
+    <div class="row col-md-12   p-1 m-1" style="background-color:lightblue">
+        <div class="col-md-3">
+
+            @{
+
+                var uploaderName = Model.Users.FirstOrDefault(u => u.Id == item.UserId).Name;
+            }
+            <span>توسط :</span>
+            <a href="https://google.com">@uploaderName</a>
+            @* i will fix the href later *@
+        </div>
+        <div class="col-md-9">
+            @item.Caption
+        </div>
+
+    </div>
+    @* note : hr tag doesnt work in div *@
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
+}
+
+
+
+<form asp-action="SavePost" method="post">
+
+    <fieldset>
+        <div class="form-group">
+            <textarea class="form-control" asp-for="Caption" rows="3">
+
+            </textarea>
+        </div>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="ثبت" />
+    </fieldset>
+</form>
+
+@* <div class="row">
+    <div class="border-0 mb-3 row col-md-12" >
+        <div class="col-md-3 border-secondary mb-3 row-cols-md-6" >
+
+            <div>
+                <a href="https://google.com">@Model.Uploader.Name</a>
+            </div>
+            <div class="row">
+                <div>عضویت : </div>
+                <div>@Model.Uploader.RegisterDate.ToShamsi()</div>
+            </div>
+            <div class="row">
+                <div>تعداد پست ها : </div>
+                <div>@Model.Uploader.SharedPosts.Count</div>
+            </div>
+
+        </div>
+        <div class="col-md-9  border-secondary mb-3" >
+            <h4 class="-header -title">
+                <span>
+                    عنوان
+                </span>
+                <span>
+                    @Model.Title
+                </span>
+            </h4>
+            <h6 class="-subtitle mb-2 text-muted">
+                <span>
+                    @Model.Posts.Count
+                </span>
+                <span>
+                    پست
+                </span>
+            </h6>
+
+            <hr />
+            <div>
+                @Model.Description
+            </div>
+        </div>
+    </div>
+
+    @foreach (var item in Model.Posts)
+    {
+        <div>
+            @item.Caption
+        </div>
+        <div>
+            @item.LikeCount
+        </div>
+        <div>
+            @item.UploadDate
+        </div>
+    }
+
+    <form>
+
+        <fieldset>
+            <div class="form-group">
+                <label for="exampleTextarea">نمونه محدوده متن</label>
+                <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+            </div>
+        </fieldset>
+
+    </form>
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+ *@

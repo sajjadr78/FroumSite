@@ -20,9 +20,10 @@ namespace FroumSite.Controllers
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id)
         {
-            return View(await _context.Posts.ToListAsync());
+
+            return View(await _context.Posts.Where(p=>p.TopicId==id).ToListAsync());
         }
 
         // GET: Posts/Details/5

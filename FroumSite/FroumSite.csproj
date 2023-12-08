@@ -66,6 +66,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Account\Register.cshtml" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-reboot.css.map" />

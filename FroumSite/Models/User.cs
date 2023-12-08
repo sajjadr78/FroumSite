@@ -56,6 +56,8 @@ namespace FroumSite.Models
         [Required]
         public string Password { get; set; }
 
+        public bool IsAdmin { get; set; }
+
 
         #region Navigation Properties
 

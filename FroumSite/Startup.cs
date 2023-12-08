@@ -1,4 +1,5 @@
 using FroumSite.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace FroumSite
@@ -37,6 +39,18 @@ namespace FroumSite
             });
 
             #endregion
+
+            #region Authentication
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+                {
+                    option.LoginPath = "/Account/Login";
+                    option.LogoutPath = "/Account/Logout";
+                    option.ExpireTimeSpan = TimeSpan.FromDays(10);
+                });
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +71,25 @@ namespace FroumSite
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.Use(async (context, next) =>
+            {
+                // Do work that doesn't write to the Response.
+                if (context.Request.Path.StartsWithSegments("/Admin"))
+                {
+                    if (!context.User.Identity.IsAuthenticated)
+                    {
+                        context.Response.Redirect("/Account/Login");
+                    }
+                    else if (!bool.Parse(context.User.FindFirstValue("IsAdmin")))
+                    {
+                        context.Response.Redirect("/Account/Login");
+                    }
+                }
+                await next.Invoke();
+                // Do logging or other work that doesn't write to the Response.
+            });
 
 
 

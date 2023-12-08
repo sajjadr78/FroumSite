@@ -23,20 +23,20 @@ namespace FroumSite.Controllers
         [Route("Rooms/{Id}")]
         public async Task<IActionResult> Index(int Id)
         {
-            var rooms = await _context.Rooms
+            var roomsIncludedTopics = await _context.Rooms
                 .Where(r => r.SubjectId == Id)
                 .Include(r => r.Topics)
                 .ToListAsync();
 
             string subjectName = _context.Subjects.Find(Id).Title;
 
-            var topics = _context.Topics.Include(t => t.Uploader).ToList();
+            var topicsIncludedUsers = _context.Topics.Include(t => t.Uploader).ToList();
 
             RoomViewModel vm = new RoomViewModel
             {
-                Rooms = rooms,
+                RoomsIncludedTopics = roomsIncludedTopics,
                 SubjectName = subjectName,
-                Topics = topics
+                TopicsIncludedUsers = topicsIncludedUsers
             };
 
             return View(vm);

@@ -17,25 +17,44 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                @* <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">موضوعات</a>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li>
+                                <span class="text-black card border-success">سلام @User.Identity.Name عزیز</span>
+                            </li>
+                            <li>
+                                <a class="btn btn-danger text-white " style=" float: left; " asp-area="" asp-controller="Account" asp-action="Logout">خروج از حساب کاربری</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="btn btn-primary text-white " style=" float: left; " asp-area="" asp-controller="Account" asp-action="Login">ورود</a>
+                            </li>
+
+                            <li>
+                                <a class=" btn btn-info text-white" style=" float: left;" asp-area="" asp-controller="Account" asp-action="Register">ثبت نام</a>
+                            </li>
+                        }
+                        @*                         <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">موضوعات</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">پست ها</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Posts" asp-action="Index">پست ها</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">کاربران</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">کاربران</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Topics" asp-action="Index">تاپیک ها</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Topics" asp-action="Index">تاپیک ها</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">تالار ها</a>
-                        </li>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">تالار ها</a>
+                        </li> *@
                     </ul>
-                </div> *@
+                </div>
             </div>
         </nav>
     </header>

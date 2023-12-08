@@ -7,6 +7,62 @@
 }
 
 
+<h1>تاپیک ها</h1>
+
+<a class="btn btn-primary" href="/Topics/Create/@(Model.Room.Id)">ایجاد تاپیک جدید در این تالار</a>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">@Model.Room.Title - @Model.TopicsIncludedPosts.Count</th>
+            <th scope="col">پست</th>
+            <th scope="col">آخرین پست</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TopicsIncludedPosts)
+        {
+            <tr class="table-success">
+                <th scope="row">
+                    <a href="/Topics/Details/@item.Id">
+                        @item.Title
+                    </a>
+                </th>
+                @{
+                    int postsCount = item.Posts.Count;
+                }
+                <td>@postsCount</td>
+                <td>
+                    @if (postsCount == 0)
+                    {
+                        <span class="text-danger">
+                            در این تاپیک ، هیچ پستی وجود ندارد
+                        </span>
+                    }
+                    else
+                    {
+                        <div>
+                            @item.Posts.Last().Caption
+                        </div>
+                        <div>
+                            <span>
+                                توسط:
+                            </span>
+                            <span>
+                                @(Model.PostsIncludedUsers.Where(p=>p.TopicId == item.Id)
+                                .Last()
+                                .Uploader
+                                .Name)
+                            </span>
+                        </div>
+
+                    }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
 
 
 @* <p>
@@ -48,56 +104,3 @@
     </tbody>
 </table>
  *@
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">@Model.RoomName - @Model.TopicsIncludedPosts.Count</th>
-            <th scope="col">پست</th>
-            <th scope="col">آخرین پست</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.TopicsIncludedPosts)
-        {
-            <tr class="table-success">
-                <th scope="row">
-                    <a href="/Posts/Details/@item.Id">
-                        @item.Title
-                    </a>
-                </th>
-                @{
-                    int postsCount = item.Posts.Count;
-                }
-                <td>@postsCount</td>
-                <td>
-                    @if (postsCount == 0)
-                    {
-                        <span class="text-danger">
-                            در این تاپیک ، هیچ پستی وجود ندارد
-                        </span>
-                    }
-                    else
-                    {
-                        <div>
-                            @item.Posts.Last().Caption
-                        </div>
-                        <div>
-                            <span>
-                                توسط:
-                            </span>
-                            <span>
-                                @(Model.PostsIncludedUsers.Where(p=>p.TopicId == item.Id)
-                                .Last()
-                                .Uploader
-                                .Name)
-                            </span>
-                        </div>
-
-                    }
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
