@@ -37,6 +37,57 @@
 <table class="table table-hover">
     <thead>
         <tr>
+            <th scope="col">@Model.SubjectName - @Model.Rooms.Count تالار</th>
+            <th scope="col">تاپیک</th>
+            <th scope="col">آخرین تاپیک</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Rooms)
+        {
+
+
+
+            <tr class="table-success">
+                <th scope="row">
+                    <a href="/Topics/Index/@item.Id">
+                        @item.Title
+                    </a>
+                </th>
+
+                <td>@item.Topics.Count</td>
+                <td>
+                    @if (item.Topics.Count == 0)
+                    {
+                        <span class="text-danger">
+                            در این تالار هیچ تاپیکی وجود ندارد
+                        </span>
+                    }
+                    else
+                    {
+                        <div>
+                            @item.Topics.Last().Title
+                        </div>
+                        <div>
+                            <span>
+                                توسط:
+                            </span>
+                            <span>
+                                @Model.Topics.Where(t => t.RoomId == item.Id).Last().Uploader.Name
+                            </span>
+                        </div>
+                    }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+ *@
+
+<table class="table table-hover">
+    <thead>
+        <tr>
             <th scope="col">@Model.SubjectName - @Model.RoomsIncludedTopics.Count تالار</th>
             <th scope="col">تاپیک</th>
             <th scope="col">آخرین تاپیک</th>
