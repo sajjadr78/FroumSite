@@ -10,6 +10,7 @@ namespace FroumSite.Models
             RoomsIncludedTopics = new List<Room>();
             TopicsIncludedUsers = new List<Topic>();
         }
+
         public List<Room> RoomsIncludedTopics { get; set; }
         public string SubjectName { get; set; }
         public List<Topic> TopicsIncludedUsers { get; set; }
