@@ -1,4 +1,4 @@
-﻿@model FroumSite.Models.Post
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.PostsViewModel
 
 @{
     ViewData["Title"] = "افزودن پست جدید";
@@ -12,14 +12,25 @@
         <span asp-validation-for="Caption"></span>
     </div>
     <div class="form-group">
-        <label asp-for="Uploader"></label>
-        <input asp-for="Uploader" />
-        <span asp-validation-for="Caption"></span>
+        <label class="col-sm-2 col-form-label" asp-for="UploaderName"></label>
+        <select asp-for="UserId" class="form-control">
+            @foreach (var item in Model.Users)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+        <span asp-validation-for="UploaderName"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Caption"></label>
-        <input asp-for="Caption" />
-        <span asp-validation-for="Caption"></span>
+        <label asp-for="TopicTitle"></label>
+        <select asp-for="TopicId" class="form-control">
+            @foreach (var item in Model.Topics)
+            {
+                <option value="@item.Id">@item.Title</option>
+            }
+        </select>
+        <span asp-validation-for="TopicTitle"></span>
     </div>
 
     <div class="form-group">

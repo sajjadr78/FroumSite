@@ -31,15 +31,16 @@
                 <td class="col-1">@item.UploadDate.ToShamsi()</td>
 
                 @{
-                    var uploaderName = Model.PostsIncludedUser.FirstOrDefault(p => p.Id == item.Id).Uploader.Name;
+                    var uploader = Model.PostsIncludedUser.FirstOrDefault(p => p.Id == item.Id).Uploader;
+                    var uploaderFullName = uploader.Name + " " + uploader.Family;
                 }
 
-                <td class="col-1">@uploaderName</td>
+                <td class="col-1">@uploaderFullName</td>
                 <td class="col-3">
                      
-                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">جزییات</a>
-                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-controller="Posts" asp-route-id="@item.Id">جزییات</a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-controller="Posts" asp-route-id="@item.Id">ویرایش</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-controller="Posts" asp-route-id="@item.Id">حذف</a>
                     
                 </td>
             </tr>

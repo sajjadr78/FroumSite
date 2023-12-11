@@ -1,7 +1,53 @@
-﻿
+﻿@using FroumSite.Utilities;
+@model User
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "حذف کاربر";
 }
 
-<h1>Delete</h1>
+<form method="post" asp-action="DeleteConfirmed">
 
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Name) : @Html.DisplayFor(model=>model.Name)
+
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Family) : @Html.DisplayFor(model=>model.Family)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.PhoneNumber) : @Html.DisplayFor(model=>model.PhoneNumber)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Sex) : 
+        @{
+            if (Model.Sex == FroumSite.Models.Enums.Sex.Male)
+            {
+                <span>مرد</span>
+            }
+            else
+            {
+                <span>زن</span>
+            }
+        }
+    </label>
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.RegisterDate) : @Model.RegisterDate.ToShamsi()
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Birthday) : @Model.Birthday.ToShamsi()
+    </label>
+
+    <h3 class="bg-danger text-white p-2 mb-2 mt-2 col-6">
+        آیا می خواهید کاربر بالا حذف شود ؟
+    </h3>
+
+    <input type="submit" class="btn btn-danger" value="بله" />
+    <a class="btn btn-success" asp-action="Users" asp-controller="Home">خیر</a>
+</form>
+
+        

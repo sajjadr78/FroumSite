@@ -1,7 +1,20 @@
-﻿
+﻿@model Subject
+
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "جزییات موضوع";
 }
 
-<h1>Details</h1>
+<div>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Title) : @Html.DisplayFor(model=>model.Title)
+
+    </label>
+
+
+    <a class="btn btn-success" asp-controller="Home" asp-action="Subjects">بازگشت</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">ویرایش</a>
+    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">حذف</a>
+</div>
 

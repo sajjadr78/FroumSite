@@ -8,6 +8,7 @@ using System;
 using FroumSite.Data;
 using System.Threading.Tasks;
 using System.Linq;
+using FroumSite.Models.ViewModels;
 
 namespace FroumSite.Controllers
 {

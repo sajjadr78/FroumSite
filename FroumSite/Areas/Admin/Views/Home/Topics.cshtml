@@ -27,17 +27,21 @@
                 <td>@item.Room.Title</td>
 
                 @{
-                    var uploaderName = Model.TopicsIncludedUsers.Where(t => t.Id == item.Id).FirstOrDefault().Uploader.Name;
+                    var uploader = Model.TopicsIncludedUsers.Where(t => t.Id == item.Id)
+                        .FirstOrDefault()
+                        .Uploader;
+
+                    var uploaderFullName = uploader.Name + " " + uploader.Family;
                 }
 
                 <td>
-                    @uploaderName
+                    @uploaderFullName
                 </td>
 
                 <td>
-                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">جزییات</a>
-                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-controller="Topics" asp-route-id="@item.Id">جزییات</a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-controller="Topics" asp-route-id="@item.Id">ویرایش</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-controller="Topics" asp-route-id="@item.Id">حذف</a>
                 </td>
             </tr>
         }

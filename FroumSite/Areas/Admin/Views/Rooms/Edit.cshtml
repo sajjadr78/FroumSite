@@ -1,7 +1,40 @@
-﻿
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.RoomsViewModel
+
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<form class="col-4" asp-action="Save" method="post" >
 
+    <div class="form-group">
+        <label asp-for="RoomTitle" ></label>
+        <textarea asp-for="RoomTitle" class="form-control"></textarea>
+        <span asp-validation-for="RoomTitle"></span>
+    </div>
+
+    
+
+    <div class="form-group">
+        <label asp-for="SubjectTitle" ></label>
+        <select asp-for="SubjectId" class="form-control">
+            @foreach (var item in Model.Subjects)
+            {
+                if (item.Id==Model.SubjectId)
+                {
+                    <option value="@item.Id" selected="selected">@item.Title</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Title</option>
+                }
+            }
+        </select>
+    </div>
+
+
+
+    <div class="form-group">
+        <input class="form-control btn btn-success" type="submit" value="ذخیره" />
+    </div>
+
+</form>

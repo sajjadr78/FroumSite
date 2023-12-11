@@ -1,7 +1,55 @@
-﻿
+﻿@using FroumSite.Utilities;
+@model User
+
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "جزییات کاربر";
 }
 
-<h1>Details</h1>
+<div>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Name) : @Html.DisplayFor(model=>model.Name)
+
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Family) : @Html.DisplayFor(model=>model.Family)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.PhoneNumber) : @Html.DisplayFor(model=>model.PhoneNumber)
+    </label>
+
+
+    <label class=" form-control">
+
+        @Html.DisplayNameFor(model=>model.Sex) : 
+        @{
+            if (Model.Sex == FroumSite.Models.Enums.Sex.Male)
+            {
+                <span>مرد</span>
+            }
+            else
+            {
+                <span>زن</span>
+            }
+        }
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.RegisterDate) : @Model.RegisterDate.ToShamsi()
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Birthday) : @Model.Birthday.ToShamsi()
+    </label>
+
+
+
+    <a class="btn btn-success" asp-controller="Home" asp-action="Users">بازگشت</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">ویرایش</a>
+    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">حذف</a>
+</div>
 

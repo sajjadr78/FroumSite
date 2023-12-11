@@ -1,7 +1,29 @@
-﻿
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.RoomsViewModel
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "افزودن پست جدید";
 }
 
-<h1>Create</h1>
+<form asp-action="Save" method="post">
 
+    <div class="form-group">
+        <label asp-for="RoomTitle"></label>
+        <input asp-for="RoomTitle" />
+        <span asp-validation-for="RoomTitle"></span>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 col-form-label" asp-for="SubjectTitle"></label>
+        <select asp-for="SubjectId" class="form-control">
+            @foreach (var item in Model.Subjects)
+            {
+                <option value="@item.Id">@item.Title</option>
+            }
+        </select>
+        <span asp-validation-for="SubjectTitle"></span>
+    </div>
+
+    <div class="form-group">
+        <input class="btn btn-success" type="submit" value="ذخیره" />
+    </div>
+
+</form>

@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.RoomName)
+                @Html.DisplayNameFor(model => model.RoomTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SubjectName)
+                @Html.DisplayNameFor(model => model.SubjectTitle)
             </th>
             <th></th>
         </tr>
@@ -32,9 +32,9 @@
                     @Html.DisplayFor(modelItem => item.Subject.Title)
                 </td>
                 <td>
-                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">جزییات</a>
-                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-controller="Rooms" asp-route-id="@item.Id">جزییات</a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-controller="Rooms" asp-route-id="@item.Id">ویرایش</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-controller="Rooms" asp-route-id="@item.Id">حذف</a>
                 </td>
             </tr>
         }

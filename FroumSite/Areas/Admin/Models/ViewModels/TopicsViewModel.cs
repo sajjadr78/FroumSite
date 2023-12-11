@@ -9,6 +9,14 @@ namespace FroumSite.Areas.Admin.Models.ViewModels
         public List<Topic> TopicsIncludedRooms { get; set; }
         public List<Topic> TopicsIncludedUsers { get; set; }
 
+        public int Id { get; set; }
+
+        public List<Room> Rooms { get; set; }
+        public List<User> Users { get; set; }
+
+        public int UploaderId { get; set; }
+        public int RoomId { get; set; }
+
         [Required(ErrorMessage = "لطفا عنوان را وارد کنید")]
         [Display(Name = "عنوان")]
         [MaxLength(50, ErrorMessage = "عنوان نباید بیشتر از 50 کاراکتر باشد")]

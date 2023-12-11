@@ -1,7 +1,38 @@
-﻿
+﻿@using FroumSite.Utilities;
+@model FroumSite.Areas.Admin.Models.ViewModels.TopicsViewModel
+
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "جزییات تاپیک";
 }
 
-<h1>Details</h1>
+<div>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Title) : @Html.DisplayFor(model=>model.Title)
+
+    </label>
+
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Description) : @Html.DisplayFor(model=>model.Description)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.UploaderName) : @Html.DisplayFor(model=>model.UploaderName)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.RoomName) : @Html.DisplayFor(model=>model.RoomName)
+    </label>
+
+
+
+    <a class="btn btn-success" asp-controller="Home" asp-action="Topics">بازگشت</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">ویرایش</a>
+    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">حذف</a>
+</div>
 

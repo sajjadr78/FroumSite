@@ -1,7 +1,65 @@
-﻿
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.PostsViewModel
+
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<form class="col-4" asp-action="Save" method="post" >
 
+    <div class="form-group">
+        <label asp-for="Caption" ></label>
+        <textarea asp-for="Caption" class="form-control"></textarea>
+        <span asp-validation-for="Caption" ></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LikeCount" ></label>
+        <input asp-for="LikeCount"  class="form-control"/>
+        <span asp-validation-for="LikeCount" ></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UploaderName" ></label>
+        <select asp-for="UserId" class="form-control">
+            @foreach (var item in Model.Users)
+            {
+                if (item.Id==Model.UserId)
+                {
+                    <option value="@item.Id" selected="selected">@item.Name @item.Family</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Name @item.Family</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TopicTitle"></label>
+        <select asp-for="TopicId" class="form-control">
+            @foreach (var item in Model.Topics)
+            {
+                if (item.Id == Model.TopicId)
+                {
+                    <option value="@item.Id" selected="selected">@item.Title</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Title</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UploadDate"></label>
+        <input class="form-control" type="date" asp-for="UploadDate"/>
+        <span asp-validation-for="UploadDate"></span>
+    </div>
+
+    <div class="form-group">
+        <input class="form-control btn btn-success" type="submit" value="ذخیره" />
+    </div>
+
+</form>

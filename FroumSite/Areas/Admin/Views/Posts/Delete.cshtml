@@ -1,7 +1,42 @@
-﻿
+﻿@using FroumSite.Utilities;
+@model FroumSite.Areas.Admin.Models.ViewModels.PostsViewModel
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "حذف پست";
 }
 
-<h1>Delete</h1>
+<form method="post" asp-action="DeleteConfirmed">
 
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Caption) : @Html.DisplayFor(model=>model.Caption)
+
+    </label>
+
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.LikeCount) : @Html.DisplayFor(model=>model.LikeCount)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.UploaderName) : @Html.DisplayFor(model=>model.UploaderName)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.TopicTitle) : @Html.DisplayFor(model=>model.TopicTitle)
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.UploadDate) : @Model.UploadDate.ToShamsi()
+    </label>
+
+    <h3 class="bg-danger text-white p-2 mb-2 mt-2 col-6">
+        آیا می خواهید پست بالا حذف شود ؟
+    </h3>
+
+    <input type="submit" class="btn btn-danger" value="بله" />
+    <a class="btn btn-success" asp-action="Posts" asp-controller="Home">خیر</a>
+</form>
+
+        

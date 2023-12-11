@@ -6,10 +6,14 @@ namespace FroumSite.Areas.Admin.Models.ViewModels
 {
     public class RoomsViewModel
     {
+        public int Id { get; set; }
+
         [Display(Name ="نام")]
-        public string RoomName { get; set; }
-        [Display(Name ="موضوع")]
-        public string SubjectName { get; set; }
+        public string RoomTitle { get; set; }
+        [Display(Name ="عنوان موضوع")]
+        public string SubjectTitle { get; set; }
         public List<Room> Rooms { get; set; }
+        public List<Subject> Subjects { get; set; }
+        public int SubjectId { get; set; }
     }
 }

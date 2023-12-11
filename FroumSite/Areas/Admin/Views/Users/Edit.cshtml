@@ -1,7 +1,71 @@
-﻿
+﻿@model User
+
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "ویرایش کاربر";
 }
 
-<h1>Edit</h1>
+<div class="row col-4">
+
+    <form asp-action="Save" method="post">
+
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input class="form-control" asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Family"></label>
+            <input class="form-control" asp-for="Family" />
+            <span asp-validation-for="Family"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Birthday"></label>
+            <input class="form-control" type="date" asp-for="Birthday" />
+            <span asp-validation-for="Birthday"></span>
+        </div>
+
+        <div class="form-group">
+
+            <label asp-for="IsAdmin"></label>
+            <div class="form-control">
+                <input type="checkbox" asp-for="IsAdmin" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input class="form-control" asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber"></label>
+            <input class="form-control" asp-for="PhoneNumber" />
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RegisterDate"></label>
+            <input class="form-control" type="date" asp-for="RegisterDate" />
+            <span asp-validation-for="RegisterDate"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Sex"></label>
+            <select class="form-control" asp-for="Sex">
+                <option value="Male" asp-for="Sex">مرد</option>
+                <option value="Female" asp-for="Sex">زن</option>
+            </select>
+            <span asp-validation-for="Sex"></span>
+        </div>
+
+        <div class="form-group">
+            <input class="btn btn-success" type="submit" value="ذخیره" />
+        </div>
+
+    </form>
+
+</div>
 

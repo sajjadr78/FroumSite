@@ -1,7 +1,60 @@
-﻿
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.TopicsViewModel
+
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "ویرایش تاپیک";
 }
 
-<h1>Edit</h1>
+<form class="col-4" asp-action="Save" method="post" >
 
+    <div class="form-group">
+        <label asp-for="Title" ></label>
+        <textarea asp-for="Title" class="form-control"></textarea>
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description" ></label>
+        <textarea asp-for="Description" class="form-control" ></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UploaderName" ></label>
+        <select asp-for="UploaderId" class="form-control">
+            @foreach (var item in Model.Users)
+            {
+                if (item.Id==Model.UploaderId)
+                {
+                    <option value="@item.Id" selected="selected">@item.Name @item.Family</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Name @item.Family</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="RoomName"></label>
+        <select asp-for="RoomId" class="form-control">
+            @foreach (var item in Model.Rooms)
+            {
+                if (item.Id == Model.RoomId)
+                {
+                    <option value="@item.Id" selected="selected">@item.Title</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Title</option>
+                }
+            }
+        </select>
+    </div>
+
+
+    <div class="form-group">
+        <input class="form-control btn btn-success" type="submit" value="ذخیره" />
+    </div>
+
+</form>
