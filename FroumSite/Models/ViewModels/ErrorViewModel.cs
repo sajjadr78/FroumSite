@@ -1,6 +1,6 @@
 using System;
 
-namespace FroumSite.Models
+namespace FroumSite.Models.ViewModels
 {
     public class ErrorViewModel
     {

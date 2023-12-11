@@ -1,4 +1,5 @@
 ﻿using FroumSite.Models;
+using FroumSite.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 

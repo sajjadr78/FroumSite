@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FroumSite.Data;
 using FroumSite.Models;
+using FroumSite.Models.ViewModels;
 
 namespace FroumSite.Controllers
 {

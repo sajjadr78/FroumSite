@@ -1,5 +1,6 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
+<html lang="fa">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,24 +19,33 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 justify-content-end">
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li>
-                                <span class="text-black card border-success">سلام @User.Identity.Name عزیز</span>
+                                <span class="navbar-brand mb-0 h1">
+                                    سلام @User.Identity.Name عزیز
+                                </span>
                             </li>
+                            if (User.Claims.FirstOrDefault(x => x.Type == "IsAdmin")?.Value == "True")
+                            {
+                                <a class="btn btn-success text-white mr-3 ml-3" style=" float: left; " asp-area="Admin" asp-controller="Home" asp-action="Index">پنل ادمین</a>
+
+                            }
                             <li>
-                                <a class="btn btn-danger text-white " style=" float: left; " asp-area="" asp-controller="Account" asp-action="Logout">خروج از حساب کاربری</a>
+                                <a class="btn btn-danger text-white mr-3 ml-3" style=" float: left; " asp-area="" asp-controller="Account" asp-action="Logout">خروج از حساب کاربری</a>
                             </li>
+                            
+
                         }
                         else
                         {
                             <li>
-                                <a class="btn btn-primary text-white " style=" float: left; " asp-area="" asp-controller="Account" asp-action="Login">ورود</a>
+                                <a class="btn btn-primary text-white mr-3 ml-3" style=" float: left; " asp-area="" asp-controller="Account" asp-action="Login">ورود</a>
                             </li>
 
                             <li>
-                                <a class=" btn btn-info text-white" style=" float: left;" asp-area="" asp-controller="Account" asp-action="Register">ثبت نام</a>
+                                <a class=" btn btn-info text-white mr-3 ml-3" style=" float: left;" asp-area="" asp-controller="Account" asp-action="Register">ثبت نام</a>
                             </li>
                         }
 
@@ -52,7 +62,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - FroumSite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @* &copy; 2023 - FroumSite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

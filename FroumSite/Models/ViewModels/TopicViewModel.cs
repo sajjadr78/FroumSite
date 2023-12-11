@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FroumSite.Models
+namespace FroumSite.Models.ViewModels
 {
     public class TopicViewModel
     {

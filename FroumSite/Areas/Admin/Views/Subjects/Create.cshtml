@@ -1,0 +1,19 @@
+﻿@model FroumSite.Models.Subject
+
+@{
+    ViewData["Title"] = "افزودن موضوع جدید";
+}
+
+<form asp-action="Save" method="post">
+
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div class="form-group">
+        <input class="btn btn-success" type="submit" value="ذخیره" />
+    </div>
+
+</form>

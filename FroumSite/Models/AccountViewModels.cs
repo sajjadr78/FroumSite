@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FroumSite.Models.Enums;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -51,7 +52,6 @@ namespace FroumSite.Models
 
     public class LoginViewModel
     {
-
         [StringLength(11, ErrorMessage = "شماره تلفن همراه باید 11 رقم باشد")]
         [Display(Name = "شماره تلفن همراه")]
         [Required]

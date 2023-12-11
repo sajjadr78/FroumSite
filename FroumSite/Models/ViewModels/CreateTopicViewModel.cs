@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FroumSite.Models
+namespace FroumSite.Models.ViewModels
 {
     public class CreateTopicViewModel
     {

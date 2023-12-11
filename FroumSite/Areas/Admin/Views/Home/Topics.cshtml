@@ -1,0 +1,46 @@
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.TopicsViewModel
+
+@{
+    ViewData["Title"] = "پنل ادمین " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value + " | لیست تاپیک ها";
+}
+
+<h1 class="mb-3">تاپیک ها</h1>
+
+<a asp-action="Create" asp-controller="Topics" class="btn btn-info mb-3">افزودن تاپیک جدید</a>
+
+<table class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Title)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Description)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.RoomName)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.UploaderName)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TopicsIncludedRooms)
+        {
+            <tr class="table-secondary">
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Room.Title</td>
+
+                @{
+                    var uploaderName = Model.TopicsIncludedUsers.Where(t => t.Id == item.Id).FirstOrDefault().Uploader.Name;
+                }
+
+                <td>
+                    @uploaderName
+                </td>
+
+                <td>
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">جزییات</a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

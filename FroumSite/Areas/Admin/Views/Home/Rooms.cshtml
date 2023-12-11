@@ -1,0 +1,42 @@
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.RoomsViewModel
+
+@{
+    ViewData["Title"] = "پنل ادمین " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value + " | لیست تالار ها";
+}
+
+<h1 class="mb-3">تالار ها</h1>
+
+<p>
+    <a asp-action="Create" asp-controller="Rooms" class="btn btn-success mb-3">افزودن تالار جدید</a>
+</p>
+<table class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Rooms)
+        {
+            <tr class="table-secondary">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject.Title)
+                </td>
+                <td>
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">جزییات</a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

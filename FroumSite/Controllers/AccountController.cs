@@ -35,7 +35,7 @@ namespace FroumSite.Controllers
                 return View(register);
             }
 
-            if (_context.Users.Any(u=>u.PhoneNumber == register.PhoneNumber))
+            if (_context.Users.Any(u => u.PhoneNumber == register.PhoneNumber))
             {
                 ModelState.AddModelError("PhoneNumber", "شماره همراه وارد شده قبلا ثبت نام کرده است");
                 return View(register);

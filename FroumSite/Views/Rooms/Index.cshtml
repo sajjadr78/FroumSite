@@ -1,4 +1,4 @@
-﻿@model FroumSite.Models.RoomViewModel
+﻿@model RoomViewModel
 
 @{
     ViewData["Title"] = $"تالار های موضوع {Model.SubjectName}";
@@ -34,7 +34,7 @@
 </table>
  *@
 
-<table class="table table-hover">
+<table class="table table-hover table-bordered">
     <thead>
         <tr>
             <th scope="col">@Model.SubjectName - @Model.RoomsIncludedTopics.Count تالار</th>
@@ -45,9 +45,6 @@
     <tbody>
         @foreach (var item in Model.RoomsIncludedTopics)
         {
-
-
-
             <tr class="table-success">
                 <th scope="row">
                     <a href="/Topics/Index/@item.Id">

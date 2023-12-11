@@ -1,7 +1,7 @@
 ﻿using FroumSite.Data;
 using System.Collections.Generic;
 
-namespace FroumSite.Models
+namespace FroumSite.Models.ViewModels
 {
     public class RoomViewModel
     {

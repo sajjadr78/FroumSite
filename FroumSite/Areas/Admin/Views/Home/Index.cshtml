@@ -1,0 +1,15 @@
+﻿@using System.Security.Claims;
+@{
+    ViewData["Title"] = "پنل ادمین " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+}
+
+<div class="row">
+
+    <a class="btn btn-info col-2 m-1 btn-lg" asp-action="Subjects">موضوعات</a>
+    <a class="btn btn-info col-2 m-1 btn-lg" asp-action="Rooms">تالار ها</a>
+    <a class="btn btn-info col-2 m-1 btn-lg" asp-action="Topics">تاپیک ها</a>
+    <a class="btn btn-info col-2 m-1 btn-lg" asp-action="Posts">پست ها</a>
+    <a class="btn btn-info col-2 m-1 btn-lg" asp-action="Users">کاربران</a>
+
+</div>
+

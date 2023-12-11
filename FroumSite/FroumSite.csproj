@@ -85,6 +85,10 @@
     <None Include="wwwroot\lib\bootstrap4\js\bootstrap.min.js.map" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+  </ItemGroup>
+
 
 	
 </Project>

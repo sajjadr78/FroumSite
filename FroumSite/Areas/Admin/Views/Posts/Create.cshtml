@@ -1,0 +1,29 @@
+﻿@model FroumSite.Models.Post
+
+@{
+    ViewData["Title"] = "افزودن پست جدید";
+}
+
+<form asp-action="Save" method="post">
+
+    <div class="form-group">
+        <label asp-for="Caption"></label>
+        <input asp-for="Caption" />
+        <span asp-validation-for="Caption"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Uploader"></label>
+        <input asp-for="Uploader" />
+        <span asp-validation-for="Caption"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Caption"></label>
+        <input asp-for="Caption" />
+        <span asp-validation-for="Caption"></span>
+    </div>
+
+    <div class="form-group">
+        <input class="btn btn-success" type="submit" value="ذخیره" />
+    </div>
+
+</form>

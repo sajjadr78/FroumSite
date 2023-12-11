@@ -15,9 +15,11 @@ namespace FroumSite.Models
         public string Caption { get; set; }
 
         [Required]
+        [Display(Name ="تاریخ آپلود")]
         public DateTime UploadDate { get; set; }
 
         [Required]
+        [Display(Name ="تعداد لایک ها")]
         public int LikeCount { get; set; }
 
         #region Foreign Keys

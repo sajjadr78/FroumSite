@@ -1,11 +1,9 @@
-﻿@model FroumSite.Models.CreateTopicViewModel
+﻿@model CreateTopicViewModel
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>Topic</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -29,9 +27,7 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

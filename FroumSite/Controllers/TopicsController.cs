@@ -9,6 +9,7 @@ using FroumSite.Data;
 using FroumSite.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using FroumSite.Models.ViewModels;
 
 namespace FroumSite.Controllers
 {
@@ -82,6 +83,9 @@ namespace FroumSite.Controllers
 
             return View(vm);
         }
+
+
+
         // GET: Topics/Create
         [Authorize]
         public IActionResult Create(int id)
@@ -96,6 +100,7 @@ namespace FroumSite.Controllers
         [HttpPost]
         public async Task<IActionResult> SavePost(ShowTopicAndSavePostViewModel vm)
         {
+
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
 
 
@@ -137,7 +142,7 @@ namespace FroumSite.Controllers
             _context.Topics.Add(topic);
             await _context.SaveChangesAsync();
 
-            return Content("success");
+            return RedirectToAction("Index",routeValues:new {id = roomId});
         }
 
         // GET: Topics/Edit/5

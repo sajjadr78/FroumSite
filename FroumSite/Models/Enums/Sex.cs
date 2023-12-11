@@ -1,4 +1,4 @@
-﻿namespace FroumSite
+﻿namespace FroumSite.Models.Enums
 {
     public enum Sex
     {

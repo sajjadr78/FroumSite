@@ -1,12 +1,9 @@
 ﻿using FroumSite.Data;
-using FroumSite.Models;
+using FroumSite.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FroumSite.Controllers
@@ -24,6 +21,7 @@ namespace FroumSite.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             return View(await _context.Subjects.ToListAsync());
         }
 

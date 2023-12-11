@@ -4,15 +4,13 @@
     ViewData["Title"] = "انجمن سجاد";
 }
 
-<div>
+<div class="row">
     @foreach (var item in Model)
     {
-        <a asp-action="Index" class="btn" asp-controller="Rooms" asp-route-Id="@item.Id">
-            <div class="card text-white bg-info  col-lg-1 " style="max-width: 20rem;">
-                <div class="card-body">
-                    <h4 class="card-title">@item.Title</h4>
-                </div>
-            </div>
+
+        <a class="btn btn-success  btn-lg  m-1"
+           asp-action="Index" class="btn" asp-controller="Rooms" asp-route-Id="@item.Id">
+            @item.Title
         </a>
     }
 </div>

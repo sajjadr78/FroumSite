@@ -1,0 +1,49 @@
+﻿@using FroumSite.Utilities;
+
+@model FroumSite.Areas.Admin.Models.ViewModels.PostsViewModel
+
+@{
+    ViewData["Title"] = "پنل ادمین " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value + " | لیست پست ها" ;
+}
+
+<h1 class="mb-3">پست ها</h1>
+
+<a asp-action="Create" asp-controller="Posts" class="btn btn-info mb-3">افزودن پست جدید</a>
+
+<table class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th class="col-3" scope="col">@Html.DisplayNameFor(model=>model.Caption)</th>
+            <th class="col-2" scope="col">@Html.DisplayNameFor(model=>model.LikeCount)</th>
+            <th class="col-2" scope="col">@Html.DisplayNameFor(model=>model.TopicTitle)</th>
+            <th class="col-1" scope="col">@Html.DisplayNameFor(model=>model.UploadDate)</th>
+            <th class="col-1" scope="col">@Html.DisplayNameFor(model=>model.UploaderName)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PostsIncludedTopic)
+        {
+            <tr class="table-secondary">
+                <td class="col-3">@item.Caption</td>
+                <td class="col-2">@item.LikeCount</td>
+                <td class="col-2">@item.Topic.Title</td>
+                <td class="col-1">@item.UploadDate.ToShamsi()</td>
+
+                @{
+                    var uploaderName = Model.PostsIncludedUser.FirstOrDefault(p => p.Id == item.Id).Uploader.Name;
+                }
+
+                <td class="col-1">@uploaderName</td>
+                <td class="col-3">
+                     
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">جزییات</a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

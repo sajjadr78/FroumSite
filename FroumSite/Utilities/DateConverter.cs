@@ -9,9 +9,9 @@ namespace FroumSite.Utilities
         {
             PersianCalendar pc = new PersianCalendar();
 
-            return $"{pc.GetDayOfMonth(date).ToString("00")}/" +
+            return $"{pc.GetYear(date)}/" +
                    $"{pc.GetMonth(date).ToString("00")}/" +
-                   $"{pc.GetYear(date)}";
+                   $"{pc.GetDayOfMonth(date).ToString("00")}";
 
         }
     }

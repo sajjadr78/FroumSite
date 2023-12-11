@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FroumSite.Models.Subject>
+
+@{
+    ViewData["Title"] = "پنل ادمین " + User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value + " | لیست موضوعات";
+}
+
+<h1 class="mb-3">موضوعات</h1>
+
+<a asp-action="Create" asp-controller="Subjects" class="btn btn-info mb-3">افزودن موضوع جدید</a>
+
+<table class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Title)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-secondary">
+                <td>@item.Title</td>
+                <td>
+                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@item.Id">جزییات</a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id">ویرایش</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

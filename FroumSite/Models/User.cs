@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FroumSite.Models.Enums;
 
 namespace FroumSite.Models
 {
@@ -56,6 +57,7 @@ namespace FroumSite.Models
         [Required]
         public string Password { get; set; }
 
+        [Display(Name="ادمین")]
         public bool IsAdmin { get; set; }
 
 
