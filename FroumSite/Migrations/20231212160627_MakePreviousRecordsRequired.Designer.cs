@@ -4,14 +4,16 @@ using FroumSite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FroumSite.Migrations
 {
     [DbContext(typeof(FroumContext))]
-    partial class FroumContextModelSnapshot : ModelSnapshot
+    [Migration("20231212160627_MakePreviousRecordsRequired")]
+    partial class MakePreviousRecordsRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +60,7 @@ namespace FroumSite.Migrations
                             Caption = "خانواده اولین گروهی است که ما تجربه می کنیم",
                             LikeCount = 0,
                             TopicId = 1,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(6713),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5030),
                             UserId = 1
                         },
                         new
@@ -67,7 +69,7 @@ namespace FroumSite.Migrations
                             Caption = "بهتر است فضای خانواده صمیمی باشد",
                             LikeCount = 0,
                             TopicId = 1,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7559),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5844),
                             UserId = 10
                         },
                         new
@@ -76,7 +78,7 @@ namespace FroumSite.Migrations
                             Caption = "فردوسی زحمات زیادی برای ادبیات ایران کشید",
                             LikeCount = 0,
                             TopicId = 2,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7583),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5871),
                             UserId = 9
                         },
                         new
@@ -85,7 +87,7 @@ namespace FroumSite.Migrations
                             Caption = "شاهنامه بسیار پر مفهوم است",
                             LikeCount = 0,
                             TopicId = 2,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7585),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5917),
                             UserId = 4
                         },
                         new
@@ -94,7 +96,7 @@ namespace FroumSite.Migrations
                             Caption = "گوشی جدید شیائومی به سیستم عامل اختصاصی این شرکت مجهر است",
                             LikeCount = 0,
                             TopicId = 3,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7587),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5920),
                             UserId = 3
                         },
                         new
@@ -103,7 +105,7 @@ namespace FroumSite.Migrations
                             Caption = "امسال ، برای اپل سال نحسی بود!",
                             LikeCount = 0,
                             TopicId = 4,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7589),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5922),
                             UserId = 6
                         },
                         new
@@ -112,7 +114,7 @@ namespace FroumSite.Migrations
                             Caption = "اختلاس چای دبش به کجا رسید؟",
                             LikeCount = 0,
                             TopicId = 5,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7591),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5924),
                             UserId = 2
                         },
                         new
@@ -121,7 +123,7 @@ namespace FroumSite.Migrations
                             Caption = "آیا اروپا امسال هم زمستان سختی خواهد داشت؟",
                             LikeCount = 0,
                             TopicId = 5,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7592),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5926),
                             UserId = 3
                         },
                         new
@@ -130,7 +132,7 @@ namespace FroumSite.Migrations
                             Caption = "5 ماه اول شیردهی چقدر مهم است؟",
                             LikeCount = 0,
                             TopicId = 6,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7594),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5928),
                             UserId = 2
                         },
                         new
@@ -139,7 +141,7 @@ namespace FroumSite.Migrations
                             Caption = "استرس در دوران بارداری",
                             LikeCount = 0,
                             TopicId = 6,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7595),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5930),
                             UserId = 4
                         },
                         new
@@ -148,7 +150,7 @@ namespace FroumSite.Migrations
                             Caption = "تغذیه در دوران بارداری",
                             LikeCount = 0,
                             TopicId = 6,
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 859, DateTimeKind.Local).AddTicks(7597),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 416, DateTimeKind.Local).AddTicks(5932),
                             UserId = 4
                         });
                 });
@@ -342,7 +344,7 @@ namespace FroumSite.Migrations
                             LikeCount = 0,
                             RoomId = 1,
                             Title = "روابط پدر با فرزندان",
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 860, DateTimeKind.Local).AddTicks(2677),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 417, DateTimeKind.Local).AddTicks(1094),
                             UserId = 1
                         },
                         new
@@ -352,7 +354,7 @@ namespace FroumSite.Migrations
                             LikeCount = 0,
                             RoomId = 12,
                             Title = "فردوسی",
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 860, DateTimeKind.Local).AddTicks(3259),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 417, DateTimeKind.Local).AddTicks(1644),
                             UserId = 2
                         },
                         new
@@ -362,7 +364,7 @@ namespace FroumSite.Migrations
                             LikeCount = 0,
                             RoomId = 4,
                             Title = "شیائومی ، تافته ی جدا بافته",
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 860, DateTimeKind.Local).AddTicks(3278),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 417, DateTimeKind.Local).AddTicks(1664),
                             UserId = 3
                         },
                         new
@@ -372,7 +374,7 @@ namespace FroumSite.Migrations
                             LikeCount = 0,
                             RoomId = 3,
                             Title = "سرنوشت اپل در سال 2023",
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 860, DateTimeKind.Local).AddTicks(3280),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 417, DateTimeKind.Local).AddTicks(1666),
                             UserId = 4
                         },
                         new
@@ -382,7 +384,7 @@ namespace FroumSite.Migrations
                             LikeCount = 0,
                             RoomId = 6,
                             Title = "از سیاست چه خبر",
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 860, DateTimeKind.Local).AddTicks(3282),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 417, DateTimeKind.Local).AddTicks(1668),
                             UserId = 5
                         },
                         new
@@ -392,7 +394,7 @@ namespace FroumSite.Migrations
                             LikeCount = 0,
                             RoomId = 8,
                             Title = "سلامتی در دوران بارداری و شیردهی",
-                            UploadDate = new DateTime(2023, 12, 13, 0, 34, 10, 860, DateTimeKind.Local).AddTicks(3285),
+                            UploadDate = new DateTime(2023, 12, 12, 19, 36, 27, 417, DateTimeKind.Local).AddTicks(1670),
                             UserId = 6
                         });
                 });
@@ -449,7 +451,7 @@ namespace FroumSite.Migrations
                             Name = "سجاد",
                             Password = "123",
                             PhoneNumber = "09136941387",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 857, DateTimeKind.Local).AddTicks(7062),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 414, DateTimeKind.Local).AddTicks(4950),
                             Sex = 0
                         },
                         new
@@ -497,7 +499,7 @@ namespace FroumSite.Migrations
                             Name = "شیلا",
                             Password = "123",
                             PhoneNumber = "09136547156",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 858, DateTimeKind.Local).AddTicks(5850),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 415, DateTimeKind.Local).AddTicks(3023),
                             Sex = 1
                         },
                         new
@@ -509,7 +511,7 @@ namespace FroumSite.Migrations
                             Name = "الناز",
                             Password = "123",
                             PhoneNumber = "09136512036",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 858, DateTimeKind.Local).AddTicks(5865),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 415, DateTimeKind.Local).AddTicks(3042),
                             Sex = 1
                         },
                         new
@@ -521,7 +523,7 @@ namespace FroumSite.Migrations
                             Name = "شهرام",
                             Password = "123",
                             PhoneNumber = "09123650942",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 858, DateTimeKind.Local).AddTicks(5868),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 415, DateTimeKind.Local).AddTicks(3046),
                             Sex = 0
                         },
                         new
@@ -533,7 +535,7 @@ namespace FroumSite.Migrations
                             Name = "محمود",
                             Password = "123",
                             PhoneNumber = "09425558182",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 858, DateTimeKind.Local).AddTicks(5871),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 415, DateTimeKind.Local).AddTicks(3050),
                             Sex = 0
                         },
                         new
@@ -545,7 +547,7 @@ namespace FroumSite.Migrations
                             Name = "شهلا",
                             Password = "123",
                             PhoneNumber = "09116951478",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 858, DateTimeKind.Local).AddTicks(5874),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 415, DateTimeKind.Local).AddTicks(3053),
                             Sex = 1
                         },
                         new
@@ -557,7 +559,7 @@ namespace FroumSite.Migrations
                             Name = "زهرا",
                             Password = "123",
                             PhoneNumber = "09362012361",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 858, DateTimeKind.Local).AddTicks(5876),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 415, DateTimeKind.Local).AddTicks(3056),
                             Sex = 1
                         },
                         new
@@ -569,39 +571,9 @@ namespace FroumSite.Migrations
                             Name = "امیر",
                             Password = "123",
                             PhoneNumber = "09352142314",
-                            RegisterDate = new DateTime(2023, 12, 13, 0, 34, 10, 858, DateTimeKind.Local).AddTicks(5880),
+                            RegisterDate = new DateTime(2023, 12, 12, 19, 36, 27, 415, DateTimeKind.Local).AddTicks(3060),
                             Sex = 0
                         });
-                });
-
-            modelBuilder.Entity("FroumSite.Models.UserLikePost", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "PostId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("UserLikePosts");
-                });
-
-            modelBuilder.Entity("FroumSite.Models.UserLikeTopic", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TopicId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "TopicId");
-
-                    b.HasIndex("TopicId");
-
-                    b.ToTable("UserLikeTopics");
                 });
 
             modelBuilder.Entity("FroumSite.Models.Post", b =>
@@ -609,13 +581,13 @@ namespace FroumSite.Migrations
                     b.HasOne("FroumSite.Models.Topic", "Topic")
                         .WithMany("Posts")
                         .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FroumSite.Models.User", "User")
+                    b.HasOne("FroumSite.Models.User", "Uploader")
                         .WithMany("SharedPosts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -624,7 +596,7 @@ namespace FroumSite.Migrations
                     b.HasOne("FroumSite.Models.Subject", "Subject")
                         .WithMany("Rooms")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -633,43 +605,13 @@ namespace FroumSite.Migrations
                     b.HasOne("FroumSite.Models.Room", "Room")
                         .WithMany("Topics")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FroumSite.Models.User", "User")
+                    b.HasOne("FroumSite.Models.User", "Uploader")
                         .WithMany("SharedTopics")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FroumSite.Models.UserLikePost", b =>
-                {
-                    b.HasOne("FroumSite.Models.Post", "Post")
-                        .WithMany("UsersLikedThisPost")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FroumSite.Models.User", "User")
-                        .WithMany("LikedPosts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FroumSite.Models.UserLikeTopic", b =>
-                {
-                    b.HasOne("FroumSite.Models.Topic", "Topic")
-                        .WithMany("UsersLikedThisTopic")
-                        .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FroumSite.Models.User", "User")
-                        .WithMany("LikedTopics")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

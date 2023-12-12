@@ -76,7 +76,7 @@ namespace FroumSite.Areas.Admin.Controllers
 
             var postToDelete = await _context.Posts
                 .Include(t => t.Topic)
-                .Include(u => u.Uploader)
+                .Include(u => u.User)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             
@@ -89,7 +89,7 @@ namespace FroumSite.Areas.Admin.Controllers
                 UploadDate = postToDelete.UploadDate,
                 UserId = postToDelete.UserId,
                 TopicTitle = postToDelete.Topic.Title,
-                UploaderName = postToDelete.Uploader.Name
+                UploaderName = postToDelete.User.Name
             };
 
             return View(vm);
@@ -120,11 +120,11 @@ namespace FroumSite.Areas.Admin.Controllers
         public IActionResult Details(int id)
         {
             var postToShowDetails = _context.Posts
-                .Include(u => u.Uploader)
+                .Include(u => u.User)
                 .Include(t => t.Topic)
                 .FirstOrDefault(o => o.Id == id);
 
-            var uploaderFullName = postToShowDetails.Uploader.Name + " " + postToShowDetails.Uploader.Family;
+            var uploaderFullName = postToShowDetails.User.Name + " " + postToShowDetails.User.Family;
 
             PostsViewModel vm = new PostsViewModel
             {

@@ -34,7 +34,7 @@ namespace FroumSite.Controllers
             var room = _context.Rooms.Find(Id);
 
             var postsIncludedUsers = await _context.Posts
-                .Include(p => p.Uploader)
+                .Include(p => p.User)
                 .ToListAsync();
 
             TopicViewModel vm = new TopicViewModel
@@ -62,18 +62,42 @@ namespace FroumSite.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             var topicIncludedUsers = await _context.Topics
-                .Include(p => p.Uploader)
+                .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             topicId = topicIncludedPosts.Id;
 
-            var users = _context.Users.ToList();
+            var users =await  _context.Users.ToListAsync();
+
+            var posts = await _context.Posts.ToListAsync();
+
+            var postsCountUploaderByUser = _context.Users
+                .Include(p => p.SharedPosts)
+                .FirstOrDefault(u => u.Id == 12)
+                .SharedPosts
+                .Count;
+            bool isLikedByUser = false;
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = int.Parse(
+                    User.Claims
+                        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
+                        .Value);
+
+                isLikedByUser = await _context
+                                        .UserLikeTopics
+                                        .AnyAsync(u => u.TopicId == id &&
+                                                       u.UserId == userId);
+            }
 
             ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
             {
                 TopicIncludedPosts = topicIncludedPosts,
                 TopicIncludedUploader = topicIncludedPosts,
-                Users = users
+                Users = users,
+                PostsCountUploadedByUser = postsCountUploaderByUser,
+                IsTopicLikedByUser = isLikedByUser,
+                Context = _context
             };
 
             if (topicIncludedPosts == null)
@@ -82,6 +106,76 @@ namespace FroumSite.Controllers
             }
 
             return View(vm);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> LikeTopic(int id)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            var userLikeTopic = await _context
+                                        .UserLikeTopics
+                                        .Where(u => u.TopicId == id && u.UserId == userId)
+                                        .FirstOrDefaultAsync();
+
+            var topic = _context.Topics.Find(id);
+
+            if (userLikeTopic == null)
+            {
+                UserLikeTopic ult = new UserLikeTopic
+                {
+                    TopicId = id,
+                    UserId = userId
+                };
+                _context.UserLikeTopics.Add(ult);
+                topic.LikeCount++;
+            }
+            else
+            {
+                _context.UserLikeTopics.Remove(userLikeTopic);
+                topic.LikeCount--;
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("Details", routeValues: new { id = topicId });
+
+        }
+
+        [Authorize]
+        public async Task<IActionResult> LikePost(int id)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            var userLikePost = await _context
+                                        .UserLikePosts
+                                        .Where(u => u.PostId == id && u.UserId == userId)
+                                        .FirstOrDefaultAsync();
+
+            var post = _context.Posts.Find(id);
+
+            if (userLikePost == null)
+            {
+                UserLikePost ulp = new UserLikePost
+                {
+                    PostId = id,
+                    UserId = userId
+                };
+                _context.UserLikePosts.Add(ulp);
+                post.LikeCount++;
+            }
+            else
+            {
+                _context.UserLikePosts.Remove(userLikePost);
+                post.LikeCount--;
+            }
+
+            await _context.SaveChangesAsync();
+
+
+            return RedirectToAction("Details", routeValues: new { id = topicId });
+
         }
 
 
@@ -136,13 +230,15 @@ namespace FroumSite.Controllers
                 Description = description,
                 Title = title,
                 RoomId = roomId,
-                UserId = userId
+                UserId = userId,
+                LikeCount = 0,
+                UploadDate = DateTime.Now
             };
 
             _context.Topics.Add(topic);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index",routeValues:new {id = roomId});
+            return RedirectToAction("Index", routeValues: new { id = roomId });
         }
 
         // GET: Topics/Edit/5

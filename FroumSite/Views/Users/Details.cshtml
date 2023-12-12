@@ -1,60 +1,47 @@
-﻿@model FroumSite.Models.User
+﻿@using FroumSite.Utilities;
+@model User
+
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "جزییات کاربر";
 }
 
-<h1>Details</h1>
+<div>
 
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Family)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Family)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RegisterDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RegisterDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Birthday)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Birthday)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sex)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sex)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Password)
-        </dd>
-    </dl>
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Name) : @Html.DisplayFor(model=>model.Name)
+
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Family) : @Html.DisplayFor(model=>model.Family)
+    </label>
+
+    <label class=" form-control">
+
+        @Html.DisplayNameFor(model=>model.Sex) :
+        @{
+            if (Model.Sex == FroumSite.Models.Enums.Sex.Male)
+            {
+                <span>مرد</span>
+            }
+            else
+            {
+                <span>زن</span>
+            }
+        }
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.RegisterDate) : @Model.RegisterDate.ToShamsi()
+    </label>
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Birthday) : @(DateTime.Now.Year - Model.Birthday.Year) سال
+    </label>
+
+
+
+
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

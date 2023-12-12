@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,29 +19,31 @@ namespace FroumSite.Models
         [MaxLength(300,ErrorMessage ="توضیحات نباید بیشتر از 300 کاراکتر باشد")]
         public string Description { get; set; }
 
+        [Display(Name ="تعداد لایک")]
+        [Required]
+        public int LikeCount { get; set; }
+
+        [Display(Name ="تاریخ آپلود")]
+        [Required]
+        public DateTime UploadDate { get; set; }
 
         #region Foreign Keys
 
-        [Required]
         public int RoomId { get; set; }
 
-        //this line generates error so i added some codes on froumcontext.cs line 27
-        [Required]
         public int UserId { get; set; }
-
 
         #endregion
 
         #region Navigation Properties
 
-        //[ForeignKey("RoomId")]
+        
         public Room Room { get; set; }
-        //[Display(Name ="توسط")]
-        //[ForeignKey("UserId")]
-        public User Uploader { get; set; }
-
-
+        public User User { get; set; }
         public List<Post> Posts { get; set; }
+
+
+        public List<UserLikeTopic> UsersLikedThisTopic { get; set; }
         #endregion
     }
 }

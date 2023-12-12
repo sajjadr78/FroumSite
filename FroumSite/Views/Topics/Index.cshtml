@@ -41,19 +41,30 @@
                     }
                     else
                     {
-                        <div>
+                        <a asp-action="Details" asp-controller="Posts" asp-route-id="@item.Posts.Last().Id">
                             @item.Posts.Last().Caption
-                        </div>
+                        </a>
                         <div>
                             <span>
                                 توسط:
                             </span>
-                            <span>
-                                @(Model.PostsIncludedUsers.Where(p=>p.TopicId == item.Id)
+                            @{
+                                var uploader = Model.PostsIncludedUsers
+                                .Where(p => p.TopicId == item.Id)
                                 .Last()
-                                .Uploader
-                                .Name)
-                            </span>
+                                .User;
+
+                                var uploaderFullName = uploader.Name + " " + uploader.Family;
+
+                                var uploaderId = uploader.Id;
+                            }
+                            <a asp-action="Details"
+                               asp-controller="Users"
+                               asp-route-id="@uploaderId">
+
+                                @uploaderFullName
+
+                            </a>
                         </div>
 
                     }
@@ -104,4 +115,3 @@
     </tbody>
 </table>
  *@
- 

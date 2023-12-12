@@ -31,7 +31,7 @@ namespace FroumSite.Controllers
 
             string subjectName = _context.Subjects.Find(Id).Title;
 
-            var topicsIncludedUsers = _context.Topics.Include(t => t.Uploader).ToList();
+            var topicsIncludedUsers = _context.Topics.Include(t => t.User).ToList();
 
             RoomViewModel vm = new RoomViewModel
             {

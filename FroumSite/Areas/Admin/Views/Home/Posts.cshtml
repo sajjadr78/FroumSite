@@ -31,7 +31,7 @@
                 <td class="col-1">@item.UploadDate.ToShamsi()</td>
 
                 @{
-                    var uploader = Model.PostsIncludedUser.FirstOrDefault(p => p.Id == item.Id).Uploader;
+                    var uploader = Model.PostsIncludedUser.FirstOrDefault(p => p.Id == item.Id).User;
                     var uploaderFullName = uploader.Name + " " + uploader.Family;
                 }
 

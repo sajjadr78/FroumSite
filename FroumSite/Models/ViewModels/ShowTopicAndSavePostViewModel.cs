@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FroumSite.Data;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace FroumSite.Models.ViewModels
@@ -12,6 +13,8 @@ namespace FroumSite.Models.ViewModels
         [Display(Name = "کپشن")]
         public string Caption { get; set; }
         public List<User> Users { get; set; }
-
+        public int PostsCountUploadedByUser { get; set; }
+        public bool IsTopicLikedByUser { get; set; }
+        public FroumContext Context { get; set; }
     }
 }

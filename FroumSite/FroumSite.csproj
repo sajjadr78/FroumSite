@@ -44,6 +44,16 @@
     <Compile Remove="Migrations\20231205174028_InitMoreData.Designer.cs" />
     <Compile Remove="Migrations\20231205174658_InitMoreData.cs" />
     <Compile Remove="Migrations\20231205174658_InitMoreData.Designer.cs" />
+    <Compile Remove="Migrations\20231212172408_AddedLikeRecordToTopicAndPostTbl.cs" />
+    <Compile Remove="Migrations\20231212172408_AddedLikeRecordToTopicAndPostTbl.Designer.cs" />
+    <Compile Remove="Migrations\20231212173303_AddedLikeRecordToTopicAndPostTbl.cs" />
+    <Compile Remove="Migrations\20231212173303_AddedLikeRecordToTopicAndPostTbl.Designer.cs" />
+    <Compile Remove="Migrations\20231212173443_AddedLikeRecordToTopicAndPostTbl.cs" />
+    <Compile Remove="Migrations\20231212173443_AddedLikeRecordToTopicAndPostTbl.Designer.cs" />
+    <Compile Remove="Migrations\20231212193537_AddedLikeFuture.cs" />
+    <Compile Remove="Migrations\20231212193537_AddedLikeFuture.Designer.cs" />
+    <Compile Remove="Migrations\20231212193727_AddedLikeFeatureTo_Topic_And_Post_Tbls.cs" />
+    <Compile Remove="Migrations\20231212193727_AddedLikeFeatureTo_Topic_And_Post_Tbls.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -31,10 +32,10 @@ namespace FroumSite.Models
 
         #region NavigationProperties
 
-        [ForeignKey("UserId")]
-        public User Uploader { get; set; }
-        [ForeignKey("TopicId")]
+        public User User { get; set; }
         public Topic Topic { get; set; }
+
+        public List<UserLikePost> UsersLikedThisPost { get; set; }
 
         #endregion
     }

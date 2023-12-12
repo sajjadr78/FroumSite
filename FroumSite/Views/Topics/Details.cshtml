@@ -1,32 +1,25 @@
 ﻿@using FroumSite.Utilities;
 @using FroumSite.Models.ViewModels;
+@using System.Security.Claims;
 @model ShowTopicAndSavePostViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-
-<div class="col-md-12 row  mb-3 border" style="border-radius:20px">
+<div class=" row col-12 mb-3 border " style="border-radius:20px">
     <div class="col-3 p-3" style="background-color:#fff3e0;">
-        <a href="https://google.com">@Model.TopicIncludedUploader.Uploader.Name</a>
+        <a asp-action="Details" asp-controller="Users"
+           asp-route-id="@Model.TopicIncludedUploader.User.Id">
+            @Model.TopicIncludedUploader.User.Name
+        </a>
 
-        <div class="row">
-            <span>
-                عضویت :
-            </span>
-            <span>
-                @Model.TopicIncludedUploader.Uploader.RegisterDate.ToShamsi()
-            </span>
+        <div>
+            @($"تاریخ عضویت : {Model.TopicIncludedUploader.User.RegisterDate.ToShamsi()}")
         </div>
 
-        <div class="row">
-            <span>
-                تعداد پست :
-            </span>
-            <span>
-                @Model.TopicIncludedUploader.Uploader.SharedPosts.Count
-            </span>
+        <div>
+            @($"تعداد پست های کاربر : {Model.PostsCountUploadedByUser} ")
         </div>
     </div>
     <div class="col-9 p-3">
@@ -34,7 +27,9 @@
             <h4>عنوان : @Model.TopicIncludedPosts.Title</h4>
         </div>
         <div>
-            <span class="text-muted card-subtitle">@Model.TopicIncludedPosts.Posts.Count پست</span>
+            <span class="text-muted card-subtitle">
+                @Model.TopicIncludedPosts.Posts.Count پست
+            </span>
         </div>
 
         <hr />
@@ -43,13 +38,32 @@
             @Model.TopicIncludedPosts.Description
         </div>
         <hr />
-        @* i'll fix lines below later *@
-        <div>
-            0 نفر لایک کرده اند
+
+        <div class="text-right">
+            @{
+                if (User.Identity.IsAuthenticated)
+                {
+                    <a class="btn btn-sm" asp-action="LikeTopic" asp-route-id="@Model.TopicIncludedUploader.Id">
+                        @if (Model.IsTopicLikedByUser)
+                        {
+                            <h3>&#9829;</h3>
+                        }
+                        else
+                        {
+                            <h3>&#9825;</h3>
+                        }
+                    </a>
+                }
+            }
+
         </div>
 
-        <div>
-            آپلود شده در تاریخ 0/0/0
+        <div class="text-muted card-subtitle text-sm-right">
+            @Model.TopicIncludedPosts.LikeCount لایک
+        </div>
+
+        <div class="text-muted text-sm-right">
+            آپلود شده در تاریخ @Model.TopicIncludedPosts.UploadDate.ToShamsi()
         </div>
     </div>
 
@@ -58,24 +72,68 @@
 
 @foreach (var item in Model.TopicIncludedPosts.Posts)
 {
-    <div class="row col-md-12  border p-1 mb-3" style="border-radius:20px">
+    <div class="col-12 border p-1 mb-3" style="border-radius:20px">
         <div class="col-md-3" style="background-color:#fce4ec">
 
             @{
 
-                var uploaderName = Model.Users.FirstOrDefault(u => u.Id == item.UserId).Name;
+                var uploader = Model.Users.FirstOrDefault(u => u.Id == item.UserId);
+                var uploaderFullName = uploader.Name + " " + uploader.Family;
+                var uploaderId = uploader.Id;
             }
             <span>توسط :</span>
-            <a href="https://google.com">@uploaderName</a>
-            @* i will fix the href later *@
+            <a asp-action="Details"
+               asp-controller="Users"
+               asp-route-id="@uploaderId">
+
+                @uploaderFullName
+
+            </a>
+
         </div>
         <div class="col-md-9">
             @item.Caption
         </div>
 
+        <div class="text-right">
+            @{
+                if (User.Identity.IsAuthenticated)
+                {
+                    <a class="btn btn-sm" asp-action="LikePost" asp-route-id="@item.Id">
+                        @{
+                            int userId = int.Parse(User.Claims
+                                        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
+                                        .Value);
+
+                            var isPostLikedByUser = Model.Context.UserLikePosts
+                                                    .Any(u => u.UserId == userId && u.PostId == item.Id);
+
+                            if (isPostLikedByUser)
+                            {
+                                <h3>&#9829;</h3>
+                            }
+                            else
+                            {
+                                <h3>&#9825;</h3>
+                            }
+                        }
+                    </a>
+                }
+            }
+        </div>
+
+        <div class="text-sm-right text-muted">
+            @item.LikeCount لایک
+        </div>
+
+        <div class="text-muted text-sm-right">
+            @item.UploadDate.ToShamsi()
+        </div>
+
     </div>
     @* note : hr tag doesnt work in div *@
 }
+
 
 
 
@@ -91,6 +149,7 @@
     <fieldset>
         <input type="submit" value="ثبت" />
     </fieldset>
+
 </form>
 
 @* <div class="row">

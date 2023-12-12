@@ -43,7 +43,7 @@
     </label>
 
     <label class=" form-control">
-        @Html.DisplayNameFor(model=>model.Birthday) : @Model.Birthday.ToShamsi()
+        @Html.DisplayNameFor(model=>model.Birthday) : @(DateTime.Now.Year - Model.Birthday.Year) سال
     </label>
 
 

@@ -51,7 +51,7 @@ namespace FroumSite.Areas.Admin.Controllers
                 .ToListAsync();
 
             var postsIncludedUser = await _context.Posts
-                .Include(p => p.Uploader)
+                .Include(p => p.User)
                 .ToListAsync();
 
             PostsViewModel vm = new PostsViewModel
@@ -70,7 +70,7 @@ namespace FroumSite.Areas.Admin.Controllers
                 .ToListAsync();
 
             var topicsIncludedUsers = await _context.Topics
-                .Include(t => t.Uploader)
+                .Include(t => t.User)
                 .ToListAsync();
 
             TopicsViewModel vm = new TopicsViewModel

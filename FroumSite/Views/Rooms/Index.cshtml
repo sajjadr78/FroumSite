@@ -62,16 +62,28 @@
                     }
                     else
                     {
-                        <div>
+                        <a asp-action="Details" asp-controller="Topics"
+                           asp-route-id="@item.Topics.Last().Id">
                             @item.Topics.Last().Title
-                        </div>
+                        </a>
                         <div>
                             <span>
                                 توسط:
                             </span>
-                            <span>
-                                @item.Topics.Last().Uploader.Name
-                            </span>
+                            @{
+                                var uploader = item.Topics.Last().User;
+
+                                var uploaderFullName = uploader.Name + " " + uploader.Family;
+
+                                var uploaderId = uploader.Id;
+                            }
+                            <a asp-action="Details"
+                               asp-controller="Users"
+                               asp-route-id="@uploaderId">
+
+                                @uploaderFullName
+
+                            </a>
                         </div>
                     }
                 </td>

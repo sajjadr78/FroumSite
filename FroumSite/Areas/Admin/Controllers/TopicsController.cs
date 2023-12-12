@@ -75,7 +75,7 @@ namespace FroumSite.Areas.Admin.Controllers
 
             var topicToDelete = await _context.Topics
                 .Include(t => t.Room)
-                .Include(u => u.Uploader)
+                .Include(u => u.User)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
 
@@ -85,7 +85,7 @@ namespace FroumSite.Areas.Admin.Controllers
                 Title = topicToDelete.Title,
                 Description = topicToDelete.Description,
                 RoomName = topicToDelete.Room.Title,
-                UploaderName = topicToDelete.Uploader.Name
+                UploaderName = topicToDelete.User.Name
             };
 
             return View(vm);
@@ -97,7 +97,7 @@ namespace FroumSite.Areas.Admin.Controllers
 
             var topicToEdit = await _context.Topics
                 .Include(r => r.Room)
-                .Include(u => u.Uploader)
+                .Include(u => u.User)
                 .FirstOrDefaultAsync(t=>t.Id == id);
 
             var users = await _context.Users.ToListAsync();
@@ -110,7 +110,7 @@ namespace FroumSite.Areas.Admin.Controllers
                 RoomId = topicToEdit.RoomId,
                 RoomName = topicToEdit.Room.Title,
                 UploaderId = topicToEdit.UserId,
-                UploaderName = topicToEdit.Uploader.Name,
+                UploaderName = topicToEdit.User.Name,
                 Users = users,
                 Rooms = rooms
             };
@@ -121,11 +121,11 @@ namespace FroumSite.Areas.Admin.Controllers
         public IActionResult Details(int id)
         {
             var topicToShowDetails = _context.Topics
-                .Include(u => u.Uploader)
+                .Include(u => u.User)
                 .Include(t => t.Room)
                 .FirstOrDefault(t => t.Id == id);
 
-            var uploaderFullName = topicToShowDetails.Uploader.Name + " " + topicToShowDetails.Uploader.Family;
+            var uploaderFullName = topicToShowDetails.User.Name + " " + topicToShowDetails.User.Family;
 
             TopicsViewModel vm = new TopicsViewModel
             {

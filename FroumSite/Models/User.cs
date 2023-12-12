@@ -36,7 +36,7 @@ namespace FroumSite.Models
         public DateTime RegisterDate { get; set; }
 
 
-        [Display(Name="تاریخ تولد")]
+        [Display(Name="سن")]
         public DateTime Birthday { get; set; }
 
 
@@ -65,6 +65,9 @@ namespace FroumSite.Models
 
         public List<Topic> SharedTopics { get; set; }
         public List<Post> SharedPosts { get; set; }
+        public List<UserLikeTopic> LikedTopics { get; set; }
+        public List<UserLikePost> LikedPosts { get; set; }
+
 
         #endregion
     }

@@ -27,7 +27,6 @@ namespace FroumSite.Models
 
         #region Navigation Properties
 
-        [ForeignKey("SubjectId")]
         public Subject Subject { get; set; }
         public List<Topic> Topics { get; set; }
 

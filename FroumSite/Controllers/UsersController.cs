@@ -20,6 +20,7 @@ namespace FroumSite.Controllers
         }
 
         // GET: Users
+        [HttpPost]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Users.ToListAsync());
@@ -44,6 +45,7 @@ namespace FroumSite.Controllers
         }
 
         // GET: Users/Create
+        [HttpPost]
         public IActionResult Create()
         {
             return View();
@@ -66,6 +68,7 @@ namespace FroumSite.Controllers
         }
 
         // GET: Users/Edit/5
+        [HttpPost]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -117,6 +120,7 @@ namespace FroumSite.Controllers
         }
 
         // GET: Users/Delete/5
+        [HttpPost]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

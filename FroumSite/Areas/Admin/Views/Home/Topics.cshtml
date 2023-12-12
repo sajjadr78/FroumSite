@@ -29,7 +29,7 @@
                 @{
                     var uploader = Model.TopicsIncludedUsers.Where(t => t.Id == item.Id)
                         .FirstOrDefault()
-                        .Uploader;
+                        .User;
 
                     var uploaderFullName = uploader.Name + " " + uploader.Family;
                 }
