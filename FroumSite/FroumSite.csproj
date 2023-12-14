@@ -7,15 +7,20 @@
   <ItemGroup>
     <Compile Remove="Data\Abstractions\**" />
     <Compile Remove="Data\Repositories\**" />
+    <Compile Remove="Views\Subjects\**" />
     <Content Remove="Data\Abstractions\**" />
     <Content Remove="Data\Repositories\**" />
+    <Content Remove="Views\Subjects\**" />
     <EmbeddedResource Remove="Data\Abstractions\**" />
     <EmbeddedResource Remove="Data\Repositories\**" />
+    <EmbeddedResource Remove="Views\Subjects\**" />
     <None Remove="Data\Abstractions\**" />
     <None Remove="Data\Repositories\**" />
+    <None Remove="Views\Subjects\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\SubjectsController.cs" />
     <Compile Remove="Migrations\20231203164547_InitRecords.cs" />
     <Compile Remove="Migrations\20231203164547_InitRecords.Designer.cs" />
     <Compile Remove="Migrations\20231203164727_InitRecords.cs" />
@@ -77,6 +82,7 @@
 
   <ItemGroup>
     <None Include="Views\Account\Register.cshtml" />
+    <None Include="wwwroot\app.js" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-reboot.css.map" />
@@ -97,6 +103,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Views\Topics\ShowLikeViews\" />
   </ItemGroup>
 
   <ItemGroup>

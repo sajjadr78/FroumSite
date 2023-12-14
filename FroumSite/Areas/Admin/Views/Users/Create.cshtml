@@ -1,4 +1,4 @@
-﻿@model User
+﻿@model RegisterViewModel
 
 @{
     ViewData["Title"] = "افزودن کاربر جدید";
@@ -10,19 +10,19 @@
         <div class="form-group">
             <label asp-for="Name"></label>
             <input class="form-control" class="form-control" asp-for="Name" />
-            <span asp-validation-for="Name"></span>
+            <span class="text-danger" asp-validation-for="Name"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Family"></label>
             <input class="form-control" asp-for="Family" />
-            <span asp-validation-for="Family"></span>
+            <span class="text-danger" asp-validation-for="Family"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Birthday"></label>
             <input class="form-control" type="date" asp-for="Birthday" />
-            <span asp-validation-for="Birthday"></span>
+            <span class="text-danger" asp-validation-for="Birthday"></span>
         </div>
 
         <div class="form-group">
@@ -35,19 +35,19 @@
         <div class="form-group">
             <label asp-for="Password"></label>
             <input class="form-control" asp-for="Password" />
-            <span asp-validation-for="Password"></span>
+            <span class="text-danger" asp-validation-for="Password"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="PhoneNumber"></label>
             <input class="form-control" asp-for="PhoneNumber" />
-            <span asp-validation-for="PhoneNumber"></span>
+            <span class="text-danger" asp-validation-for="PhoneNumber"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="RegisterDate"></label>
             <input class="form-control" type="date" asp-for="RegisterDate" />
-            <span asp-validation-for="RegisterDate"></span>
+            <span class="text-danger" asp-validation-for="RegisterDate"></span>
         </div>
 
         <div class="form-group">
@@ -56,7 +56,7 @@
                 <option value="Male">مرد</option>
                 <option value="Female">زن</option>
             </select>
-            <span asp-validation-for="Sex"></span>
+            <span class="text-danger" asp-validation-for="Sex"></span>
         </div>
 
         <div class="form-group">
@@ -66,3 +66,8 @@
     </form>
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

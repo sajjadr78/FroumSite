@@ -1,0 +1,9 @@
+﻿@model IEnumerable<UserLikeTopic>
+
+
+@foreach (var item in Model)
+{
+    <p>
+        @item.User.Name @item.User.Family
+    </p>
+}

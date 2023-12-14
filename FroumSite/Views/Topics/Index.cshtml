@@ -7,9 +7,14 @@
 }
 
 
-<h1 class="mb-3">تاپیک ها</h1>
+<h1 class="mb-3">تاپیک های تالار @Model.Room.Title</h1>
+<div>
+    <a class="btn btn-success m-3" asp-action="Index" asp-controller="Rooms" asp-route-id="@Model.Room.Id">بازگشت</a>
+</div>
 
-<a class="btn btn-primary mb-3" href="/Topics/Create/@(Model.Room.Id)">ایجاد تاپیک جدید در این تالار</a>
+<div>
+    <a class="btn btn-primary m-3" asp-action="Create" asp-route-id="@Model.Room.Id">ایجاد تاپیک جدید در این تالار</a>
+</div>
 
 <table class="table table-hover">
     <thead>

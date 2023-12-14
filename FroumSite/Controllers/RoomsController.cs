@@ -37,28 +37,34 @@ namespace FroumSite.Controllers
             {
                 RoomsIncludedTopics = roomsIncludedTopics,
                 SubjectName = subjectName,
-                TopicsIncludedUsers = topicsIncludedUsers
+                TopicsIncludedUsers = topicsIncludedUsers,
+                RoomId = Id
             };
 
             return View(vm);
         }
 
         // GET: Rooms/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> RoomDetails(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var topicsIncludedPosts = await _context.Topics.Where(t => t.RoomId == id)
+                .Include(t => t.Posts)
+                .ToListAsync();
 
-            var room = await _context.Rooms
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (room == null)
-            {
-                return NotFound();
-            }
+            var room = _context.Rooms.Find(id);
 
-            return View(room);
+            var postsIncludedUsers = await _context.Posts
+                .Include(p => p.User)
+                .ToListAsync();
+
+            TopicViewModel vm = new TopicViewModel
+            {
+                TopicsIncludedPosts = topicsIncludedPosts,
+                Room = room,
+                PostsIncludedUsers = postsIncludedUsers
+            };
+
+            return View(vm);
         }
 
         // GET: Rooms/Create

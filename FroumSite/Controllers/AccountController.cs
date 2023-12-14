@@ -79,7 +79,7 @@ namespace FroumSite.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel login)
+        public async Task<IActionResult> Login(LoginViewModel login)
         {
             if (!ModelState.IsValid)
             {
@@ -109,8 +109,6 @@ namespace FroumSite.Controllers
                 new Claim("SharedTopics", user.SharedTopics.ToString()),
                 new Claim("Password", user.Password)
 
-                // new Claim("CodeMeli", user.Email),
-
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -121,16 +119,17 @@ namespace FroumSite.Controllers
                 IsPersistent = login.RememberMe
             };
 
-            HttpContext.SignInAsync(principal, properties);
+            await HttpContext.SignInAsync(principal, properties);
 
             return Redirect("/");
         }
 
         #endregion
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext
+                .SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Redirect("/Account/Login");
         }
 

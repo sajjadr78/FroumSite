@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FroumSite.Controllers
@@ -12,6 +13,7 @@ namespace FroumSite.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly FroumContext _context;
+        private readonly int subjectId = 0;
 
         public HomeController(ILogger<HomeController> logger, FroumContext context)
         {
@@ -25,9 +27,30 @@ namespace FroumSite.Controllers
             return View(await _context.Subjects.ToListAsync());
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> SubjectDetails(int? id)
         {
-            return View();
+            if (id==null)
+            {
+                return NotFound();
+            }
+
+            var roomsIncludedTopics = await _context.Rooms
+                 .Where(r => r.SubjectId == id)
+                 .Include(r => r.Topics)
+                 .ToListAsync();
+
+            string subjectName = _context.Subjects.Find(id).Title;
+
+            var topicsIncludedUsers = _context.Topics.Include(t => t.User).ToList();
+
+            RoomViewModel vm = new RoomViewModel
+            {
+                RoomsIncludedTopics = roomsIncludedTopics,
+                SubjectName = subjectName,
+                TopicsIncludedUsers = topicsIncludedUsers
+            };
+
+            return View(vm);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

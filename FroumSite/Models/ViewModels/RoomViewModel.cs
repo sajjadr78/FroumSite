@@ -14,5 +14,7 @@ namespace FroumSite.Models.ViewModels
         public List<Room> RoomsIncludedTopics { get; set; }
         public string SubjectName { get; set; }
         public List<Topic> TopicsIncludedUsers { get; set; }
+        public int RoomId { get; set; }
+        public int SubjectId { get; set; }
     }
 }

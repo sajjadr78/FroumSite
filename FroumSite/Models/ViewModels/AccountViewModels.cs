@@ -11,7 +11,7 @@ namespace FroumSite.Models.ViewModels
         [MaxLength(20, ErrorMessage = "نام نباید بیشتر از 20 حرف باشد")]
         [MinLength(3, ErrorMessage = "نام باید بیشتر از 2 حرف باشد")]
         [Display(Name = "نام")]
-        [Required]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]
         public string Name { get; set; }
 
 
@@ -22,6 +22,7 @@ namespace FroumSite.Models.ViewModels
 
 
         [Display(Name = "تاریخ تولد")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]
         public DateTime Birthday { get; set; }
 
 
@@ -32,7 +33,7 @@ namespace FroumSite.Models.ViewModels
 
         [StringLength(11, ErrorMessage = "شماره تلفن همراه باید 11 رقم باشد")]
         [Display(Name = "شماره تلفن همراه")]
-        [Required]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]
         public string PhoneNumber { get; set; }
 
         [MaxLength(15, ErrorMessage = "رمز نباید بیشتر از 15 حرف باشد")]
@@ -48,13 +49,19 @@ namespace FroumSite.Models.ViewModels
         [Compare("Password")]
         [Display(Name = "تکرار کلمه عبور")]
         public string RePassword { get; set; }
+
+        public bool IsAdmin { get; set; }
+
+        [Display(Name = "تاریخ ثبت نام")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]
+        public DateTime RegisterDate { get; internal set; }
     }
 
     public class LoginViewModel
     {
         [StringLength(11, ErrorMessage = "شماره تلفن همراه باید 11 رقم باشد")]
         [Display(Name = "شماره تلفن همراه")]
-        [Required]
+        [Required(ErrorMessage ="لطفا شماره همراه خود را وارد کنید")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]

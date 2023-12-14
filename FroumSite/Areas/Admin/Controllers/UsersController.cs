@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
+using FroumSite.Models.ViewModels;
 
 namespace FroumSite.Areas.Admin.Controllers
 {
@@ -19,23 +20,41 @@ namespace FroumSite.Areas.Admin.Controllers
             _context = context;
         }
 
-        public  IActionResult Create()
+        public IActionResult Create()
         {
-            User user = new User
+            RegisterViewModel vm = new RegisterViewModel
             {
-                RegisterDate = new System.DateTime(1950,1,1),
+                RegisterDate = new System.DateTime(1950, 1, 1),
                 Birthday = new System.DateTime(1950, 1, 1)
             };
 
-            return View(user);
+            return View(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save(User user)
+        public async Task<IActionResult> Save(RegisterViewModel vm)
         {
             if (_userIdToEdit == 0)
             {
-                
+                var isUserExists = _context.Users
+                                    .Any(u => u.PhoneNumber == vm.PhoneNumber);
+                if (isUserExists)
+                {
+                    ModelState.AddModelError("PhoneNumber", "این شماره تلفن از قبل ثبت نام کرده است");
+                    return View("Create");
+                }
+
+                User user = new User
+                {
+                    Birthday = vm.Birthday,
+                    Family = vm.Family,
+                    IsAdmin = vm.IsAdmin,
+                    Name = vm.Name,
+                    PhoneNumber = vm.PhoneNumber,
+                    RegisterDate = vm.RegisterDate,
+                    Password = vm.Password,
+                    Sex = vm.Sex
+                };
 
                 _context.Users.Add(user);
             }
@@ -46,14 +65,14 @@ namespace FroumSite.Areas.Admin.Controllers
 
                 if (userToEdit != null)
                 {
-                    userToEdit.Name = user.Name;
-                    userToEdit.Family = user.Family;
-                    userToEdit.PhoneNumber = user.PhoneNumber;
-                    userToEdit.Birthday = user.Birthday;
-                    userToEdit.RegisterDate = user.RegisterDate;
-                    userToEdit.Password = user.Password;
-                    userToEdit.Sex = user.Sex;
-                    userToEdit.IsAdmin = user.IsAdmin;
+                    userToEdit.Name = vm.Name;
+                    userToEdit.Family = vm.Family;
+                    userToEdit.PhoneNumber = vm.PhoneNumber;
+                    userToEdit.Birthday = vm.Birthday;
+                    userToEdit.RegisterDate = vm.RegisterDate;
+                    userToEdit.Password = vm.Password;
+                    userToEdit.Sex = vm.Sex;
+                    userToEdit.IsAdmin = vm.IsAdmin;
                 }
             }
 

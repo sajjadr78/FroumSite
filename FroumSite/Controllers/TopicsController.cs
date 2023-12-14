@@ -41,7 +41,7 @@ namespace FroumSite.Controllers
             {
                 TopicsIncludedPosts = topicsIncludedPosts,
                 Room = room,
-                PostsIncludedUsers = postsIncludedUsers
+                PostsIncludedUsers = postsIncludedUsers,
             };
 
             return View(vm);
@@ -69,7 +69,12 @@ namespace FroumSite.Controllers
 
             var users =await  _context.Users.ToListAsync();
 
-            var posts = await _context.Posts.ToListAsync();
+
+            var userLikeTopics = await _context.UserLikeTopics
+                .Where(u=>u.TopicId==topicId).ToListAsync();
+            var userLikePosts = await _context.UserLikePosts.ToListAsync();
+
+
 
             var postsCountUploaderByUser = _context.Users
                 .Include(p => p.SharedPosts)
@@ -97,6 +102,8 @@ namespace FroumSite.Controllers
                 Users = users,
                 PostsCountUploadedByUser = postsCountUploaderByUser,
                 IsTopicLikedByUser = isLikedByUser,
+                UserLikePosts = userLikePosts,
+                UserLikeTopics= userLikeTopics,
                 Context = _context
             };
 
@@ -310,16 +317,26 @@ namespace FroumSite.Controllers
             return View(topic);
         }
 
-        // POST: Topics/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpGet]
+        public async Task <IActionResult> ShowTopicLikes()
         {
-            var topic = await _context.Topics.FindAsync(id);
-            _context.Topics.Remove(topic);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var likes = await _context.UserLikeTopics
+                .Include(u=>u.User)
+                .Where(u => u.TopicId == topicId).ToListAsync();
+
+            return PartialView("_ShowTopicLikes", likes);
         }
+
+        // POST: Topics/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var topic = await _context.Topics.FindAsync(id);
+        //    _context.Topics.Remove(topic);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool TopicExists(int id)
         {
