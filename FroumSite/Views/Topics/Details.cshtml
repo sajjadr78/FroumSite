@@ -78,19 +78,19 @@
 
         </div>
 
-@*         <a class="text-muted card-subtitle text-sm-right" href="#" onclick="ShowLikes()">
-            @Model.TopicIncludedPosts.LikeCount لایک
+        @*         <a class="text-muted card-subtitle text-sm-right" href="#" onclick="ShowLikes()">
+        @Model.TopicIncludedPosts.LikeCount لایک
         </a> *@
 
         <a href="#" class="text-muted text-primary card-subtitle text-sm-right" data-toggle="modal" data-target="#likesModal">
             @Model.TopicIncludedPosts.LikeCount لایک
         </a>
 
-@*         <a class="text-muted text-primary card-subtitle text-sm-right" 
+        @*         <a class="text-muted text-primary card-subtitle text-sm-right"
         href="#"
-        data-toggle="modal" 
+        data-toggle="modal"
         data-target="#exampleModal">
-            @Model.TopicIncludedPosts.LikeCount لایک
+        @Model.TopicIncludedPosts.LikeCount لایک
         </a> *@
 
         <div class="text-muted text-sm-right">
@@ -169,9 +169,16 @@
                 }
             </div>
 
-            <div class="text-sm-right text-muted">
-                @item.LikeCount لایک
+            <div>
+                <a href="#"
+                   onclick="ShowLikesPost(@item.Id)"
+                   class="text-sm-right text-muted"
+                   data="@item.Id">
+                    @item.LikeCount لایک
+                </a>
             </div>
+
+
 
             <div class="text-muted text-sm-right">
                 @item.UploadDate.ToShamsi()
@@ -205,14 +212,42 @@
     </form>
 </div>
 
-<partial name="_ShowLikesModal.cshtml"></partial>
+<partial name="ShowLikeViews/_ShowLikesModal.cshtml"></partial>
+<div class="modal fade" id="likesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">لایک ها</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Container to load likes using AJAX -->
+                <div id="likesContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="~/app.js"></script>
-
+    <script src="~/js/site.js"></script>
+    <script>
+        function ShowLikesPost(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Topics/ShowPostLikes/" + id,
+                data: {},
+                success: function (response) {
+                    $('#likesModal').modal('show');
+                    $('#likesContainer').html(response);
+                }
+            });
+        }
+    </script>
 }
 

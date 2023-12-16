@@ -41,7 +41,7 @@ namespace FroumSite.Controllers
                 RoomId = Id
             };
 
-            return View(vm);
+            return View( vm);
         }
 
         // GET: Rooms/Details/5

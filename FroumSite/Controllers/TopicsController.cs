@@ -24,6 +24,16 @@ namespace FroumSite.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> ShowPostLikes(int id)
+        {
+            var ulp = await _context.UserLikePosts
+                .Include(u=>u.User)
+                .Where(u=>u.PostId == id)
+                .ToListAsync();
+
+            return PartialView("../Topics/ShowLikeViews/_ShowPostLikes", ulp);
+        }
+
         // GET: Topics
         public async Task<IActionResult> Index(int Id)
         {
@@ -67,11 +77,11 @@ namespace FroumSite.Controllers
 
             topicId = topicIncludedPosts.Id;
 
-            var users =await  _context.Users.ToListAsync();
+            var users = await _context.Users.ToListAsync();
 
 
             var userLikeTopics = await _context.UserLikeTopics
-                .Where(u=>u.TopicId==topicId).ToListAsync();
+                .Where(u => u.TopicId == topicId).ToListAsync();
             var userLikePosts = await _context.UserLikePosts.ToListAsync();
 
 
@@ -103,7 +113,7 @@ namespace FroumSite.Controllers
                 PostsCountUploadedByUser = postsCountUploaderByUser,
                 IsTopicLikedByUser = isLikedByUser,
                 UserLikePosts = userLikePosts,
-                UserLikeTopics= userLikeTopics,
+                UserLikeTopics = userLikeTopics,
                 Context = _context
             };
 
@@ -194,7 +204,7 @@ namespace FroumSite.Controllers
             CreateTopicViewModel vm = new CreateTopicViewModel();
             roomId = id;
 
-            return View(vm);
+            return PartialView(vm);
         }
 
         [Authorize]
@@ -318,13 +328,13 @@ namespace FroumSite.Controllers
         }
 
         [HttpGet]
-        public async Task <IActionResult> ShowTopicLikes()
+        public async Task<IActionResult> ShowTopicLikes()
         {
             var likes = await _context.UserLikeTopics
-                .Include(u=>u.User)
+                .Include(u => u.User)
                 .Where(u => u.TopicId == topicId).ToListAsync();
 
-            return PartialView("_ShowTopicLikes", likes);
+            return PartialView("../Topics/ShowLikeViews/_ShowTopicLikes", likes);
         }
 
         // POST: Topics/Delete/5

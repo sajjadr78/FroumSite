@@ -3,7 +3,7 @@
 
 @foreach (var item in Model)
 {
-    <p>
+    <a asp-action="Details" asp-controller="Users" asp-route-id="@item.UserId">
         @item.User.Name @item.User.Family
-    </p>
+    </a>
 }

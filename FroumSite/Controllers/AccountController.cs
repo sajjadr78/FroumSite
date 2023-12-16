@@ -25,7 +25,7 @@ namespace FroumSite.Controllers
 
         public IActionResult Register()
         {
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
@@ -75,7 +75,7 @@ namespace FroumSite.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            return PartialView();
         }
 
         [HttpPost]

@@ -82,7 +82,6 @@
 
   <ItemGroup>
     <None Include="Views\Account\Register.cshtml" />
-    <None Include="wwwroot\app.js" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap4\css\bootstrap-reboot.css.map" />
@@ -103,7 +102,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Views\Topics\ShowLikeViews\" />
+    <Folder Include="Views\Rooms\Modals\" />
   </ItemGroup>
 
   <ItemGroup>

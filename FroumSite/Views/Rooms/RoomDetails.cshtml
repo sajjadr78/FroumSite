@@ -9,12 +9,32 @@
 
 <h1 class="mb-3">تاپیک های تالار @Model.Room.Title</h1>
 <div>
-    <a class="btn btn-success m-3" asp-action="SubjectDetails" asp-controller="Home" asp-route-id="@Model.Room.SubjectId">بازگشت</a>
+    <a class="btn btn-success m-3" asp-action="SubjectDetails" asp-controller="Home" asp-route-id="@Model.Room.SubjectId">
+        بازگشت
+    </a>
 </div>
 
 <div>
-    <a class="btn btn-primary m-3" asp-action="Create" asp-controller="Topics" asp-route-id="@Model.Room.Id">ایجاد تاپیک جدید در این تالار</a>
+    @if (User.Identity.IsAuthenticated)
+    {
+        @* asp - action = "Create" asp - controller = "Topics" asp - route - id = "@Model.Room.Id" *@
+        <a class="btn btn-primary m-3" href="#" onclick="CreateTopic(@Model.Room.Id)" >
+            ایجاد تاپیک جدید در این تالار
+        </a>
+    }
+    else
+    {
+        <a class="btn btn-primary m-3" onclick="Login()" href="#">
+            ایجاد تاپیک جدید در این تالار
+        </a>
+    }
 </div>
+
+
+@* <a class="btn btn-primary m-3" id="btnCreateTopic" data-url="@Url.Action("Create", "Topics", new { id = Model.Room.Id })">
+    ایجاد تاپیک جدید در این تالار
+</a> *@
+
 
 <table class="table table-hover">
     <thead>
@@ -79,3 +99,57 @@
         }
     </tbody>
 </table>
+
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="createTopicModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="body">
+                <!-- Modal body content will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script>
+        function Login() {
+            $.ajax(
+                {
+                    url: "/Account/Login",
+                    type: "GET",
+                    data: {}
+                }
+            ).done(function (result) {
+                $('#Modal').modal('show');
+                $('#body').html(result);
+            });
+        }
+
+        function CreateTopic(id){
+            $.ajax(
+                {
+                    url: "/Topics/Create/" + id,
+                    type: "GET",
+                    data: {}
+                }
+            ).done(function (result) {
+                $('#Modal').modal('show');
+                $('#body').html(result);
+            });
+        }
+    </script>
+
+
+}
