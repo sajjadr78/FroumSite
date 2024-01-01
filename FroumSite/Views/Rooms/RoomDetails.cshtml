@@ -1,4 +1,5 @@
-﻿@model TopicViewModel
+﻿@using System.Security.Claims;
+@model TopicViewModel
 
 
 @{
@@ -18,13 +19,13 @@
     @if (User.Identity.IsAuthenticated)
     {
         @* asp - action = "Create" asp - controller = "Topics" asp - route - id = "@Model.Room.Id" *@
-        <a class="btn btn-primary m-3" href="#" onclick="CreateTopic(@Model.Room.Id)" >
+        <a class="btn btn-primary m-3" href="#" onclick="CreateTopic(@Model.Room.Id)">
             ایجاد تاپیک جدید در این تالار
         </a>
     }
     else
     {
-        <a class="btn btn-primary m-3" onclick="Login()" href="#">
+        <a class="btn btn-primary m-3" asp-action="Login" asp-controller="Account">
             ایجاد تاپیک جدید در این تالار
         </a>
     }
@@ -36,18 +37,18 @@
 </a> *@
 
 
-<table class="table table-hover">
-    <thead>
+<table class="table table-hover table-bordered table-striped table-success">
+    <thead class="thead-light">
         <tr>
-            <th scope="col">@Model.Room.Title - @Model.TopicsIncludedPosts.Count تالار</th>
-            <th scope="col">تعداد پست ها</th>
-            <th scope="col">آخرین پست</th>
+            <th class="col-2" scope="col">@Model.Room.Title - @Model.TopicsIncludedPosts.Count تالار</th>
+            <th class="col-2" scope="col">تعداد پست ها</th>
+            <th class="col-8" scope="col">آخرین پست</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.TopicsIncludedPosts)
         {
-            <tr class="table-success">
+            <tr >
                 <th scope="row">
                     <a href="/Topics/Details/@item.Id">
                         @item.Title
@@ -66,10 +67,13 @@
                     }
                     else
                     {
-                        <a asp-action="Details" asp-controller="Posts" asp-route-id="@item.Posts.Last().Id">
-                            @item.Posts.Last().Caption
-                        </a>
                         <div>
+                            <a asp-action="Details" asp-controller="Posts" asp-route-id="@item.Posts.Last().Id">
+                                @item.Posts.Last().Caption
+                            </a>
+
+                        </div>
+                        <span>
                             <span>
                                 توسط:
                             </span>
@@ -89,10 +93,46 @@
 
                                 @uploaderFullName
 
+
+
+
                             </a>
-                        </div>
+
+
+                        </span>
 
                     }
+
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        int userId = int.Parse(User
+                        .Claims
+                        .FirstOrDefault(x =>
+                        x.Type == ClaimTypes.NameIdentifier)?
+                        .Value);
+
+                        //bool isTopicCreatedByUser = userId == item.UserId;
+
+                        if (userId == item.UserId)
+                        {
+                            <span>
+                                |
+                            </span>
+                            <button class="btn btn-danger"
+                               onclick="DeleteTopic(@item.Id)">حذف</button>
+
+                            <span>
+                                |
+                            </span>
+                            <button class="btn btn-success"
+                                    onclick="EditTopic(@item.Id)">
+                                    ویرایش
+                            </button>
+                        }
+                    }
+
                 </td>
 
             </tr>
@@ -137,12 +177,41 @@
             });
         }
 
-        function CreateTopic(id){
+        function CreateTopic(id) {
             $.ajax(
                 {
                     url: "/Topics/Create/" + id,
                     type: "GET",
                     data: {}
+                }
+            ).done(function (result) {
+                $('#Modal').modal('show');
+                $('#body').html(result);
+            });
+        }
+
+        function DeleteTopic(id) {
+            $.ajax(
+                {
+                    url: "/Topics/DeleteTopicByUser/" + id,
+                    type: "GET",
+                    data: {}
+                }
+            ).done(function (result) {
+                $('#Modal').modal('show');
+                $('#body').html(result);
+            });
+        }
+
+        function EditTopic(id) {
+            $.ajax(
+                {
+                    url: "/Topics/EditTopicByUser/" + id,
+                    type: "GET",
+                    data: {},
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 401) {
+                            alert("شما باید وارد حساب کاربری خود شوید یا ثبت نام کنید")
                 }
             ).done(function (result) {
                 $('#Modal').modal('show');

@@ -54,24 +54,24 @@
                 @{
                     if (User.Identity.IsAuthenticated)
                     {
-                        @if (Model.IsTopicLikedByUser)
+                            @if (Model.IsTopicLikedByUser)
                         {
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-                            </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                                </svg>
                         }
                         else
                         {
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                            </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                                </svg>
                         }
                     }
                     else
                     {
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                        </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                            </svg>
                     }
                 }
             </a>
@@ -82,9 +82,10 @@
         @Model.TopicIncludedPosts.LikeCount لایک
         </a> *@
 
-        <a href="#" class="text-muted text-primary card-subtitle text-sm-right" data-toggle="modal" data-target="#likesModal">
+        <button class="text-muted text-primary card-subtitle text-sm-right" 
+           onclick="ShowTopicLikes()">
             @Model.TopicIncludedPosts.LikeCount لایک
-        </a>
+        </button>
 
         @*         <a class="text-muted text-primary card-subtitle text-sm-right"
         href="#"
@@ -94,13 +95,16 @@
         </a> *@
 
         <div class="text-muted text-sm-right">
-            آپلود شده در تاریخ @Model.TopicIncludedPosts.UploadDate.ToShamsi()
+            @Model.TopicIncludedPosts.UploadDate.ToShamsi()
         </div>
+
+
     </div>
 
 </div>
 
-
+@* <partial name="ShowLikeViews/_ShowLikesModal.cshtml"/> *@
+@await Html.PartialAsync("~/Views/Topics/ShowLikeViews/_ShowLikesModal.cshtml")
 
 
 @foreach (var item in Model.TopicIncludedPosts.Posts)
@@ -133,8 +137,8 @@
 
             <div class="text-right">
                 @{
-                    <a class="btn btn-sm" asp-action="LikePost" asp-route-id="@item.Id">
-                        @{
+                        <a class="btn btn-sm" asp-action="LikePost" asp-route-id="@item.Id">
+                            @{
                             if (User.Identity.IsAuthenticated)
                             {
                                 int userId = int.Parse(User.Claims
@@ -146,26 +150,26 @@
 
                                 if (isPostLikedByUser)
                                 {
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-                                    </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
+                                            </svg>
                                 }
                                 else
                                 {
                                     // <h3>&#9825;</h3>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                    </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                                            </svg>
                                 }
                             }
                             else
                             {
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
+                                        </svg>
                             }
-                        }
-                    </a>
+                            }
+                        </a>
                 }
             </div>
 
@@ -185,6 +189,36 @@
             </div>
         </div>
 
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            int userId = int.Parse(User
+            .Claims
+            .FirstOrDefault(x =>
+            x.Type == ClaimTypes.NameIdentifier)?
+            .Value);
+
+            //bool isTopicCreatedByUser = userId == item.UserId;
+
+            if (userId == item.UserId)
+            {
+                <span>
+                    |
+                </span>
+                <button class="btn btn-danger"
+                        onclick="DeletePost(@item.Id)">
+                    حذف
+                </button>
+
+                <span>
+                    |
+                </span>
+                <button class="btn btn-success"
+                        onclick="EditPost(@item.Id)">
+                    ویرایش
+                </button>
+            }
+        }
 
 
     </div>
@@ -212,30 +246,14 @@
     </form>
 </div>
 
-<partial name="ShowLikeViews/_ShowLikesModal.cshtml"></partial>
-<div class="modal fade" id="likesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">لایک ها</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Container to load likes using AJAX -->
-                <div id="likesContainer"></div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    <script src="~/js/site.js"></script>
+    @* <script src="~/js/site.js"></script> *@
     <script>
         function ShowLikesPost(id) {
             $.ajax({
@@ -248,6 +266,47 @@
                 }
             });
         }
+
+        function EditPost(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Topics/EditPostByUser/" + id,
+                data: {},
+                success: function (response) {
+                    $('#likesModal').modal('show');
+                    $('#likesContainer').html(response);
+                }
+            });
+        }
+
+        function DeletePost(id) {
+            $.ajax({
+                type: "GET",
+                url: "/Topics/DeletePostByUser/" + id,
+                data: {},
+                success: function (response) {
+                    $('#likesModal').modal('show');
+                    $('#likesContainer').html(response);
+                }
+            });
+        }
+
+        function ShowTopicLikes() {
+            $.ajax({
+                url: '/Topics/ShowTopicLikes',  // Replace with your actual endpoint
+                type: 'GET',
+                success: function (data) {
+                    // Update the likesContainer with the fetched data
+                    $('#likesContainer').html(data);
+                },
+                error: function () {
+                    // Handle error
+                    console.error('Failed to fetch likes data.');
+                }
+            });
+        }
+
+
     </script>
 }
 

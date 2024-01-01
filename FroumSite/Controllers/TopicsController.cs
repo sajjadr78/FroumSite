@@ -10,14 +10,18 @@ using FroumSite.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using FroumSite.Models.ViewModels;
+using FroumSite.Areas.Admin.Models.ViewModels;
 
 namespace FroumSite.Controllers
 {
     public class TopicsController : Controller
     {
         private readonly FroumContext _context;
-        static int roomId;
-        static int topicId;
+        static int _roomId;
+        static int _topicId;
+        static int _topicIdToDelete;
+        static int _topicIdToEdit;
+        static int _postIdToDelete;
 
         public TopicsController(FroumContext context)
         {
@@ -27,8 +31,8 @@ namespace FroumSite.Controllers
         public async Task<IActionResult> ShowPostLikes(int id)
         {
             var ulp = await _context.UserLikePosts
-                .Include(u=>u.User)
-                .Where(u=>u.PostId == id)
+                .Include(u => u.User)
+                .Where(u => u.PostId == id)
                 .ToListAsync();
 
             return PartialView("../Topics/ShowLikeViews/_ShowPostLikes", ulp);
@@ -75,13 +79,13 @@ namespace FroumSite.Controllers
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            topicId = topicIncludedPosts.Id;
+            _topicId = topicIncludedPosts.Id;
 
             var users = await _context.Users.ToListAsync();
 
 
             var userLikeTopics = await _context.UserLikeTopics
-                .Where(u => u.TopicId == topicId).ToListAsync();
+                .Where(u => u.TopicId == _topicId).ToListAsync();
             var userLikePosts = await _context.UserLikePosts.ToListAsync();
 
 
@@ -156,7 +160,7 @@ namespace FroumSite.Controllers
             await _context.SaveChangesAsync();
 
 
-            return RedirectToAction("Details", routeValues: new { id = topicId });
+            return RedirectToAction("Details", routeValues: new { id = _topicId });
 
         }
 
@@ -191,7 +195,7 @@ namespace FroumSite.Controllers
             await _context.SaveChangesAsync();
 
 
-            return RedirectToAction("Details", routeValues: new { id = topicId });
+            return RedirectToAction("Details", routeValues: new { id = _topicId });
 
         }
 
@@ -202,7 +206,7 @@ namespace FroumSite.Controllers
         public IActionResult Create(int id)
         {
             CreateTopicViewModel vm = new CreateTopicViewModel();
-            roomId = id;
+            _roomId = id;
 
             return PartialView(vm);
         }
@@ -219,7 +223,7 @@ namespace FroumSite.Controllers
             {
                 Caption = vm.Caption,
                 LikeCount = 0,
-                TopicId = topicId,
+                TopicId = _topicId,
                 UploadDate = DateTime.Now,
                 UserId = userId
             };
@@ -227,7 +231,7 @@ namespace FroumSite.Controllers
             _context.Posts.Add(post);
             var result = await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", new { Id = topicId });
+            return RedirectToAction("Details", new { Id = _topicId });
         }
 
         // POST: Topics/Create
@@ -246,7 +250,7 @@ namespace FroumSite.Controllers
             {
                 Description = description,
                 Title = title,
-                RoomId = roomId,
+                RoomId = _roomId,
                 UserId = userId,
                 LikeCount = 0,
                 UploadDate = DateTime.Now
@@ -255,7 +259,7 @@ namespace FroumSite.Controllers
             _context.Topics.Add(topic);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", routeValues: new { id = roomId });
+            return RedirectToAction("RoomDetails", "Rooms", routeValues: new { id = _roomId });
         }
 
         // GET: Topics/Edit/5
@@ -310,21 +314,111 @@ namespace FroumSite.Controllers
         }
 
         // GET: Topics/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize]
+        public async Task<IActionResult> DeleteTopicByUser(int id)
         {
-            if (id == null)
+            _topicIdToDelete = id;
+
+            var topicToDelete = await _context.Topics
+                .Include(t => t.Room)
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+
+
+            TopicsViewModel vm = new TopicsViewModel
             {
-                return NotFound();
+                Title = topicToDelete.Title,
+                Description = topicToDelete.Description,
+                RoomName = topicToDelete.Room.Title,
+                UploaderName = topicToDelete.User.Name
+            };
+
+            return PartialView(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed()
+        {
+            var topicToDelete = _context.Topics.Find(_topicIdToDelete);
+
+            _context.Topics.Remove(topicToDelete);
+
+            await _context.SaveChangesAsync();
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> EditTopicByUser(int id)
+        {
+            _topicIdToEdit = id;
+
+            var topicToEdit = await _context.Topics
+                .Include(r => r.Room)
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            var users = await _context.Users.ToListAsync();
+            var rooms = await _context.Rooms.ToListAsync();
+
+            TopicsViewModel vm = new TopicsViewModel
+            {
+                Title = topicToEdit.Title,
+                Description = topicToEdit.Description,
+                RoomId = topicToEdit.RoomId,
+                RoomName = topicToEdit.Room.Title,
+                UploaderId = topicToEdit.UserId,
+                UploaderName = topicToEdit.User.Name,
+                Users = users,
+                Rooms = rooms
+            };
+
+            return PartialView(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditConfirmed(TopicsViewModel vm)
+        {
+            var topicToEdit = await _context.Topics
+                .FirstOrDefaultAsync(p => p.Id == _topicIdToEdit);
+
+            if (topicToEdit != null)
+            {
+                topicToEdit.RoomId = vm.RoomId;
+                topicToEdit.Description = vm.Description;
+                topicToEdit.Title = vm.Title;
             }
 
-            var topic = await _context.Topics
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (topic == null)
-            {
-                return NotFound();
-            }
+            await _context.SaveChangesAsync();
 
-            return View(topic);
+            _topicIdToEdit = 0;
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        public async Task<IActionResult> DeletePostByUser(int id)
+        {
+            _postIdToDelete = id;
+
+            var postToDelete = await _context.Posts
+                .Include(t => t.Topic)
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+
+
+            return PartialView(postToDelete);
+        }
+
+        [HttpPost]
+        public async Task ConfirmDeletePostAsync()
+        {
+            var postToDelete = await _context.Posts
+                .FirstOrDefaultAsync(p => p.Id == _postIdToDelete);
+
+            _context.Posts.Remove(postToDelete);
+            await _context.SaveChangesAsync();
         }
 
         [HttpGet]
@@ -332,7 +426,7 @@ namespace FroumSite.Controllers
         {
             var likes = await _context.UserLikeTopics
                 .Include(u => u.User)
-                .Where(u => u.TopicId == topicId).ToListAsync();
+                .Where(u => u.TopicId == _topicId).ToListAsync();
 
             return PartialView("../Topics/ShowLikeViews/_ShowTopicLikes", likes);
         }

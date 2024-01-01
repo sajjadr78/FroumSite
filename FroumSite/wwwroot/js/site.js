@@ -4,11 +4,12 @@
 // Write your JavaScript code.
 $(document).ready(function () {
     // Handle button click
-    $('#likesModal').on('show.bs.modal', function (e) {
+    $("#btnShowTopicLikes").click(function (e) { 
         // Make AJAX request to fetch likes data
         $.ajax({
             url: '/Topics/ShowTopicLikes',  // Replace with your actual endpoint
             type: 'GET',
+            
             success: function (data) {
                 // Update the likesContainer with the fetched data
                 $('#likesContainer').html(data);

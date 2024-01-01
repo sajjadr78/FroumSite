@@ -44,7 +44,7 @@
                         else
                         {
                             <li>
-                                <a class="btn btn-primary text-white mr-3 ml-3"
+@*                                 <a class="btn btn-primary text-white mr-3 ml-3"
                                    style=" float: left; "
                                    href="#"
                                    id="btnLogin"
@@ -53,15 +53,22 @@
 
                                     ورود
 
+                                </a> *@
+
+                                <a class="btn btn-primary text-white mr-3 ml-3"
+                                   style=" float: left; "
+                                   asp-action="Login"
+                                    asp-controller="Account">
+
+                                    ورود
+
                                 </a>
-
-
                             </li>
 
                             <li>
-                                @* <a class=" btn btn-info text-white mr-3 ml-3" style=" float: left;" asp-area="" asp-controller="Account" asp-action="Register">ثبت نام</a> *@
+                                <a class=" btn btn-info text-white mr-3 ml-3" style=" float: left;" asp-area="" asp-controller="Account" asp-action="Register">ثبت نام</a>
 
-                                <a class="btn btn-info text-white mr-3 ml-3"
+@*                                 <a class="btn btn-info text-white mr-3 ml-3"
                                    style=" float: left; "
                                    href="#"
                                    id="btnRegister"
@@ -70,7 +77,7 @@
 
                                     ثبت نام
 
-                                </a>
+                                </a> *@
                             </li>
                         }
 
@@ -92,45 +99,6 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-
-
-    <!-- Your existing modal container -->
-    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="createTopicModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Create Topic</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="body">
-                    <!-- Modal body content will be loaded dynamically -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        $(function () {
-            $("#btnLogin").click(function () {
-                $.get("/Account/Login", function (result) {
-                    $("#Modal").modal();
-                    $("#ModalLabel").html("ورود کاربر");
-                    $("#body").html(result);
-                });
-            });
-            $("#btnRegister").click(function () {
-                $.get("/Account/Register", function (result) {
-                    $("#Modal").modal();
-                    $("#ModalLabel").html("ثبت نام کاربر");
-                    $("#body").html(result);
-                });
-            });
-        });
-    </script>
 
 
     @RenderSection("Scripts", required: false)

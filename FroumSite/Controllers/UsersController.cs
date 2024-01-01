@@ -26,6 +26,11 @@ namespace FroumSite.Controllers
             return View(await _context.Users.ToListAsync());
         }
 
+        public IActionResult LoadUserDetails(int? id)
+        {
+            return PartialView(id);
+        }
+
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {

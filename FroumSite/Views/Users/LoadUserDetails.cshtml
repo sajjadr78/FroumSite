@@ -1,5 +1,6 @@
-﻿
-<div class="modal fade" id="Modal"
+﻿@model int
+
+<div onload="Load(@Model)" class="modal fade" id="Modal"
      tabindex="-1"
      data-backdrop="static"
      role="dialog" aria-labelledby="createTopicModalLabel" aria-hidden="true">
@@ -23,18 +24,18 @@
 
 @section Scripts{
     <script>
-        $(document).ready(function () {
+        $(document).ready(
+            function Load(id) {
+                $.ajax({
+                    type: "GET",
+                    url: "/User/LoadUserDetails/" + id,
+                    data: {},
+                    success: function (response) {
+                        $("#Modal").modal();
+                        $("#body").html(response);
+                    }
+                });
 
-            $.ajax({
-                type: "GET",
-                url: "/Account/LoadLoginForm",
-                data: {},
-                success: function (response) {
-                    $("#Modal").modal();
-                    $("#body").html(response);
-                }
             });
-
-        });
     </script>
 }

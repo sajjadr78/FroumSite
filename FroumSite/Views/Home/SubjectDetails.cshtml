@@ -6,7 +6,6 @@
 
 
 
-<h1>@Model.SubjectName</h1>
 
 @* <table class="table">
     <thead>
@@ -33,65 +32,73 @@
     </tbody>
 </table>
  *@
+<div>
+    <h1>@Model.SubjectName</h1>
 
-<a class="btn btn-success m-3" asp-action="Index" asp-controller="Home">بازگشت</a>
 
-<table class="table table-hover table-bordered">
-    <thead>
-        <tr>
-            <th scope="col">@Model.SubjectName - @Model.RoomsIncludedTopics.Count تالار</th>
-            <th scope="col">تعداد تاپیک ها</th>
-            <th scope="col">آخرین تاپیک</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.RoomsIncludedTopics)
-        {
-            <tr class="table-success">
-                <th scope="row">
-                    
-                    <a asp-action="RoomDetails" asp-controller="Rooms" asp-route-id = "@item.Id">
-                        @item.Title
-                    </a>
-                </th>
+    <a class="btn btn-success m-3" asp-action="Index" asp-controller="Home">بازگشت</a>
 
-                <td>@item.Topics.Count</td>
-                <td>
-                    @if (item.Topics.Count == 0)
-                    {
-                        <span class="text-danger">
-                            در این تالار هیچ تاپیکی وجود ندارد
-                        </span>
-                    }
-                    else
-                    {
-                        <a asp-action="Details" asp-controller="Topics"
-                           asp-route-id="@item.Topics.Last().Id">
-                            @item.Topics.Last().Title
-                        </a>
-                        <div>
-                            <span>
-                                توسط:
-                            </span>
-                            @{
-                                var uploader = item.Topics.Last().User;
-
-                                var uploaderFullName = uploader.Name + " " + uploader.Family;
-
-                                var uploaderId = uploader.Id;
-                            }
-                            <a asp-action="Details"
-                               asp-controller="Users"
-                               asp-route-id="@uploaderId">
-
-                                @uploaderFullName
-
-                            </a>
-                        </div>
-                    }
-                </td>
-
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">@Model.SubjectName - @Model.RoomsIncludedTopics.Count تالار</th>
+                <th scope="col">تعداد تاپیک ها</th>
+                <th scope="col">آخرین تاپیک</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RoomsIncludedTopics)
+            {
+                <tr class="table-success">
+                    <th scope="row">
+
+                        <a href="#" id="btnRoomDetails" data="@item.Id" >
+                            @item.Title
+                        </a>
+                    </th>
+
+                    <td>@item.Topics.Count</td>
+                    <td>
+                        @if (item.Topics.Count == 0)
+                        {
+                            <span class="text-danger">
+                                در این تالار هیچ تاپیکی وجود ندارد
+                            </span>
+                        }
+                        else
+                        {
+                            <a asp-action="Details" asp-controller="Topics"
+                               asp-route-id="@item.Topics.Last().Id">
+                                @item.Topics.Last().Title
+                            </a>
+                            <div>
+                                <span>
+                                    توسط:
+                                </span>
+                                @{
+                                    var uploader = item.Topics.Last().User;
+
+                                    var uploaderFullName = uploader.Name + " " + uploader.Family;
+
+                                    var uploaderId = uploader.Id;
+                                }
+                                <a asp-action="Details"
+                                   asp-controller="Users"
+                                   asp-route-id="@uploaderId">
+
+                                    @uploaderFullName
+
+                                </a>
+                            </div>
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script src="~/js/Custom.js"></script>
+}

@@ -1,8 +1,5 @@
 ﻿@model IEnumerable<FroumSite.Models.Subject>
 
-@{
-    ViewData["Title"] = "انجمن سجاد";
-}
 <div id="Details">
     <div class="row">
         @foreach (var item in Model)
@@ -13,7 +10,7 @@
                     id="btnShowSubjectDetails">
                 @item.Title
             </button>
-                
+
         }
     </div>
 </div>

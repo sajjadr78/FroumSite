@@ -1,68 +1,41 @@
-﻿@model RegisterViewModel
+﻿
+<div class="modal fade" id="Modal"
+     tabindex="-1"
+     data-backdrop="static"
+     role="dialog" aria-labelledby="createTopicModalLabel" aria-hidden="true">
 
-@{
-    ViewData["Title"] = "ثبت نام";
-}
-
-<h1>ثبت نام</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" id="btnClose"
+                   onclick="history.back()"
+                   class="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="form-group">
-                <label asp-for="Family" class="control-label"></label>
-                <input asp-for="Family" class="form-control" />
-                <span asp-validation-for="Family" class="text-danger"></span>
+            <div class="modal-body" id="body">
+                <!-- Modal body content will be loaded dynamically -->
             </div>
-            <div class="form-group">
-                <label asp-for="Birthday" class="control-label"></label>
-                <input asp-for="Birthday" class="form-control" />
-                <span asp-validation-for="Birthday" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sex" class="control-label"></label>
-                <select asp-for="Sex" class="form-control">
-                    <option value="Male">مرد</option>
-                    <option value="Female">زن</option>
-                </select>
-                <span asp-validation-for="Sex" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
-                <input asp-for="PhoneNumber" class="form-control" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="RePassword" class="control-label"></label>
-                <input asp-for="RePassword" class="form-control" />
-                <span asp-validation-for="RePassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="ثبت نام" class="btn btn-primary" />
-            </div>
-            <div class="form-group">
-                <label class="bg-info text-white">از قبل ثبت نام کرده‌اید؟</label>
-                <a class="btn btn-success" asp-action="Login">وارد شوید</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-@section Scripts
-{
-    <partial name="_ValidationScriptsPartial" />
-}
 
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "/Account/LoadRegisterForm",
+                data: {},
+                success: function (response) {
+                    $("#Modal").modal();
+                    $("#body").html(response);
+                }
+            });
+
+
+        });
+    </script>
+}

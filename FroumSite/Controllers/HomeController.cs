@@ -23,7 +23,6 @@ namespace FroumSite.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             return View(await _context.Subjects.ToListAsync());
         }
 
@@ -50,7 +49,7 @@ namespace FroumSite.Controllers
                 TopicsIncludedUsers = topicsIncludedUsers
             };
 
-            return View(vm);
+            return PartialView(vm);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

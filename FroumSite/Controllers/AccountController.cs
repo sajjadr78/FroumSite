@@ -25,7 +25,7 @@ namespace FroumSite.Controllers
 
         public IActionResult Register()
         {
-            return PartialView();
+            return View();
         }
 
         [HttpPost]
@@ -73,7 +73,17 @@ namespace FroumSite.Controllers
 
         #region Login
 
+        public IActionResult LoadLoginForm()
+        {
+            return PartialView();
+        }
+
         public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult LoadRegisterForm()
         {
             return PartialView();
         }
@@ -121,7 +131,7 @@ namespace FroumSite.Controllers
 
             await HttpContext.SignInAsync(principal, properties);
 
-            return Redirect("/");
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         #endregion
