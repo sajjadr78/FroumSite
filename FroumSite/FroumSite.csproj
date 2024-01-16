@@ -102,7 +102,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Views\Rooms\Modals\" />
   </ItemGroup>
 
   <ItemGroup>

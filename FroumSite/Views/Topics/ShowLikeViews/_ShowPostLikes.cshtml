@@ -1,7 +1,18 @@
 ﻿@model IEnumerable< UserLikePost>
+@{
+    Layout = null;
+}
+
 
 @foreach (var item in Model)
 {
-    <a asp-action="Details" asp-controller="Users"
-       asp-route-id="@item.UserId">@item.User.Name @item.User.Family </a>
+    <div>
+        <a onclick="showPopupModal('@Url.Action("Details","Users",new {id = item.UserId},protocol:Context.Request.Scheme)','مشخصات کاربر')"
+           class="link text-primary">
+
+            @item.User.Name @item.User.Family
+
+        </a>
+    </div>
+    
 }

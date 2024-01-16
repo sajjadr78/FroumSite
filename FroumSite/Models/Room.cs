@@ -16,7 +16,7 @@ namespace FroumSite.Models
 
         [Display(Name ="عنوان تالار")]
         [MaxLength(20,ErrorMessage ="عنوان تالار نباید بیشتر از 20 کاراکتر باشد")]
-        [Required(ErrorMessage ="لطفا عنوان تالار را وارد کنید")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Title { get; set; }
 
         #region FroeignKeys

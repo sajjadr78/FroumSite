@@ -64,7 +64,7 @@ namespace FroumSite.Controllers
                 PostsIncludedUsers = postsIncludedUsers
             };
 
-            return PartialView(vm);
+            return View(vm);
         }
 
         // GET: Rooms/Create

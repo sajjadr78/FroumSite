@@ -17,7 +17,7 @@ namespace FroumSite.Areas.Admin.Models.ViewModels
         public int UploaderId { get; set; }
         public int RoomId { get; set; }
 
-        [Required(ErrorMessage = "لطفا عنوان را وارد کنید")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [Display(Name = "عنوان")]
         [MaxLength(50, ErrorMessage = "عنوان نباید بیشتر از 50 کاراکتر باشد")]
         public string Title { get; set; }

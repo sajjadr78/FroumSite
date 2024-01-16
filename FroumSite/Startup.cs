@@ -1,4 +1,6 @@
 using FroumSite.Data;
+using FroumSite.Models;
+using FroumSite.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -31,12 +34,31 @@ namespace FroumSite
 
             #region Db Context
 
-
             //add-migrations needs microsoft.entityframeworkcore.tools package
             services.AddDbContext<FroumContext>(options =>
             {
-                options.UseSqlServer("Data Source =.;Initial Catalog=Froum_DB;Integrated Security=true");
+                options
+                .UseSqlServer(Configuration.GetConnectionString("LocalConnection"));
             });
+
+            #endregion
+
+            #region AddTransients
+
+            services.AddScoped(typeof(GenericRepository<User>));
+            services.AddScoped(typeof(GenericRepository<Topic>));
+            services.AddScoped(typeof(GenericRepository<Room>));
+            services.AddScoped(typeof(GenericRepository<Post>));
+            services.AddScoped(typeof(GenericRepository<UserLikePost>));
+            services.AddScoped(typeof(GenericRepository<UserLikeTopic>));
+
+            services.AddScoped<IGenericRepository<Post>, GenericRepository<Post>>();
+            services.AddScoped<IGenericRepository<Subject>, GenericRepository<Subject>>();
+            services.AddScoped<IGenericRepository<Room>, GenericRepository<Room>>();
+            services.AddScoped<IGenericRepository<Topic>, GenericRepository<Topic>>();
+
+            //services.AddScoped<IGenericRepository<UserLikePost>, GenericRepository<UserLikePost>>();
+            //services.AddScoped<IGenericRepository<UserLikeTopic>, GenericRepository<UserLikeTopic>>();
 
             #endregion
 
@@ -51,6 +73,7 @@ namespace FroumSite
                 });
 
             #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,111 @@
+﻿@using System.Security.Claims;
+@model TopicViewModel
+
+
+
+<table id="tblTopics" class="table table-hover table-bordered table-striped table-success">
+    <thead class="thead-light">
+        <tr>
+            <th class="col-2" scope="col">@Model.Room.Title - @Model.TopicsIncludedPosts.Count تاپیک</th>
+            <th class="col-2" scope="col">تعداد پست ها</th>
+            <th class="col-7" scope="col">آخرین پست</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TopicsIncludedPosts)
+        {
+            <tr>
+                <th scope="row">
+                    <a href="/Topics/Details/@item.Id">
+                        @item.Title
+                    </a>
+                </th>
+                @{
+                    int postsCount = item.Posts.Count;
+                }
+                <td>@postsCount</td>
+                <td>
+                    @if (postsCount == 0)
+                    {
+                        <span class="text-danger">
+                            در این تاپیک ، هیچ پستی وجود ندارد
+                        </span>
+                    }
+                    else
+                    {
+                        <div>
+                            <a asp-action="Details" asp-controller="Posts" asp-route-id="@item.Posts.Last().Id">
+                                @item.Posts.Last().Caption
+                            </a>
+
+                        </div>
+                        <span>
+                            <span>
+                                توسط:
+                            </span>
+                            @{
+                                var uploader = Model.PostsIncludedUsers
+                                .Where(p => p.TopicId == item.Id)
+                                .Last()
+                                .User;
+
+                                var uploaderFullName = uploader.Name + " " + uploader.Family;
+
+                                var uploaderId = uploader.Id;
+                            }
+                            <a onclick="showPopupModal('@Url.Action("Details","Users",new {id = uploaderId},protocol:Context.Request.Scheme)','مشخصات کاربر')"
+                               class="link text-primary">
+
+                                @uploaderFullName
+
+                            </a>
+
+
+                        </span>
+
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+                        int userId = int.Parse(User
+                        .Claims
+                        .FirstOrDefault(x =>
+                        x.Type == ClaimTypes.NameIdentifier)?
+                        .Value);
+
+
+                        if (userId == item.UserId)
+                        {
+
+                            <button class="btn btn-danger float-left"
+                                    onclick="showCenteredModal('@Url.Action("DeleteTopicByUser","Topics",new {id = item.Id})','حذف تاپیک')">
+                                حذف تاپیک
+                            </button>
+
+
+                        }
+                    }
+
+                </td>
+
+               
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+
+    <script src="~/js/Custom.js"></script>
+
+
+}

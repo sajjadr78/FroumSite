@@ -41,7 +41,7 @@ namespace FroumSite.Models
 
 
         [Display(Name="جنسیت")]
-        [Required(ErrorMessage ="لطفا جنسیت خود را انتخاب کنید")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public Sex Sex { get; set; }
 
 

@@ -11,7 +11,7 @@ namespace FroumSite.Models
         public int Id { get; set; }
 
         [MaxLength(300,ErrorMessage ="کپشن نباید بیشتر از 300 کاراکتر باشد")]
-        [Required(ErrorMessage ="کپشن اجباری است")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [Display(Name ="کپشن")]
         public string Caption { get; set; }
 

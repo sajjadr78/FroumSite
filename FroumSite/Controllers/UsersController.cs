@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FroumSite.Data;
 using FroumSite.Models;
+using FroumSite.Utilities;
 
 namespace FroumSite.Controllers
 {
@@ -32,6 +33,7 @@ namespace FroumSite.Controllers
         }
 
         // GET: Users/Details/5
+        [NoDirectAccess]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

@@ -1,0 +1,98 @@
+﻿@using FroumSite.Utilities;
+@model ShowTopicAndSavePostViewModel
+
+@{
+    Layout = null;
+    var postsOrderdByDate = Model.PostsOfCurrentTopic.OrderBy(p => p.UploadDate).ToList();
+}
+
+@foreach (var item in postsOrderdByDate)
+{
+    <div class="col-12 border row p-1 mb-3"  style="border-radius:20px">
+        <div class="col-md-3" style="background-color:#fce4ec">
+
+            @{
+
+                var postUploader = item.User;
+                var postUploaderFullName = postUploader.Name + " " + postUploader.Family;
+                var postUploaderId = postUploader.Id;
+            }
+            <span>توسط :</span>
+            <a onclick="showPopupModal('@Url.Action("Details","Users",new {id = postUploaderId},protocol:Context.Request.Scheme)','مشخصات کاربر')"
+               class="link text-primary">
+
+                @postUploaderFullName
+
+            </a>
+
+        </div>
+        <div class="col-md-9">
+            <div>
+
+                @item.Caption
+            </div>
+
+
+            <div class="text-right" id="LikePostButtonDiv">
+                @{
+
+                    LikePostViewModel likePostViewModel = new LikePostViewModel
+                {
+                    id = item.Id,
+                    UserLikePosts = Model.UserLikePosts,
+                    postLikeCount = item.LikeCount
+                };
+                }
+                @await Html.PartialAsync("_LikePostButton",likePostViewModel)
+            </div>
+
+
+
+
+
+
+
+            <div class="text-muted text-sm-right">
+                @item.UploadDate.ToShamsi()
+            </div>
+        </div>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+
+            int userId = int.Parse(User
+            .Claims
+            .FirstOrDefault(x =>
+            x.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?
+            .Value);
+
+            //bool isTopicCreatedByUser = userId == item.UserId;
+
+            if (userId == item.UserId)
+            {
+                <span>
+                    |
+                </span>
+                <button class="btn btn-danger"
+                        onclick="showCenteredModal('@Url.Action("DeletePostByUser","Topics",new {id = item.Id},protocol:Context.Request.Scheme)','حذف پست')">
+                    حذف
+                </button>
+
+                <span>
+                    |
+                </span>
+                <button class="btn btn-success"
+                        onclick="showCenteredModal('@Url.Action("EditPostByUser","Topics",new {id = item.Id},protocol:Context.Request.Scheme)','ویرایش پست')">
+                    ویرایش
+                </button>
+            }
+        }
+
+
+    </div>
+    @* note : hr tag doesnt work in div *@
+}
+
+@section Scripts{
+    <script src="~/js/Custom.js"></script>
+}

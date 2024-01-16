@@ -25,7 +25,7 @@ namespace FroumSite.Areas.Admin.Models.ViewModels
         public List<Post> PostsIncludedUser { get; set; }
 
         [Display(Name = "کپشن")]
-        [Required]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Caption { get; set; }
         [Display(Name = "تعداد لایک ها")]
         public int LikeCount { get; set; }

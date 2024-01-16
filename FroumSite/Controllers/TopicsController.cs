@@ -11,43 +11,76 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using FroumSite.Models.ViewModels;
 using FroumSite.Areas.Admin.Models.ViewModels;
+using System.Threading;
+using FroumSite.Utilities;
+using FroumSite.Repositories;
 
 namespace FroumSite.Controllers
 {
     public class TopicsController : Controller
     {
         private readonly FroumContext _context;
-        static int _roomId;
-        static int _topicId;
-        static int _topicIdToDelete;
-        static int _topicIdToEdit;
-        static int _postIdToDelete;
 
-        public TopicsController(FroumContext context)
+
+        private readonly GenericRepository<Topic> _topicRepo;
+        private readonly GenericRepository<Room> _roomRepo;
+        private readonly GenericRepository<Post> _postRepo;
+        private readonly GenericRepository<User> _userRepo;
+        private readonly GenericRepository<UserLikePost> _userLikePostRepo;
+        private readonly GenericRepository<UserLikeTopic> _userLikeTopicRepo;
+        private static int _roomId;
+        private static int _topicId;
+        private static int _topicIdToDelete;
+        private static int _topicIdToEdit;
+        private static int _postIdToDelete;
+        private static int _postIdToEdit;
+
+        public TopicsController(GenericRepository<Topic> topicRepo,
+                                GenericRepository<Room> roomRepo,
+                                GenericRepository<UserLikePost> userLikePostRepo,
+                                GenericRepository<UserLikeTopic> userLikeTopicRepo,
+                                GenericRepository<Post> postRepo,
+                                GenericRepository<User> userRepo,
+                                FroumContext context)
         {
+            _topicRepo = topicRepo;
+            _roomRepo = roomRepo;
+            _postRepo = postRepo;
+            _userRepo = userRepo;
+            _userLikePostRepo = userLikePostRepo;
+            _userLikeTopicRepo = userLikeTopicRepo;
             _context = context;
         }
 
         public async Task<IActionResult> ShowPostLikes(int id)
         {
-            var ulp = await _context.UserLikePosts
+            var ulp = await _userLikePostRepo
+                .GetAll(u => u.PostId == id)
                 .Include(u => u.User)
-                .Where(u => u.PostId == id)
                 .ToListAsync();
 
-            return PartialView("../Topics/ShowLikeViews/_ShowPostLikes", ulp);
+            return View("../Topics/ShowLikeViews/_ShowPostLikes", ulp);
         }
 
         // GET: Topics
         public async Task<IActionResult> Index(int Id)
         {
-            var topicsIncludedPosts = await _context.Topics.Where(t => t.RoomId == Id)
-                .Include(t => t.Posts)
-                .ToListAsync();
+            TopicViewModel vm = await InitialViewModel(Id);
 
-            var room = _context.Rooms.Find(Id);
+            return View(vm);
+        }
 
-            var postsIncludedUsers = await _context.Posts
+        private async Task<TopicViewModel> InitialViewModel(int roomId)
+        {
+            var topicsIncludedPosts = await _topicRepo
+                            .GetAll(t => t.RoomId == roomId)
+                            .Include(t => t.Posts)
+                            .ToListAsync();
+
+            var room = await _roomRepo.GetByIdAsync(roomId);
+
+            var postsIncludedUsers = await _postRepo
+                .GetAll()
                 .Include(p => p.User)
                 .ToListAsync();
 
@@ -55,47 +88,53 @@ namespace FroumSite.Controllers
             {
                 TopicsIncludedPosts = topicsIncludedPosts,
                 Room = room,
-                PostsIncludedUsers = postsIncludedUsers,
+                PostsIncludedUsers = postsIncludedUsers
             };
-
-            return View(vm);
+            return vm;
         }
 
         // GET: Topics/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+
+            _topicId = id;
 
 
 
-            var topicIncludedPosts = await _context.Topics
-                .Include(p => p.Posts)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            var topicIncludedUsers = await _context.Topics
+            var topicIncludedUsers = await _topicRepo
+                .GetAll()
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            _topicId = topicIncludedPosts.Id;
-
-            var users = await _context.Users.ToListAsync();
-
-
-            var userLikeTopics = await _context.UserLikeTopics
-                .Where(u => u.TopicId == _topicId).ToListAsync();
-            var userLikePosts = await _context.UserLikePosts.ToListAsync();
+                .FirstOrDefaultAsync(m => m.Id == _topicId);
 
 
 
-            var postsCountUploaderByUser = _context.Users
+
+            var postsOfCurrentTopic = await _postRepo
+                .GetAll(p => p.TopicId == _topicId)
+                .Include(u => u.User)
+                .ToListAsync();
+
+            var userLikeTopics = await _userLikeTopicRepo
+                .GetAll(u => u.TopicId == _topicId)
+                .ToListAsync();
+
+            var userLikePosts = await _userLikePostRepo
+                .GetAll(u => u.Post.TopicId == _topicId)
+                .Include(s => s.Post)
+                .ToListAsync();
+
+            var currentUserId = int.Parse(User.Claims
+                .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
+                .Value);
+
+            var postsCountUploadedByUser = _userRepo.GetAll()
                 .Include(p => p.SharedPosts)
-                .FirstOrDefault(u => u.Id == 12)
+                .FirstOrDefault(u => u.Id == currentUserId)
                 .SharedPosts
                 .Count;
+
             bool isLikedByUser = false;
+
             if (User.Identity.IsAuthenticated)
             {
                 var userId = int.Parse(
@@ -111,17 +150,15 @@ namespace FroumSite.Controllers
 
             ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
             {
-                TopicIncludedPosts = topicIncludedPosts,
-                TopicIncludedUploader = topicIncludedPosts,
-                Users = users,
-                PostsCountUploadedByUser = postsCountUploaderByUser,
+                TopicIncludedUploader = topicIncludedUsers,
+                PostsOfCurrentTopic = postsOfCurrentTopic,
+                PostsCountUploadedByUser = postsCountUploadedByUser,
                 IsTopicLikedByUser = isLikedByUser,
                 UserLikePosts = userLikePosts,
-                UserLikeTopics = userLikeTopics,
-                Context = _context
+                UserLikeTopics = userLikeTopics
             };
 
-            if (topicIncludedPosts == null)
+            if (postsOfCurrentTopic == null)
             {
                 return NotFound();
             }
@@ -129,38 +166,56 @@ namespace FroumSite.Controllers
             return View(vm);
         }
 
+        public async Task<IActionResult> EditPostByUser(int id)
+        {
+            _postIdToEdit = id;
+            var post = await _postRepo.GetByIdAsync(_postIdToEdit);
+
+
+            return View("_EditPostByUser", post);
+        }
+
         [Authorize]
-        public async Task<IActionResult> LikeTopic(int id)
+        public async Task<IActionResult> LikeTopic()
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
 
             var userLikeTopic = await _context
                                         .UserLikeTopics
-                                        .Where(u => u.TopicId == id && u.UserId == userId)
+                                        .Where(u => u.TopicId == _topicId && u.UserId == userId)
                                         .FirstOrDefaultAsync();
 
-            var topic = _context.Topics.Find(id);
-
+            var topic = _context.Topics.Find(_topicId);
+            LikeViewModel likeViewModel = new LikeViewModel();
             if (userLikeTopic == null)
             {
                 UserLikeTopic ult = new UserLikeTopic
                 {
-                    TopicId = id,
+                    TopicId = _topicId,
                     UserId = userId
                 };
                 _context.UserLikeTopics.Add(ult);
                 topic.LikeCount++;
+                await _context.SaveChangesAsync();
+
+                likeViewModel.LikeCount = topic.LikeCount;
+                likeViewModel.IsLiked = true;
+
             }
             else
             {
                 _context.UserLikeTopics.Remove(userLikeTopic);
                 topic.LikeCount--;
+                await _context.SaveChangesAsync();
+
+                likeViewModel.LikeCount = topic.LikeCount;
+                likeViewModel.IsLiked = false;
+
             }
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_TopicLikeButton", likeViewModel) });
 
-            await _context.SaveChangesAsync();
 
 
-            return RedirectToAction("Details", routeValues: new { id = _topicId });
 
         }
 
@@ -191,24 +246,23 @@ namespace FroumSite.Controllers
                 _context.UserLikePosts.Remove(userLikePost);
                 post.LikeCount--;
             }
-
             await _context.SaveChangesAsync();
 
+            var userLikePosts = await _context.UserLikePosts.ToListAsync();
 
-            return RedirectToAction("Details", routeValues: new { id = _topicId });
+            post = _context.Posts.Find(id);
 
-        }
+            LikePostViewModel likePostViewModel = new LikePostViewModel
+            {
+                id = id,
+                UserLikePosts = userLikePosts,
+                postLikeCount = post.LikeCount
+            };
 
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_LikePostButton", likePostViewModel) };
 
+            return Json(json);
 
-        // GET: Topics/Create
-        [Authorize]
-        public IActionResult Create(int id)
-        {
-            CreateTopicViewModel vm = new CreateTopicViewModel();
-            _roomId = id;
-
-            return PartialView(vm);
         }
 
         [Authorize]
@@ -231,8 +285,64 @@ namespace FroumSite.Controllers
             _context.Posts.Add(post);
             var result = await _context.SaveChangesAsync();
 
-            return RedirectToAction("Details", new { Id = _topicId });
+
+
+            var postsOfCurrentTopic = await _postRepo
+                .GetAll(p => p.TopicId == _topicId)
+                .Include(u => u.User)
+                .ToListAsync();
+
+            
+
+            vm.PostsOfCurrentTopic = postsOfCurrentTopic;
+            vm.UserLikePosts = _context.UserLikePosts
+                .Include(s => s.Post)
+                .Where(u => u.Post.TopicId == _topicId).ToList();
+
+
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", vm) });
+
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveEditedPost(int id, [Bind("Id,Caption,UploadDate,LikeCount,UserId,TopicId")] Post editedPost)
+        {
+            var postToEdit = await _postRepo.GetByIdAsync(id);
+
+            postToEdit.Caption = editedPost.Caption;
+            await _postRepo.SaveChangesAsync();
+
+
+
+            var postsOfCurrentTopic = await _postRepo
+                .GetAll(p => p.TopicId == _topicId)
+                .Include(u => u.User)
+                .ToListAsync();
+
+            var userLikePosts = await _userLikePostRepo
+                .GetAll(u => u.Post.TopicId == _topicId)
+                .Include(s => s.Post)
+                .ToListAsync();
+
+            ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
+            {
+                UserLikePosts = userLikePosts,
+                PostsOfCurrentTopic = postsOfCurrentTopic
+            };
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", vm) };
+            return Json(json);
+        }
+
+        // GET: Topics/Create
+        [Authorize]
+        public IActionResult Create(int id)
+        {
+            CreateTopicViewModel vm = new CreateTopicViewModel();
+            _roomId = id;
+
+            return View(vm);
+        }
+
 
         // POST: Topics/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -241,25 +351,42 @@ namespace FroumSite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoomId,UserId,Title,Description")] CreateTopicViewModel vm)
         {
-
-            int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
-            string description = vm.Description;
-            string title = vm.Title;
-
-            Topic topic = new Topic
+            if (ModelState.IsValid)
             {
-                Description = description,
-                Title = title,
-                RoomId = _roomId,
-                UserId = userId,
-                LikeCount = 0,
-                UploadDate = DateTime.Now
-            };
+                try
+                {
+                    int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
+                    string description = vm.Description;
+                    string title = vm.Title;
 
-            _context.Topics.Add(topic);
-            await _context.SaveChangesAsync();
+                    Topic topic = new Topic
+                    {
+                        Description = description,
+                        Title = title,
+                        RoomId = _roomId,
+                        UserId = userId,
+                        LikeCount = 0,
+                        UploadDate = DateTime.Now
+                    };
 
-            return RedirectToAction("RoomDetails", "Rooms", routeValues: new { id = _roomId });
+                    _context.Topics.Add(topic);
+                    await _context.SaveChangesAsync();
+
+                    TopicViewModel initailizedViewModel = await InitialViewModel(_roomId);
+
+
+                    var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllTopicsOfRoom", initailizedViewModel) };
+                    return Json(json);
+                }
+                catch (Exception)
+                {
+                    return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Create", vm) });
+
+                }
+
+
+            }
+            return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Create", vm) });
         }
 
         // GET: Topics/Edit/5
@@ -334,19 +461,34 @@ namespace FroumSite.Controllers
                 UploaderName = topicToDelete.User.Name
             };
 
-            return PartialView(vm);
+            return View("_DeleteTopicByUser", vm);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed()
         {
-            var topicToDelete = _context.Topics.Find(_topicIdToDelete);
+            TopicViewModel vm = new TopicViewModel();
+            try
+            {
+                var topicToDelete = _context.Topics.Find(_topicIdToDelete);
 
-            _context.Topics.Remove(topicToDelete);
+                _context.Topics.Remove(topicToDelete);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            return Redirect(Request.Headers["Referer"].ToString());
+                vm = await InitialViewModel(_roomId);
+
+                var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllTopicsOfRoom", vm) };
+
+                return Json(json);
+            }
+            catch
+            {
+                var json = new { isValid = false, html = Helper.RenderRazorViewToString(this, "_DeleteTopicByUser", vm) };
+
+                return Json(json);
+            }
+
         }
 
         [Authorize]
@@ -408,17 +550,37 @@ namespace FroumSite.Controllers
 
 
 
-            return PartialView(postToDelete);
+            return View("_DeletePostByUser", postToDelete);
         }
 
         [HttpPost]
-        public async Task ConfirmDeletePostAsync()
+        public async Task<IActionResult> ConfirmDeletePost()
         {
             var postToDelete = await _context.Posts
                 .FirstOrDefaultAsync(p => p.Id == _postIdToDelete);
 
             _context.Posts.Remove(postToDelete);
             await _context.SaveChangesAsync();
+
+            var postsOfCurrentTopic = await _postRepo
+                .GetAll(p => p.TopicId == _topicId)
+                .Include(u => u.User)
+                .ToListAsync();
+
+
+            var userLikePosts = await _userLikePostRepo
+                .GetAll(u => u.Post.TopicId == _topicId)
+                .Include(s => s.Post)
+                .ToListAsync();
+
+            ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
+            {
+                UserLikePosts = userLikePosts,
+                PostsOfCurrentTopic = postsOfCurrentTopic
+            };
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", vm) };
+            return Json(json);
         }
 
         [HttpGet]
@@ -428,7 +590,7 @@ namespace FroumSite.Controllers
                 .Include(u => u.User)
                 .Where(u => u.TopicId == _topicId).ToListAsync();
 
-            return PartialView("../Topics/ShowLikeViews/_ShowTopicLikes", likes);
+            return View("../Topics/ShowLikeViews/_ShowTopicLikes", likes);
         }
 
         // POST: Topics/Delete/5

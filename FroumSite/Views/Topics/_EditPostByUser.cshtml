@@ -1,0 +1,53 @@
+﻿@model Post
+
+@{
+    Layout = null;
+}
+
+@{
+    var a = Model;
+    var b = Model.Id;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="SaveEditedPost" asp-route-id="@Model.Id" onsubmit="return ajaxSavePost(this)">
+            <label asp-for="Id" class="hide"></label>
+
+
+            <div class=" col-12">
+                <label asp-for="Caption"></label>
+                <textarea class="col-12 border-dark" asp-for="Caption" cols="12" rows="3">
+
+            </textarea>
+                <span class="text-danger" asp-validation-for="Caption"></span>
+            </div>
+
+            <div class="col-4 border-white">
+
+                <input type="submit" value="ثبت" class="btn btn-success" />
+            </div>
+
+        </form>
+    </div>
+</div>
+@* <div class="col-12 row p-1 mb-3" style="border-radius:20px">
+    <form class="col-12" asp-action="SaveEditedPost" onsubmit="return ModifyPost(this)">
+        <label asp-for="Id" class="hide"></label>
+
+
+        <div class=" col-12">
+            <label asp-for="Caption"></label>
+            <textarea class="col-12 border-dark" asp-for="Caption" cols="12" rows="3">
+
+            </textarea>
+            <span class="text-danger" asp-validation-for="Caption"></span>
+        </div>
+
+        <div class="col-4 border-white">
+
+            <input type="submit" value="ثبت" class="btn btn-success" />
+        </div>
+
+    </form>
+</div> *@

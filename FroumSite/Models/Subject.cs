@@ -15,7 +15,7 @@ namespace FroumSite.Models
 
         [Display(Name = "نام")]
         [MaxLength(20, ErrorMessage = "نام نباید بیشتر از 20 کاراکتر باشد")]
-        [Required(ErrorMessage = "لطفا نام را وارد کنید")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string Title { get; set; }
 
 

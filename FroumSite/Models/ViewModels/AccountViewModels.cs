@@ -27,7 +27,7 @@ namespace FroumSite.Models.ViewModels
 
 
         [Display(Name = "جنسیت")]
-        [Required(ErrorMessage = "لطفا جنسیت خود را انتخاب کنید")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public Sex Sex { get; set; }
 
 
@@ -61,7 +61,7 @@ namespace FroumSite.Models.ViewModels
     {
         [StringLength(11, ErrorMessage = "شماره تلفن همراه باید 11 رقم باشد")]
         [Display(Name = "شماره تلفن همراه")]
-        [Required(ErrorMessage ="لطفا شماره همراه خود را وارد کنید")]
+        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]

@@ -4,14 +4,16 @@ using FroumSite.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FroumSite.Migrations
 {
     [DbContext(typeof(FroumContext))]
-    partial class FroumContextModelSnapshot : ModelSnapshot
+    [Migration("20240116000610_TblTopic_DescriptionField_IsRequiredNow")]
+    partial class TblTopic_DescriptionField_IsRequiredNow
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

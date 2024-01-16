@@ -1,0 +1,38 @@
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.TopicsViewModel
+@{
+    ViewData["Title"] = "حذف تاپیک";
+    Layout = null;
+}
+
+<form method="post" asp-action="DeleteConfirmed" onsubmit="return ModifyTopic(this)">
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.Title) : @Html.DisplayFor(model=>model.Title)
+
+    </label>
+
+
+
+    <textarea disabled class=" form-control">
+        @Html.DisplayNameFor(model=>model.Description) : @Html.DisplayFor(model=>model.Description)
+    </textarea>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.UploaderName) : @Html.DisplayFor(model=>model.UploaderName)
+    </label>
+
+
+    <label class=" form-control">
+        @Html.DisplayNameFor(model=>model.RoomName) : @Html.DisplayFor(model=>model.RoomName)
+    </label>
+
+
+    <h3 class="bg-danger text-white p-2 mb-2 mt-2 col-6">
+        آیا می خواهید تاپیک بالا حذف شود ؟
+    </h3>
+
+    <input type="submit" class="btn btn-danger" value="بله" />
+    <a class="btn btn-success text-white" data-dismiss="modal" >خیر</a>
+</form>
+

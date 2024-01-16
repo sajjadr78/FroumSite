@@ -1,4 +1,5 @@
-﻿@model TopicViewModel
+﻿@using System.Security.Claims;
+@model TopicViewModel
 
 
 @{
@@ -6,117 +7,43 @@
 
 }
 
-
 <h1 class="mb-3">تاپیک های تالار @Model.Room.Title</h1>
 <div>
-    <a class="btn btn-success m-3" asp-action="Index" asp-controller="Rooms" asp-route-id="@Model.Room.Id">بازگشت</a>
+    <a class="btn btn-success m-3" asp-action="SubjectDetails" asp-controller="Home" asp-route-id="@Model.Room.SubjectId">
+        بازگشت
+    </a>
 </div>
 
 <div>
-    <a class="btn btn-primary m-3" asp-action="Create" asp-route-id="@Model.Room.Id">ایجاد تاپیک جدید در این تالار</a>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a onclick="showPopupModal('@Url.Action("Create","Topics",new {id = Model.Room.Id},protocol:Context.Request.Scheme)','ایجاد تاپیک')"
+           class="btn btn-primary m-3 text-white">
+            ایجاد تاپیک جدید در این تالار
+        </a>
+    }
+    else
+    {
+        <a onclick="showPopupModal('@Url.Action("Login","Account",null,protocol:Context.Request.Scheme)','ورود به سایت')"
+           class="btn btn-primary m-3 text-white">
+            ایجاد تاپیک جدید در این تالار
+        </a>
+    }
 </div>
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">@Model.Room.Title - @Model.TopicsIncludedPosts.Count</th>
-            <th scope="col">پست</th>
-            <th scope="col">آخرین پست</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.TopicsIncludedPosts)
-        {
-            <tr class="table-success">
-                <th scope="row">
-                    <a href="/Topics/Details/@item.Id">
-                        @item.Title
-                    </a>
-                </th>
-                @{
-                    int postsCount = item.Posts.Count;
-                }
-                <td>@postsCount</td>
-                <td>
-                    @if (postsCount == 0)
-                    {
-                        <span class="text-danger">
-                            در این تاپیک ، هیچ پستی وجود ندارد
-                        </span>
-                    }
-                    else
-                    {
-                        <a asp-action="Details" asp-controller="Posts" asp-route-id="@item.Posts.Last().Id">
-                            @item.Posts.Last().Caption
-                        </a>
-                        <div>
-                            <span>
-                                توسط:
-                            </span>
-                            @{
-                                var uploader = Model.PostsIncludedUsers
-                                .Where(p => p.TopicId == item.Id)
-                                .Last()
-                                .User;
+<div id="view-all-topics">
 
-                                var uploaderFullName = uploader.Name + " " + uploader.Family;
-
-                                var uploaderId = uploader.Id;
-                            }
-                            <a asp-action="Details"
-                               asp-controller="Users"
-                               asp-route-id="@uploaderId">
-
-                                @uploaderFullName
-
-                            </a>
-                        </div>
-
-                    }
-                </td>
-
-            </tr>
-        }
-    </tbody>
-</table>
+    @await Html.PartialAsync("_ViewAllTopicsOfRoom",Model)
+</div>
 
 
-@* <p>
-    <a asp-action="Create">Create New</a>
-</p> *@
-@* <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model=>model.Uploader)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelitem=>item.Uploader.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/js/Custom.js"></script>
+
+
 }
-    </tbody>
-</table>
- *@

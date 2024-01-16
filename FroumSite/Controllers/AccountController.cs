@@ -9,23 +9,26 @@ using FroumSite.Data;
 using System.Threading.Tasks;
 using System.Linq;
 using FroumSite.Models.ViewModels;
+using FroumSite.Utilities;
+using FroumSite.Repositories;
 
 namespace FroumSite.Controllers
 {
     public class AccountController : Controller
     {
 
-        private readonly FroumContext _context;
+        private readonly GenericRepository<User> _userRepo;
 
-        public AccountController(FroumContext context)
+        public AccountController(GenericRepository<User> userRepo)
         {
-            _context = context;
+            _userRepo = userRepo;
         }
         #region Register
 
+        [NoDirectAccess]
         public IActionResult Register()
         {
-            return View();
+            return View(new RegisterViewModel());
         }
 
         [HttpPost]
@@ -36,7 +39,7 @@ namespace FroumSite.Controllers
                 return View(register);
             }
 
-            if (_context.Users.Any(u => u.PhoneNumber == register.PhoneNumber))
+            if (_userRepo.GetAll(u => u.PhoneNumber == register.PhoneNumber).Any())
             {
                 ModelState.AddModelError("PhoneNumber", "شماره همراه وارد شده قبلا ثبت نام کرده است");
                 return View(register);
@@ -54,15 +57,15 @@ namespace FroumSite.Controllers
 
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _userRepo.AddAsync(user);
+            await _userRepo.SaveChangesAsync();
 
             return View("SuccessRegister", register);
         }
 
         public IActionResult VerifyEmail(string phoneNumber)
         {
-            if (_context.Users.Any(u => u.PhoneNumber == phoneNumber))
+            if (_userRepo.GetAll(u => u.PhoneNumber == phoneNumber).Any())
             {
                 return Json($"شماره همراه {phoneNumber} تکراری است");
             }
@@ -73,20 +76,13 @@ namespace FroumSite.Controllers
 
         #region Login
 
-        public IActionResult LoadLoginForm()
-        {
-            return PartialView();
-        }
 
+        [NoDirectAccess]
         public IActionResult Login()
         {
-            return View();
+            return View(new LoginViewModel());
         }
 
-        public IActionResult LoadRegisterForm()
-        {
-            return PartialView();
-        }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel login)
@@ -96,7 +92,7 @@ namespace FroumSite.Controllers
                 return View(login);
             }
 
-            var user = _context.Users
+            var user = _userRepo.GetAll()
                 .SingleOrDefault(u => u.PhoneNumber == login.PhoneNumber &&
                                       u.Password == login.Password);
             if (user == null)
@@ -140,7 +136,7 @@ namespace FroumSite.Controllers
         {
             await HttpContext
                 .SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect("/Account/Login");
+            return Redirect("/");
         }
 
     }

@@ -8,17 +8,18 @@
         @foreach (var item in Model)
         {
 
-            <button class="btn btn-success  btn-lg  m-1"
-                    data="@item.Id"
-                    id="btnShowSubjectDetails">
+            <a class="btn btn-success  btn-lg  m-1"
+                    asp-action="SubjectDetails"
+                    asp-route-id="@item.Id">
                 @item.Title
-            </button>
+            </a>
                 
         }
     </div>
 </div>
 
-@section Scripts{
 
+
+@section Scripts{
     <script src="~/js/Custom.js"></script>
 }

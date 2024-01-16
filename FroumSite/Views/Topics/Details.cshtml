@@ -7,22 +7,24 @@
     ViewData["Title"] = "Details";
 }
 
-<a class="btn btn-success m-3" asp-action="RoomDetails" asp-controller="Rooms"
-   asp-route-id="@Model.TopicIncludedPosts.RoomId">
+<a class="btn btn-success m-3" asp-action="Index" asp-controller="Topics"
+   asp-route-id="@Model.TopicIncludedUploader.RoomId">
     بازگشت
 </a>
 
 <div class=" row col-12 mb-3 border " style="border-radius:20px">
     <div class="col-3 p-3" style="background-color:#fff3e0;">
-        <a asp-action="Details" asp-controller="Users"
-           asp-route-id="@Model.TopicIncludedUploader.User.Id">
+        @{
+            var uploader = Model.TopicIncludedUploader.User;
+            var uploaderFullName = uploader.Name + " " + uploader.Family;
 
-            @{
-                var uploaderFullName = Model.TopicIncludedUploader.User.Name + " " +
-                Model.TopicIncludedUploader.User.Family;
-            }
+            var uploaderId = uploader.Id;
+        }
+        <a onclick="showPopupModal('@Url.Action("Details","Users",new {id = uploaderId},protocol:Context.Request.Scheme)','مشخصات کاربر')"
+           class="link text-primary">
 
             @uploaderFullName
+
         </a>
         <div>
             @($"تاریخ عضویت : {Model.TopicIncludedUploader.User.RegisterDate.ToShamsi()}")
@@ -34,159 +36,35 @@
     </div>
     <div class="col-9 p-3">
         <div>
-            <h4>عنوان : @Model.TopicIncludedPosts.Title</h4>
+            <h4>عنوان : @Model.TopicIncludedUploader.Title</h4>
         </div>
         <div>
             <span class="text-muted card-subtitle">
-                @Model.TopicIncludedPosts.Posts.Count پست
+                @Model.PostsOfCurrentTopic.Count پست
             </span>
         </div>
 
         <hr />
 
         <div>
-            @Model.TopicIncludedPosts.Description
+            @Model.TopicIncludedUploader.Description
         </div>
         <hr />
-
-        <div class="text-right">
-            <a class="btn btn-sm" asp-action="LikeTopic" asp-route-id="@Model.TopicIncludedUploader.Id">
-                @{
-                    if (User.Identity.IsAuthenticated)
-                    {
-                            @if (Model.IsTopicLikedByUser)
-                        {
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-                                </svg>
-                        }
-                        else
-                        {
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                </svg>
-                        }
-                    }
-                    else
-                    {
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                            </svg>
-                    }
-                }
-            </a>
+        <div id="LikeButton" >
+            @{
+                LikeViewModel likeViewModel = new LikeViewModel
+                {
+                    IsLiked = Model.IsTopicLikedByUser,
+                    LikeCount = Model.TopicIncludedUploader.LikeCount
+                };
+            }
+            @await Html.PartialAsync("_TopicLikeButton",likeViewModel)
 
         </div>
 
-        @*         <a class="text-muted card-subtitle text-sm-right" href="#" onclick="ShowLikes()">
-        @Model.TopicIncludedPosts.LikeCount لایک
-        </a> *@
-
-        <button class="text-muted text-primary card-subtitle text-sm-right" 
-           onclick="ShowTopicLikes()">
-            @Model.TopicIncludedPosts.LikeCount لایک
-        </button>
-
-        @*         <a class="text-muted text-primary card-subtitle text-sm-right"
-        href="#"
-        data-toggle="modal"
-        data-target="#exampleModal">
-        @Model.TopicIncludedPosts.LikeCount لایک
-        </a> *@
 
         <div class="text-muted text-sm-right">
-            @Model.TopicIncludedPosts.UploadDate.ToShamsi()
-        </div>
-
-
-    </div>
-
-</div>
-
-@* <partial name="ShowLikeViews/_ShowLikesModal.cshtml"/> *@
-@await Html.PartialAsync("~/Views/Topics/ShowLikeViews/_ShowLikesModal.cshtml")
-
-
-@foreach (var item in Model.TopicIncludedPosts.Posts)
-{
-    <div class="col-12 border row p-1 mb-3" style="border-radius:20px">
-        <div class="col-md-3" style="background-color:#fce4ec">
-
-            @{
-
-                var uploader = Model.Users.FirstOrDefault(u => u.Id == item.UserId);
-                var postUploaderFullName = uploader.Name + " " + uploader.Family;
-                var uploaderId = uploader.Id;
-            }
-            <span>توسط :</span>
-            <a asp-action="Details"
-               asp-controller="Users"
-               asp-route-id="@uploaderId">
-
-                @postUploaderFullName
-
-            </a>
-
-        </div>
-        <div class="col-md-9">
-            <div>
-
-                @item.Caption
-            </div>
-
-
-            <div class="text-right">
-                @{
-                        <a class="btn btn-sm" asp-action="LikePost" asp-route-id="@item.Id">
-                            @{
-                            if (User.Identity.IsAuthenticated)
-                            {
-                                int userId = int.Parse(User.Claims
-                                .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
-                                .Value);
-
-                                var isPostLikedByUser = Model.Context.UserLikePosts
-                                .Any(u => u.UserId == userId && u.PostId == item.Id);
-
-                                if (isPostLikedByUser)
-                                {
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314" />
-                                            </svg>
-                                }
-                                else
-                                {
-                                    // <h3>&#9825;</h3>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                                <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                            </svg>
-                                }
-                            }
-                            else
-                            {
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-                                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                                        </svg>
-                            }
-                            }
-                        </a>
-                }
-            </div>
-
-            <div>
-                <a href="#"
-                   onclick="ShowLikesPost(@item.Id)"
-                   class="text-sm-right text-muted"
-                   data="@item.Id">
-                    @item.LikeCount لایک
-                </a>
-            </div>
-
-
-
-            <div class="text-muted text-sm-right">
-                @item.UploadDate.ToShamsi()
-            </div>
+            @Model.TopicIncludedUploader.UploadDate.ToShamsi()
         </div>
 
         @if (User.Identity.IsAuthenticated)
@@ -195,45 +73,37 @@
             int userId = int.Parse(User
             .Claims
             .FirstOrDefault(x =>
-            x.Type == ClaimTypes.NameIdentifier)?
+            x.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?
             .Value);
-
+            var topicId = Model.TopicIncludedUploader.Id;
             //bool isTopicCreatedByUser = userId == item.UserId;
 
-            if (userId == item.UserId)
+            if (userId == Model.TopicIncludedUploader.UserId)
             {
-                <span>
-                    |
-                </span>
-                <button class="btn btn-danger"
-                        onclick="DeletePost(@item.Id)">
-                    حذف
-                </button>
-
-                <span>
-                    |
-                </span>
                 <button class="btn btn-success"
-                        onclick="EditPost(@item.Id)">
+                        onclick="showCenteredModal('@Url.Action("EditTopicByUser","Topics",new {id = topicId},protocol:Context.Request.Scheme)','ویرایش تاپیک')">
                     ویرایش
                 </button>
             }
         }
-
-
     </div>
-    @* note : hr tag doesnt work in div *@
-}
+
+</div>
+
+
+
+<div id="view-all-posts">
+    @await Html.PartialAsync("_ViewAllPosts",Model)
+</div>
 
 
 <div class="col-12 border row p-1 mb-3" style="border-radius:20px">
-    <form class="col-12" asp-action="SavePost" method="post">
+    <form class="col-12" asp-action="SavePost" method="post" onsubmit="return ajaxSavePost(this)">
 
 
         <div class=" col-12">
-            <label asp-for="Caption"></label>
-            <textarea placeholder="نظر خود را بنویسید..." class="col-12 border-white" asp-for="Caption" cols="12" rows="3">
-
+            <textarea id="txtPost" placeholder="نظر شما" class="col-12 border-white" asp-for="Caption" cols="12" rows="3">
+                
             </textarea>
             <span class="text-danger" asp-validation-for="Caption"></span>
         </div>
@@ -254,57 +124,57 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     @* <script src="~/js/site.js"></script> *@
-    <script>
-        function ShowLikesPost(id) {
-            $.ajax({
-                type: "GET",
-                url: "/Topics/ShowPostLikes/" + id,
-                data: {},
-                success: function (response) {
-                    $('#likesModal').modal('show');
-                    $('#likesContainer').html(response);
-                }
-            });
-        }
+    <script src="~/js/Custom.js">
+        // function ShowLikesPost(id) {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/Topics/ShowPostLikes/" + id,
+        //         data: {},
+        //         success: function (response) {
+        //             $('#likesModal').modal('show');
+        //             $('#likesContainer').html(response);
+        //         }
+        //     });
+        // }
 
-        function EditPost(id) {
-            $.ajax({
-                type: "GET",
-                url: "/Topics/EditPostByUser/" + id,
-                data: {},
-                success: function (response) {
-                    $('#likesModal').modal('show');
-                    $('#likesContainer').html(response);
-                }
-            });
-        }
+        // function EditPost(id) {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/Topics/EditPostByUser/" + id,
+        //         data: {},
+        //         success: function (response) {
+        //             $('#likesModal').modal('show');
+        //             $('#likesContainer').html(response);
+        //         }
+        //     });
+        // }
 
-        function DeletePost(id) {
-            $.ajax({
-                type: "GET",
-                url: "/Topics/DeletePostByUser/" + id,
-                data: {},
-                success: function (response) {
-                    $('#likesModal').modal('show');
-                    $('#likesContainer').html(response);
-                }
-            });
-        }
+        // function DeletePost(id) {
+        //     $.ajax({
+        //         type: "GET",
+        //         url: "/Topics/DeletePostByUser/" + id,
+        //         data: {},
+        //         success: function (response) {
+        //             $('#likesModal').modal('show');
+        //             $('#likesContainer').html(response);
+        //         }
+        //     });
+        // }
 
-        function ShowTopicLikes() {
-            $.ajax({
-                url: '/Topics/ShowTopicLikes',  // Replace with your actual endpoint
-                type: 'GET',
-                success: function (data) {
-                    // Update the likesContainer with the fetched data
-                    $('#likesContainer').html(data);
-                },
-                error: function () {
-                    // Handle error
-                    console.error('Failed to fetch likes data.');
-                }
-            });
-        }
+        // function ShowTopicLikes() {
+        //     $.ajax({
+        //         url: '/Topics/ShowTopicLikes',  // Replace with your actual endpoint
+        //         type: 'GET',
+        //         success: function (data) {
+        //             // Update the likesContainer with the fetched data
+        //             $('#likesContainer').html(data);
+        //         },
+        //         error: function () {
+        //             // Handle error
+        //             console.error('Failed to fetch likes data.');
+        //         }
+        //     });
+        // }
 
 
     </script>
