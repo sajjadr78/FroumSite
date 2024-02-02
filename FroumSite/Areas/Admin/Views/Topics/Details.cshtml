@@ -4,6 +4,7 @@
 
 @{
     ViewData["Title"] = "جزییات تاپیک";
+    Layout = null;
 }
 
 <div>
@@ -31,8 +32,9 @@
 
 
 
-    <a class="btn btn-success" asp-controller="Home" asp-action="Topics">بازگشت</a>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">ویرایش</a>
-    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">حذف</a>
+
+    <input type="button" class="btn btn-success" data-dismiss="modal" value="بازگشت">
+    <input type="button" class="btn btn-primary" onclick="showPopupModal('@Url.Action("Edit","Topics",new {id = Model.Id},Context.Request.Scheme)','ویرایش تاپیک','true')" value="ویرایش">
+    <input type="button" class="btn btn-danger" onclick="showPopupModal('@Url.Action("Delete","Topics",new {id = Model.Id},Context.Request.Scheme)','حذف تاپیک','true')" value="حذف">
 </div>
 

@@ -18,6 +18,7 @@ namespace FroumSite.Areas.Admin.Controllers
             _context = context;
         }
 
+        //[Route("/Boss/Home")]
         public IActionResult Index()
         {
             return View();

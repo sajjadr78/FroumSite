@@ -2,13 +2,14 @@
 
 @{
     ViewData["Title"] = "افزودن تاپیک جدید";
+    Layout = null;
 }
 
-<form asp-action="Save" method="post">
+<form class="col-md-12" asp-action="Save" method="post" onsubmit="return jQueryAjaxPost(this,'topics-admin-panel')">
 
     <div class="form-group">
         <label asp-for="Title"></label>
-        <input asp-for="Title" />
+        <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title"></span>
     </div>
 
@@ -41,7 +42,9 @@
     </div>
 
     <div class="form-group">
-        <input class="btn btn-success" type="submit" value="ذخیره" />
+        <input class="btn btn-success btn-block" type="submit" value="ذخیره" />
     </div>
 
 </form>
+
+

@@ -28,7 +28,12 @@ namespace FroumSite.Controllers
         [NoDirectAccess]
         public IActionResult Register()
         {
-            return View(new RegisterViewModel());
+            RegisterViewModel registerViewModel = new RegisterViewModel
+            {
+                Birthday = DateTime.Now
+            };
+
+            return View(registerViewModel);
         }
 
         [HttpPost]
@@ -56,9 +61,15 @@ namespace FroumSite.Controllers
                 Sex = register.Sex,
 
             };
+            //make first user admin
+            var isUsersTblEmpty = !_userRepo.GetAll().Any();
+
+
+            user.IsAdmin = isUsersTblEmpty;
+
 
             await _userRepo.AddAsync(user);
-            await _userRepo.SaveChangesAsync();
+            _userRepo.SaveChangesAsync();
 
             return View("SuccessRegister", register);
         }
@@ -132,11 +143,18 @@ namespace FroumSite.Controllers
 
         #endregion
 
-        public async Task<IActionResult> Logout()
+        public async Task<bool> Logout()
         {
-            await HttpContext
+            try
+            {
+                await HttpContext
                 .SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Redirect("/");
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
     }

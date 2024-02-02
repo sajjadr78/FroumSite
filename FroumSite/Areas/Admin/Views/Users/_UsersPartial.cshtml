@@ -1,0 +1,62 @@
+﻿@using FroumSite.Utilities;
+@model IEnumerable<FroumSite.Models.User>
+
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Name)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Family)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Birthday)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Sex)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.RegisterDate)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.PhoneNumber)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.IsAdmin)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-secondary" id="@item.Id">
+                <td>@item.Name</td>
+                <td>@item.Family</td>
+                <td>@item.Birthday.ToShamsi()</td>
+
+                @if (item.Sex == FroumSite.Models.Enums.Sex.Male)
+                {
+                    <td>
+                        مرد
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        زن
+                    </td>
+                }
+
+                <td>@item.RegisterDate.ToShamsi()</td>
+                <td>@item.PhoneNumber</td>
+                @if (item.IsAdmin)
+                {
+                    <td>
+                        ✅
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        ✖
+                    </td>
+                }
+
+                <td>
+                    <input class="btn btn-secondary btn-sm" onclick="showPopupModal('@Url.Action("Details","Users",new {id = item.Id},Context.Request.Scheme)','جزییات کاربر')" value="جزییات" type="button">
+                    <input class="btn btn-primary btn-sm" onclick="showPopupModal('@Url.Action("Edit","Users",new {id = item.Id},Context.Request.Scheme)','ویرایش کاربر')" value="ویرایش" type="button">
+                    <input class="btn btn-danger btn-sm" onclick="showPopupModal('@Url.Action("Delete","Users",new {id = item.Id},Context.Request.Scheme)','حذف کاربر')" value="حذف" type="button">
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

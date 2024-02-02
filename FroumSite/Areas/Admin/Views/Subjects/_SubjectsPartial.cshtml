@@ -1,0 +1,24 @@
+﻿@model IEnumerable<FroumSite.Models.Subject>
+
+
+<table class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Title)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="table-secondary" id="@item.Id">
+                <td>@item.Title</td>
+                <td>
+                    <input class="btn btn-secondary btn-sm" onclick="showPopupModal('@Url.Action("Details","Subjects",new {id = item.Id},Context.Request.Scheme)','جزییات موضوع')" value="جزییات" type="button">
+                    <input class="btn btn-primary btn-sm" onclick="showPopupModal('@Url.Action("Edit","Subjects",new {id = item.Id},Context.Request.Scheme)','ویرایش موضوع')" value="ویرایش" type="button">
+                    <input class="btn btn-danger btn-sm" onclick="showPopupModal('@Url.Action("Delete","Subjects",new {id = item.Id},Context.Request.Scheme)','حذف موضوع')" value="حذف" type="button">
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

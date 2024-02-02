@@ -2,24 +2,27 @@
 @model FroumSite.Areas.Admin.Models.ViewModels.RoomsViewModel
 @{
     ViewData["Title"] = "حذف تالار";
+    Layout = null;
 }
 
-<form method="post" asp-action="DeleteConfirmed">
+<form method="post" asp-action="DeleteConfirmed" onsubmit="return DeleteEntityByAdmin(this,'rooms-admin-panel',@Model.Id)">
 
-    <label class=" form-control">
-        @Html.DisplayNameFor(model=>model.RoomTitle) : @Html.DisplayFor(model=>model.RoomTitle)
+    <h3 class="bg-danger text-white p-2 mb-2 mt-2 col-12">
+        آیا می خواهید تالار با عنوان
 
-    </label>
-
-
-
-    <label class=" form-control">
-        @Html.DisplayNameFor(model=>model.SubjectTitle) : @Html.DisplayFor(model=>model.SubjectTitle)
-    </label>
-
-
-    <h3 class="bg-danger text-white p-2 mb-2 mt-2 col-6">
-        آیا می خواهید تالار بالا حذف شود ؟
+        <span>
+            <span class="text-black-50">
+                &#10090;
+            </span>
+            <span>
+                @Model.RoomTitle
+            </span>
+            <span class="text-black-50">
+                &#10091;
+            </span>
+        </span>
+        
+        حذف شود ؟
     </h3>
 
     <input type="submit" class="btn btn-danger" value="بله" />

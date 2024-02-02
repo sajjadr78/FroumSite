@@ -2,9 +2,10 @@
 
 @{
     ViewData["Title"] = "ویرایش تاپیک";
+    Layout = null;
 }
 
-<form class="col-4" asp-action="Save" method="post" >
+<form class="col-12" asp-action="Save" onsubmit="return jQueryAjaxPost(this,'topics-admin-panel')">
 
     <div class="form-group">
         <label asp-for="Title" ></label>
@@ -54,7 +55,7 @@
 
 
     <div class="form-group">
-        <input class="form-control btn btn-success" type="submit" value="ذخیره" />
+        <input class="form-control btn btn-success btn-block" type="submit" value="ذخیره" />
     </div>
 
 </form>

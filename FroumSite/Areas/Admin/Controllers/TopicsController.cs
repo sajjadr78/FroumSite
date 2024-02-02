@@ -1,8 +1,10 @@
 ﻿using FroumSite.Areas.Admin.Models.ViewModels;
 using FroumSite.Data;
 using FroumSite.Models;
+using FroumSite.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,7 +44,8 @@ namespace FroumSite.Areas.Admin.Controllers
                     Description = vm.Description,
                     RoomId = vm.RoomId,
                     UserId = vm.UploaderId,
-                    Title = vm.Title
+                    Title = vm.Title,
+                    UploadDate = System.DateTime.Now
                 };
 
                 _context.Topics.Add(topic);
@@ -66,7 +69,23 @@ namespace FroumSite.Areas.Admin.Controllers
 
             _topicIdToEdit = 0;
 
-            return RedirectToAction("Topics", "Home");
+            var topicsIncludedRooms = await _context.Topics
+                .Include(t => t.Room)
+                .ToListAsync();
+
+            var topicsIncludedUsers = await _context.Topics
+                .Include(t => t.User)
+                .ToListAsync();
+
+            TopicsViewModel topicsViewModel = new TopicsViewModel
+            {
+                TopicsIncludedRooms = topicsIncludedRooms,
+                TopicsIncludedUsers = topicsIncludedUsers
+            };
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_TopicsPartial", topicsViewModel) };
+
+            return Json(json);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -85,7 +104,8 @@ namespace FroumSite.Areas.Admin.Controllers
                 Title = topicToDelete.Title,
                 Description = topicToDelete.Description,
                 RoomName = topicToDelete.Room.Title,
-                UploaderName = topicToDelete.User.Name
+                UploaderName = topicToDelete.User.Name,
+                Id = id
             };
 
             return View(vm);
@@ -98,7 +118,7 @@ namespace FroumSite.Areas.Admin.Controllers
             var topicToEdit = await _context.Topics
                 .Include(r => r.Room)
                 .Include(u => u.User)
-                .FirstOrDefaultAsync(t=>t.Id == id);
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             var users = await _context.Users.ToListAsync();
             var rooms = await _context.Rooms.ToListAsync();
@@ -142,13 +162,44 @@ namespace FroumSite.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed()
         {
-            var topicToDelete = _context.Topics.Find(_topicIdToDelete);
+            try
+            {
+                var topicToDelete = _context.Topics
+                    .Include(p=>p.Posts)
+                    .FirstOrDefault(t=>t.Id == _topicIdToDelete);
 
-            _context.Topics.Remove(topicToDelete);
+                var hasAnyPosts = topicToDelete.Posts.Any();
 
-            await _context.SaveChangesAsync();
+                if (hasAnyPosts)
+                {
+                    var errorTag = "<h3 class=\"bg-danger text-white p-2 mb-2 mt-2 col-12\">" +
+                    "این تاپیک دارای پست هایی می باشد بنابراین نمی توان آنرا حذف نمود" +
+                    "</h3>";
+                    var jsonResult = new { isValid = false, error = errorTag };
 
-            return RedirectToAction("Topics", "Home");
+                    return Json(jsonResult);
+                }
+
+                _context.Topics.Remove(topicToDelete);
+
+                await _context.SaveChangesAsync();
+
+                var json = new { isValid = true };
+
+                return Json(json);
+            }
+            catch
+            {
+                var errorTag = "<h3 class=\"bg-danger text-white p-2 mb-2 mt-2 col-12\">" +
+                    "خطا!" +
+                    "</h3>";
+                var json = new { isValid = false, error = errorTag };
+
+                return Json(json);
+            }
+
+
+
         }
     }
 }

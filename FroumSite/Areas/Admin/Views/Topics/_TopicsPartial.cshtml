@@ -1,0 +1,46 @@
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.TopicsViewModel
+
+@{
+    Layout = null;
+}
+
+
+<table class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Title)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.Description)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.RoomName)</th>
+            <th scope="col">@Html.DisplayNameFor(model=>model.UploaderName)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TopicsIncludedRooms)
+        {
+            <tr class="table-secondary" id="@item.Id">
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.Room.Title</td>
+
+                @{
+                    var uploader = Model.TopicsIncludedUsers.Where(t => t.Id == item.Id)
+                    .FirstOrDefault()
+                    .User;
+
+                    var uploaderFullName = uploader.Name + " " + uploader.Family;
+                }
+
+                <td>
+                    @uploaderFullName
+                </td>
+
+                <td>
+                    <input class="btn btn-secondary btn-sm" onclick="showPopupModal('@Url.Action("Details","Topics",new {id = item.Id},Context.Request.Scheme)','جزییات تاپیک')" value="جزییات" type="button">
+                    <input class="btn btn-primary btn-sm" onclick="showPopupModal('@Url.Action("Edit","Topics",new {id = item.Id},Context.Request.Scheme)','ویرایش تاپیک')" value="ویرایش" type="button">
+                    <input class="btn btn-danger btn-sm" onclick="showPopupModal('@Url.Action("Delete","Topics",new {id = item.Id},Context.Request.Scheme)','حذف تاپیک')" value="حذف" type="button">
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

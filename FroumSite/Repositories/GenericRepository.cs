@@ -77,7 +77,7 @@ namespace FroumSite.Repositories
             }
         }
 
-        public async Task<string> SaveChangesAsync()
+        public string SaveChangesAsync()
         {
             try
             {

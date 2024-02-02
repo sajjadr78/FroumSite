@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "جزییات موضوع";
+    Layout = null;
 }
 
 <div>
@@ -13,8 +14,9 @@
     </label>
 
 
-    <a class="btn btn-success" asp-controller="Home" asp-action="Subjects">بازگشت</a>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">ویرایش</a>
-    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">حذف</a>
+    <input type="button" class="btn btn-success" data-dismiss="modal" value="بازگشت">
+    <input type="button" class="btn btn-primary" onclick="showPopupModal('@Url.Action("Edit","Subjects",new {id = Model.Id},Context.Request.Scheme)','ویرایش موضوع','true')" value="ویرایش">
+    <input type="button" class="btn btn-danger" onclick="showPopupModal('@Url.Action("Delete","Subjects",new {id = Model.Id},Context.Request.Scheme)','حذف موضوع','true')" value="حذف">
+
 </div>
 

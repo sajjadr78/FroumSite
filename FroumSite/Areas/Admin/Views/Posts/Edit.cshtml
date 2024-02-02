@@ -2,9 +2,10 @@
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = null;
 }
 
-<form class="col-4" asp-action="Save" method="post" >
+<form class="col-12" asp-action="Save" onsubmit="return jQueryAjaxPost(this,'posts-admin-panel')">
 
     <div class="form-group">
         <label asp-for="Caption" ></label>

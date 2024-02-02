@@ -1,14 +1,19 @@
 ﻿@using FroumSite.Utilities;
-@model ShowTopicAndSavePostViewModel
+@model PostViewModel
 
 @{
     Layout = null;
-    var postsOrderdByDate = Model.PostsOfCurrentTopic.OrderBy(p => p.UploadDate).ToList();
+    var postsOrderdByDate = Model.Posts.OrderBy(p => p.UploadDate).ToList();
+
+
+    var isUserAuthenticated = User.Identity.IsAuthenticated;
 }
+
 
 @foreach (var item in postsOrderdByDate)
 {
-    <div class="col-12 border row p-1 mb-3"  style="border-radius:20px">
+
+    <div class="col-12 border row p-1 mb-3" style="border-radius:20px">
         <div class="col-md-3" style="background-color:#fce4ec">
 
             @{
@@ -27,37 +32,47 @@
 
         </div>
         <div class="col-md-9">
-            <div>
 
+            <div>
                 @item.Caption
             </div>
 
 
-            <div class="text-right" id="LikePostButtonDiv">
+            <div class="text-right" id="@($"LikePostButtonDiv{item.Id}")">
                 @{
-
+                    int likeCountOfCurrentPost = Model.UserLikePosts
+                    .Where(u => u.PostId == item.Id)
+                    .Count();
                     LikePostViewModel likePostViewModel = new LikePostViewModel
                 {
-                    id = item.Id,
-                    UserLikePosts = Model.UserLikePosts,
-                    postLikeCount = item.LikeCount
+                    // UserLikePosts = Model.UserLikePosts,
+                    LikeCount = likeCountOfCurrentPost,
+                    Post = item
                 };
+
+                    if (isUserAuthenticated)
+                    {
+                        var userId = int.Parse(User
+                        .Claims
+                        .FirstOrDefault(x =>
+                        x.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?
+                        .Value);
+
+                        likePostViewModel.IsPostLikedByUser = Model.UserLikePosts
+                        .Any(u => u.UserId == userId && u.PostId == item.Id);
+                    }
+
                 }
                 @await Html.PartialAsync("_LikePostButton",likePostViewModel)
             </div>
 
-
-
-
-
-
-
             <div class="text-muted text-sm-right">
                 @item.UploadDate.ToShamsi()
             </div>
+
         </div>
 
-        @if (User.Identity.IsAuthenticated)
+        @if (isUserAuthenticated)
         {
 
             int userId = int.Parse(User
@@ -92,6 +107,28 @@
     </div>
     @* note : hr tag doesnt work in div *@
 }
+
+
+
+<div class="col-12 border row p-1 mb-3" style="border-radius:20px">
+    <form class="col-12" asp-action="SavePost" method="post" onsubmit="return ajaxSavePost(this)">
+
+
+        <div class=" col-12">
+            <textarea id="txtPost" placeholder="نظر شما" class="col-12 border-white" asp-for="PostCaption" cols="12" rows="3">
+
+            </textarea>
+            <span class="text-danger" asp-validation-for="PostCaption"></span>
+        </div>
+
+        <div class="col-4 border-white">
+
+            <input type="submit" value="ثبت" class="btn btn-success" />
+        </div>
+
+    </form>
+</div>
+
 
 @section Scripts{
     <script src="~/js/Custom.js"></script>

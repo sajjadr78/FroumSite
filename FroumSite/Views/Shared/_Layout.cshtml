@@ -22,7 +22,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+                    <ul class="navbar-nav flex-grow-1 justify-content-end" id="nav">
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li>
@@ -36,13 +36,14 @@
 
                             }
                             <li>
-                                <a class="btn btn-danger text-white mr-3 ml-3" style=" float: left; " asp-area="" asp-controller="Account" asp-action="Logout">خروج از حساب کاربری</a>
+                                <a class="btn btn-danger text-white mr-3 ml-3" style=" float: left; "  onclick="signOut()">خروج از حساب کاربری</a>
                             </li>
 
 
                         }
                         else
                         {
+                            
                             <li>
                                 <a onclick="showPopupModal('@Url.Action("Login","Account",null,protocol:Context.Request.Scheme)','ورود به سایت')"
                                    class="btn btn-primary text-white mr-3 ml-3"

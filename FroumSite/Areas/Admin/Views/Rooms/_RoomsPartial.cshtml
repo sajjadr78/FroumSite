@@ -1,0 +1,34 @@
+﻿@model FroumSite.Areas.Admin.Models.ViewModels.RoomsViewModel
+
+
+<table class="table table-bordered table-hover ">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RoomTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubjectTitle)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Rooms)
+        {
+            <tr class="table-secondary" id="@item.Id">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subject.Title)
+                </td>
+                <td>
+                    <input class="btn btn-secondary btn-sm" onclick="showPopupModal('@Url.Action("Details","Rooms",new {id = item.Id},Context.Request.Scheme)','جزییات تالار')" value="جزییات" type="button">
+                    <input class="btn btn-primary btn-sm" onclick="showPopupModal('@Url.Action("Edit","Rooms",new {id = item.Id},Context.Request.Scheme)','ویرایش تالار')" value="ویرایش" type="button">
+                    <input class="btn btn-danger btn-sm" onclick="showPopupModal('@Url.Action("Delete","Rooms",new {id = item.Id},Context.Request.Scheme)','حذف تالار')" value="حذف" type="button">
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

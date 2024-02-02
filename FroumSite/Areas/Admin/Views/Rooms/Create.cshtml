@@ -2,13 +2,14 @@
 
 @{
     ViewData["Title"] = "افزودن پست جدید";
+    Layout = null;
 }
 
-<form asp-action="Save" method="post">
+<form class="col-md-12" asp-action="Save" method="post" onsubmit="return jQueryAjaxPost(this,'rooms-admin-panel')">
 
     <div class="form-group">
         <label asp-for="RoomTitle"></label>
-        <input asp-for="RoomTitle" />
+        <input asp-for="RoomTitle" class="form-control" />
         <span asp-validation-for="RoomTitle"></span>
     </div>
     <div class="form-group">
@@ -23,7 +24,7 @@
     </div>
 
     <div class="form-group">
-        <input class="btn btn-success" type="submit" value="ذخیره" />
+        <input class="btn btn-success btn-block" type="submit" value="ذخیره" />
     </div>
 
 </form>

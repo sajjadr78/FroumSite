@@ -1,6 +1,7 @@
 ﻿using FroumSite.Areas.Admin.Models.ViewModels;
 using FroumSite.Data;
 using FroumSite.Models;
+using FroumSite.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -67,7 +68,23 @@ namespace FroumSite.Areas.Admin.Controllers
 
             _postIdToEdit = 0;
 
-            return RedirectToAction("Posts", "Home");
+            var postsIncludedTopic = await _context.Posts
+                .Include(p => p.Topic)
+                .ToListAsync();
+
+            var postsIncludedUser = await _context.Posts
+                .Include(p => p.User)
+                .ToListAsync();
+
+            PostsViewModel postsViewModel = new PostsViewModel
+            {
+                PostsIncludedTopic = postsIncludedTopic,
+                PostsIncludedUser = postsIncludedTopic
+            };
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_PostsPartial", postsViewModel) };
+
+            return Json(json);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -89,7 +106,8 @@ namespace FroumSite.Areas.Admin.Controllers
                 UploadDate = postToDelete.UploadDate,
                 UserId = postToDelete.UserId,
                 TopicTitle = postToDelete.Topic.Title,
-                UploaderName = postToDelete.User.Name
+                UploaderName = postToDelete.User.Name,
+                Id = id
             };
 
             return View(vm);
@@ -148,7 +166,23 @@ namespace FroumSite.Areas.Admin.Controllers
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Posts", "Home");
+            var postsIncludedTopic = await _context.Posts
+                .Include(p => p.Topic)
+                .ToListAsync();
+
+            var postsIncludedUser = await _context.Posts
+                .Include(p => p.User)
+                .ToListAsync();
+
+            PostsViewModel postsViewModel = new PostsViewModel
+            {
+                PostsIncludedTopic = postsIncludedTopic,
+                PostsIncludedUser = postsIncludedTopic
+            };
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_PostsPartial", postsViewModel) };
+
+            return Json(json);
         }
     }
 }

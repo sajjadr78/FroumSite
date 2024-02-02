@@ -1,6 +1,7 @@
 ﻿using FroumSite.Areas.Admin.Models.ViewModels;
 using FroumSite.Data;
 using FroumSite.Models;
+using FroumSite.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -31,8 +32,6 @@ namespace FroumSite.Areas.Admin.Controllers
         {
             if (_subjectIdToEdit == 0)
             {
-
-
                 _context.Subjects.Add(subject);
             }
             else
@@ -51,7 +50,11 @@ namespace FroumSite.Areas.Admin.Controllers
 
             _subjectIdToEdit = 0;
 
-            return RedirectToAction("Subjects", "Home");
+            var subjects = await _context.Subjects.ToListAsync();
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_SubjectsPartial", subjects) };
+
+            return Json(json);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -63,7 +66,7 @@ namespace FroumSite.Areas.Admin.Controllers
 
 
 
-            
+
 
             return View(subjectToDelete);
         }
@@ -74,7 +77,7 @@ namespace FroumSite.Areas.Admin.Controllers
 
             var subjectToEdit = _context.Subjects.Find(id);
 
-            
+
             return View(subjectToEdit);
         }
 
@@ -84,20 +87,50 @@ namespace FroumSite.Areas.Admin.Controllers
                 .FirstOrDefault(s => s.Id == id);
 
 
-            
+
             return View(subjectToShowDetails);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed()
         {
-            var subjectToDelete = _context.Subjects.Find(_subjectIdToDelete);
+            try
+            {
+                var subjectToDelete = _context.Subjects
+                .Include(r => r.Rooms)
+                .FirstOrDefault(s => s.Id == _subjectIdToDelete);
 
-            _context.Subjects.Remove(subjectToDelete);
+                var hasAnyRooms = subjectToDelete.Rooms.Any();
 
-            await _context.SaveChangesAsync();
+                if (hasAnyRooms)
+                {
+                    var errorTag = "<h3 class=\"bg-danger text-white p-2 mb-2 mt-2 col-12\">" +
+                        "این موضوع دارای تالار هایی می باشد بنابراین نمی توان آنرا حذف نمود" +
+                        "</h3>";
+                    var jsonResult = new { isValid = false, error = errorTag };
 
-            return RedirectToAction("Subjects", "Home");
+                    return Json(jsonResult);
+                }
+
+                _context.Subjects.Remove(subjectToDelete);
+
+                await _context.SaveChangesAsync();
+
+                var json = new { isValid = true };
+
+                return Json(json);
+            }
+            catch
+            {
+                var errorTag = "<h3 class=\"bg-danger text-white p-2 mb-2 mt-2 col-12\">" +
+                        "خطا!" +
+                        "</h3>";
+                var jsonResult = new { isValid = false, error = errorTag };
+
+                return Json(jsonResult);
+            }
+
+            
         }
     }
 }

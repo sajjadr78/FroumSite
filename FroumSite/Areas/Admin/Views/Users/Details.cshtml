@@ -4,6 +4,7 @@
 
 @{
     ViewData["Title"] = "جزییات کاربر";
+    Layout = null;
 }
 
 <div>
@@ -48,8 +49,8 @@
 
 
 
-    <a class="btn btn-success" asp-controller="Home" asp-action="Users">بازگشت</a>
-    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id">ویرایش</a>
-    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id">حذف</a>
+    <input type="button" class="btn btn-success" data-dismiss="modal" value="بازگشت">
+    <input type="button" class="btn btn-primary" onclick="showPopupModal('@Url.Action("Edit","Users",new {id = Model.Id},Context.Request.Scheme)','ویرایش کاربر','true')" value="ویرایش">
+    <input type="button" class="btn btn-danger" onclick="showPopupModal('@Url.Action("Delete","Users",new {id = Model.Id},Context.Request.Scheme)','حذف کاربر','true')" value="حذف">
 </div>
 

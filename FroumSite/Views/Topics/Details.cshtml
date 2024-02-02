@@ -27,11 +27,11 @@
 
         </a>
         <div>
-            @($"تاریخ عضویت : {Model.TopicIncludedUploader.User.RegisterDate.ToShamsi()}")
+            @($"تاریخ عضویت : {uploader.RegisterDate.ToShamsi()}")
         </div>
 
         <div>
-            @($"تعداد پست های کاربر : {Model.PostsCountUploadedByUser} ")
+            @($"تعداد پست های کاربر : {uploader.SharedPosts.Count} ")
         </div>
     </div>
     <div class="col-9 p-3">
@@ -51,14 +51,8 @@
         </div>
         <hr />
         <div id="LikeButton" >
-            @{
-                LikeViewModel likeViewModel = new LikeViewModel
-                {
-                    IsLiked = Model.IsTopicLikedByUser,
-                    LikeCount = Model.TopicIncludedUploader.LikeCount
-                };
-            }
-            @await Html.PartialAsync("_TopicLikeButton",likeViewModel)
+            
+            @await Html.PartialAsync("_TopicLikeButton",Model.LikeViewModel)
 
         </div>
 
@@ -71,12 +65,12 @@
         {
 
             int userId = int.Parse(User
-            .Claims
-            .FirstOrDefault(x =>
-            x.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?
-            .Value);
-            var topicId = Model.TopicIncludedUploader.Id;
-            //bool isTopicCreatedByUser = userId == item.UserId;
+                .Claims
+                .FirstOrDefault(x =>
+                x.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?
+                .Value);
+
+                var topicId = Model.TopicIncludedUploader.Id;
 
             if (userId == Model.TopicIncludedUploader.UserId)
             {
@@ -93,28 +87,14 @@
 
 
 <div id="view-all-posts">
-    @await Html.PartialAsync("_ViewAllPosts",Model)
+    @{
+        var showPostViewModel = Model.ShowPostViewModel;
+    }
+    @await Html.PartialAsync("_ViewAllPosts",Model.ShowPostViewModel)
 </div>
 
 
-<div class="col-12 border row p-1 mb-3" style="border-radius:20px">
-    <form class="col-12" asp-action="SavePost" method="post" onsubmit="return ajaxSavePost(this)">
 
-
-        <div class=" col-12">
-            <textarea id="txtPost" placeholder="نظر شما" class="col-12 border-white" asp-for="Caption" cols="12" rows="3">
-                
-            </textarea>
-            <span class="text-danger" asp-validation-for="Caption"></span>
-        </div>
-
-        <div class="col-4 border-white">
-
-            <input type="submit" value="ثبت" class="btn btn-success" />
-        </div>
-
-    </form>
-</div>
 
 
 

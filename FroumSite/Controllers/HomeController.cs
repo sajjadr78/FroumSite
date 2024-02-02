@@ -5,6 +5,7 @@ using FroumSite.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,22 +18,38 @@ namespace FroumSite.Controllers
         private readonly IGenericRepository<Subject> _subjectRepo;
         private readonly IGenericRepository<Room> _roomRepo;
         private readonly IGenericRepository<Topic> _topicRepo;
+        private readonly IGenericRepository<User> _userRepo;
         private readonly int subjectId = 0;
 
         public HomeController(ILogger<HomeController> logger, 
             IGenericRepository<Subject> subjectRepo,
             IGenericRepository<Room> roomRepo,
-            IGenericRepository<Topic> topicRepo)
+            IGenericRepository<Topic> topicRepo,
+            IGenericRepository<User> userRepo)
         {
             _logger = logger;
             _subjectRepo = subjectRepo;
             _roomRepo = roomRepo;
             _topicRepo = topicRepo;
+            _userRepo = userRepo;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _subjectRepo.GetAll().ToListAsync());
+            var subjects = await _subjectRepo.GetAll().ToListAsync();
+
+            return View(subjects);
+        }
+
+        public async Task<IActionResult> IsFirstUser()
+        {
+           var urlOfButton= Url.Action("Register", "Account", null, protocol: Request.Scheme);
+
+            var isAnyUsersExists = await _userRepo.GetAll().AnyAsync();
+
+            var json = new { URL_OfButton = urlOfButton , IsAnyUsersExists = isAnyUsersExists };
+
+            return Json(json);
         }
 
         public async Task<IActionResult> SubjectDetails(int? id)

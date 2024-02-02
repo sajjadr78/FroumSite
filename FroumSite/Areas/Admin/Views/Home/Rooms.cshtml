@@ -6,37 +6,20 @@
 
 <h1 class="mb-3">تالار ها</h1>
 
-<p>
-    <a asp-action="Create" asp-controller="Rooms" class="btn btn-success mb-3">افزودن تالار جدید</a>
-</p>
-<table class="table table-bordered table-hover ">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RoomTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SubjectTitle)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Rooms)
-        {
-            <tr class="table-secondary">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Subject.Title)
-                </td>
-                <td>
-                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-controller="Rooms" asp-route-id="@item.Id">جزییات</a>
-                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-controller="Rooms" asp-route-id="@item.Id">ویرایش</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-controller="Rooms" asp-route-id="@item.Id">حذف</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<a onclick="showPopupModal('@Url.Action("Create","Rooms")','افزودن تالار جدید')"
+   class="btn btn-primary m-3 text-white">
+    افزودن تالار جدید
+</a>
+
+<div id="rooms-admin-panel">
+    @await Html.PartialAsync("../Rooms/_RoomsPartial.cshtml",Model)
+</div>
+
+
+
+
+@section Scripts{
+    <script src="~/js/Custom.js">
+
+    </script>
+}

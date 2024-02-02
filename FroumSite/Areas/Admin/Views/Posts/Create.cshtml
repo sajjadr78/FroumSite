@@ -2,13 +2,14 @@
 
 @{
     ViewData["Title"] = "افزودن پست جدید";
+    Layout = null;
 }
 
-<form asp-action="Save" method="post">
+<form class="col-md-12" asp-action="Save" method="post" onsubmit="return jQueryAjaxPost(this,'posts-admin-panel')">
 
     <div class="form-group">
         <label asp-for="Caption"></label>
-        <input asp-for="Caption" />
+        <input asp-for="Caption" class="form-control"/>
         <span asp-validation-for="Caption"></span>
     </div>
     <div class="form-group">
@@ -34,7 +35,13 @@
     </div>
 
     <div class="form-group">
-        <input class="btn btn-success" type="submit" value="ذخیره" />
+        <input class="btn btn-success btn-block" type="submit" value="ذخیره" />
     </div>
 
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

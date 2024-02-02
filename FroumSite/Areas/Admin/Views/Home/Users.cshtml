@@ -1,4 +1,4 @@
-﻿@using FroumSite.Utilities;
+﻿
 @model IEnumerable<FroumSite.Models.User>
 
 @{
@@ -7,64 +7,17 @@
 
 <h1 class="mb-3">کاربران</h1>
 
-<a asp-action="Create" asp-controller="Users" class="btn btn-info mb-3">افزودن کاربر جدید</a>
+@* <a asp-action="Create" asp-controller="Users" class="btn btn-info mb-3">افزودن کاربر جدید</a>
+ *@
+<a onclick="showPopupModal('@Url.Action("Create","Users")','افزودن کاربر جدید')"
+   class="btn btn-primary m-3 text-white">
+    افزودن کاربر جدید
+</a>
 
-<table class="table table-bordered table-hover ">
-    <thead>
-        <tr>
-            <th scope="col">@Html.DisplayNameFor(model=>model.Name)</th>
-            <th scope="col">@Html.DisplayNameFor(model=>model.Family)</th>
-            <th scope="col">@Html.DisplayNameFor(model=>model.Birthday)</th>
-            <th scope="col">@Html.DisplayNameFor(model=>model.Sex)</th>
-            <th scope="col">@Html.DisplayNameFor(model=>model.RegisterDate)</th>
-            <th scope="col">@Html.DisplayNameFor(model=>model.PhoneNumber)</th>
-            <th scope="col">@Html.DisplayNameFor(model=>model.IsAdmin)</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="table-secondary">
-                <td>@item.Name</td>
-                <td>@item.Family</td>
-                <td>@item.Birthday.ToShamsi()</td>
-
-                @if (item.Sex == FroumSite.Models.Enums.Sex.Male)
-                {
-                    <td>
-                        مرد
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        زن
-                    </td>
-                }
-
-                <td>@item.RegisterDate.ToShamsi()</td>
-                <td>@item.PhoneNumber</td>
-                @if (item.IsAdmin)
-                {
-                    <td>
-                        ✅
-                    </td>
-                }
-                else
-                {
-                    <td>
-                        ✖
-                    </td>
-                }
-
-                <td>
-                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-controller="Users" asp-route-id="@item.Id">جزییات</a>
-                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-controller="Users" asp-route-id="@item.Id">ویرایش</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-controller="Users" asp-route-id="@item.Id">حذف</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
+<div id="users-admin-panel">
+    @await Html.PartialAsync("../Users/_UsersPartial.cshtml",Model)
+</div>
+ 
+@section Scripts{
+    <script src="~/js/Custom.js"></script>
+}

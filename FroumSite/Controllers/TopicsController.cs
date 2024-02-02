@@ -67,6 +67,8 @@ namespace FroumSite.Controllers
         {
             TopicViewModel vm = await InitialViewModel(Id);
 
+            
+
             return View(vm);
         }
 
@@ -96,18 +98,34 @@ namespace FroumSite.Controllers
         // GET: Topics/Details/5
         public async Task<IActionResult> Details(int id)
         {
-
             _topicId = id;
 
 
+            ShowTopicAndSavePostViewModel vm = await InitShowTopicViewModel();
 
-            var topicIncludedUsers = await _topicRepo
-                .GetAll()
+            
+            //if (topicIncludedUsersThenIncludedSharedPosts == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return View(vm);
+        }
+
+        public async Task<ShowTopicAndSavePostViewModel> InitShowTopicViewModel()
+        {
+            bool isLikedByUser = false;
+
+
+            if (User.Identity.IsAuthenticated)
+                isLikedByUser = await CheckIsLikedByUser();
+            
+
+            var topicIncludedUsersThenIncludedSharedPosts = await _topicRepo
+                .GetAll(m => m.Id == _topicId)
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.Id == _topicId);
-
-
-
+                .ThenInclude(u => u.SharedPosts)
+                .FirstOrDefaultAsync();
 
             var postsOfCurrentTopic = await _postRepo
                 .GetAll(p => p.TopicId == _topicId)
@@ -123,47 +141,49 @@ namespace FroumSite.Controllers
                 .Include(s => s.Post)
                 .ToListAsync();
 
-            var currentUserId = int.Parse(User.Claims
-                .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
-                .Value);
 
-            var postsCountUploadedByUser = _userRepo.GetAll()
-                .Include(p => p.SharedPosts)
-                .FirstOrDefault(u => u.Id == currentUserId)
-                .SharedPosts
-                .Count;
 
-            bool isLikedByUser = false;
 
-            if (User.Identity.IsAuthenticated)
+            LikeViewModel likeViewModel = new LikeViewModel
             {
-                var userId = int.Parse(
-                    User.Claims
-                        .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
-                        .Value);
+                IsLiked = isLikedByUser,
+                LikeCount = topicIncludedUsersThenIncludedSharedPosts.LikeCount
+            };
 
-                isLikedByUser = await _context
-                                        .UserLikeTopics
-                                        .AnyAsync(u => u.TopicId == id &&
-                                                       u.UserId == userId);
-            }
+
+
+            PostViewModel showPostViewModel = new PostViewModel
+            {
+                Posts = postsOfCurrentTopic,
+                UserLikePosts = userLikePosts
+            };
 
             ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
             {
-                TopicIncludedUploader = topicIncludedUsers,
+                TopicIncludedUploader = topicIncludedUsersThenIncludedSharedPosts,
                 PostsOfCurrentTopic = postsOfCurrentTopic,
-                PostsCountUploadedByUser = postsCountUploadedByUser,
                 IsTopicLikedByUser = isLikedByUser,
                 UserLikePosts = userLikePosts,
-                UserLikeTopics = userLikeTopics
+                UserLikeTopics = userLikeTopics,
+                LikeViewModel = likeViewModel,
+                ShowPostViewModel = showPostViewModel
             };
 
-            if (postsOfCurrentTopic == null)
-            {
-                return NotFound();
-            }
+            return vm;
+        }
 
-            return View(vm);
+        private async Task<bool> CheckIsLikedByUser()
+        {
+            var userId = int.Parse(
+                                User.Claims
+                                    .FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?
+                                    .Value);
+
+            bool isLikedByUser = await _context
+                                     .UserLikeTopics
+                                     .AnyAsync(u => u.TopicId == _topicId &&
+                                                    u.UserId == userId);
+            return isLikedByUser;
         }
 
         public async Task<IActionResult> EditPostByUser(int id)
@@ -239,24 +259,27 @@ namespace FroumSite.Controllers
                     UserId = userId
                 };
                 _context.UserLikePosts.Add(ulp);
-                post.LikeCount++;
             }
             else
             {
                 _context.UserLikePosts.Remove(userLikePost);
-                post.LikeCount--;
             }
             await _context.SaveChangesAsync();
 
-            var userLikePosts = await _context.UserLikePosts.ToListAsync();
+            var isPostLikedByUser = await _userLikePostRepo
+                .GetAll(u => u.UserId == userId && u.PostId == id)
+                .AnyAsync();
 
-            post = _context.Posts.Find(id);
+
+            int likeCountOfCurrentPost = _userLikePostRepo
+                        .GetAll(u => u.PostId == id)
+                        .Count();
 
             LikePostViewModel likePostViewModel = new LikePostViewModel
             {
-                id = id,
-                UserLikePosts = userLikePosts,
-                postLikeCount = post.LikeCount
+                Post = post,
+                IsPostLikedByUser = isPostLikedByUser,
+                LikeCount = likeCountOfCurrentPost
             };
 
             var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_LikePostButton", likePostViewModel) };
@@ -267,7 +290,7 @@ namespace FroumSite.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> SavePost(ShowTopicAndSavePostViewModel vm)
+        public async Task<IActionResult> SavePost(PostViewModel vm)
         {
 
             int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
@@ -275,7 +298,7 @@ namespace FroumSite.Controllers
 
             Post post = new Post
             {
-                Caption = vm.Caption,
+                Caption = vm.PostCaption,
                 LikeCount = 0,
                 TopicId = _topicId,
                 UploadDate = DateTime.Now,
@@ -285,22 +308,26 @@ namespace FroumSite.Controllers
             _context.Posts.Add(post);
             var result = await _context.SaveChangesAsync();
 
-
-
             var postsOfCurrentTopic = await _postRepo
                 .GetAll(p => p.TopicId == _topicId)
                 .Include(u => u.User)
                 .ToListAsync();
 
-            
-
-            vm.PostsOfCurrentTopic = postsOfCurrentTopic;
-            vm.UserLikePosts = _context.UserLikePosts
-                .Include(s => s.Post)
-                .Where(u => u.Post.TopicId == _topicId).ToList();
+            var userLikePosts = await _userLikePostRepo
+                            .GetAll(u => u.Post.TopicId == _topicId)
+                            .Include(s => s.Post)
+                            .ToListAsync();
 
 
-            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", vm) });
+
+            vm.Posts = postsOfCurrentTopic;
+            vm.UserLikePosts = userLikePosts;
+
+
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", vm) };
+
+            return Json(json);
 
         }
 
@@ -310,7 +337,7 @@ namespace FroumSite.Controllers
             var postToEdit = await _postRepo.GetByIdAsync(id);
 
             postToEdit.Caption = editedPost.Caption;
-            await _postRepo.SaveChangesAsync();
+            _postRepo.SaveChangesAsync();
 
 
 
@@ -324,11 +351,15 @@ namespace FroumSite.Controllers
                 .Include(s => s.Post)
                 .ToListAsync();
 
-            ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
+
+
+            PostViewModel vm = new PostViewModel
             {
-                UserLikePosts = userLikePosts,
-                PostsOfCurrentTopic = postsOfCurrentTopic
+                Posts = postsOfCurrentTopic,
+                UserLikePosts = userLikePosts
             };
+
+
             var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", vm) };
             return Json(json);
         }
@@ -337,6 +368,8 @@ namespace FroumSite.Controllers
         [Authorize]
         public IActionResult Create(int id)
         {
+
+
             CreateTopicViewModel vm = new CreateTopicViewModel();
             _roomId = id;
 
@@ -351,10 +384,13 @@ namespace FroumSite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoomId,UserId,Title,Description")] CreateTopicViewModel vm)
         {
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    
+
                     int userId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value);
                     string description = vm.Description;
                     string title = vm.Title;
@@ -378,7 +414,7 @@ namespace FroumSite.Controllers
                     var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllTopicsOfRoom", initailizedViewModel) };
                     return Json(json);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Create", vm) });
 
@@ -482,8 +518,9 @@ namespace FroumSite.Controllers
 
                 return Json(json);
             }
-            catch
+            catch (Exception e)
             {
+
                 var json = new { isValid = false, html = Helper.RenderRazorViewToString(this, "_DeleteTopicByUser", vm) };
 
                 return Json(json);
@@ -556,30 +593,29 @@ namespace FroumSite.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmDeletePost()
         {
-            var postToDelete = await _context.Posts
-                .FirstOrDefaultAsync(p => p.Id == _postIdToDelete);
+            var postToDelete = await _postRepo.GetByIdAsync(_postIdToDelete);
 
-            _context.Posts.Remove(postToDelete);
-            await _context.SaveChangesAsync();
+            _postRepo.Delete(postToDelete);
+            _postRepo.SaveChangesAsync();
 
             var postsOfCurrentTopic = await _postRepo
-                .GetAll(p => p.TopicId == _topicId)
-                .Include(u => u.User)
-                .ToListAsync();
-
+                            .GetAll(p => p.TopicId == _topicId)
+                            .Include(u => u.User)
+                            .ToListAsync();
 
             var userLikePosts = await _userLikePostRepo
-                .GetAll(u => u.Post.TopicId == _topicId)
-                .Include(s => s.Post)
-                .ToListAsync();
+                            .GetAll(u => u.Post.TopicId == _topicId)
+                            .Include(s => s.Post)
+                            .ToListAsync();
 
-            ShowTopicAndSavePostViewModel vm = new ShowTopicAndSavePostViewModel
+            PostViewModel postViewModel = new PostViewModel
             {
-                UserLikePosts = userLikePosts,
-                PostsOfCurrentTopic = postsOfCurrentTopic
+                Posts = postsOfCurrentTopic,
+                UserLikePosts = userLikePosts
             };
 
-            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", vm) };
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_ViewAllPosts", postViewModel) };
             return Json(json);
         }
 

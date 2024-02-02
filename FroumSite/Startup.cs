@@ -56,6 +56,7 @@ namespace FroumSite
             services.AddScoped<IGenericRepository<Subject>, GenericRepository<Subject>>();
             services.AddScoped<IGenericRepository<Room>, GenericRepository<Room>>();
             services.AddScoped<IGenericRepository<Topic>, GenericRepository<Topic>>();
+            services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 
             //services.AddScoped<IGenericRepository<UserLikePost>, GenericRepository<UserLikePost>>();
             //services.AddScoped<IGenericRepository<UserLikeTopic>, GenericRepository<UserLikeTopic>>();
@@ -99,7 +100,7 @@ namespace FroumSite
             app.Use(async (context, next) =>
             {
                 // Do work that doesn't write to the Response.
-                if (context.Request.Path.StartsWithSegments("/Admin"))
+                if (context.Request.Path.StartsWithSegments("/Boss"))
                 {
                     if (!context.User.Identity.IsAuthenticated)
                     {

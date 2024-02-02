@@ -1,6 +1,7 @@
 ﻿using FroumSite.Areas.Admin.Models.ViewModels;
 using FroumSite.Data;
 using FroumSite.Models;
+using FroumSite.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -59,7 +60,18 @@ namespace FroumSite.Areas.Admin.Controllers
 
             _roomIdToEdit = 0;
 
-            return RedirectToAction("Rooms", "Home");
+            var rooms = await _context.Rooms
+                .Include(r => r.Subject)
+                .ToListAsync();
+
+            RoomsViewModel roomsViewModel = new RoomsViewModel
+            {
+                Rooms = rooms
+            };
+
+            var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_RoomsPartial", roomsViewModel) };
+
+            return Json(json);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -75,7 +87,8 @@ namespace FroumSite.Areas.Admin.Controllers
             RoomsViewModel vm = new RoomsViewModel
             {
                 RoomTitle = roomToDelete.Title,
-                SubjectTitle = roomToDelete.Subject.Title
+                SubjectTitle = roomToDelete.Subject.Title,
+                Id = id
             };
 
             return View(vm);
@@ -92,7 +105,8 @@ namespace FroumSite.Areas.Admin.Controllers
             {
                 SubjectId = roomToEdit.SubjectId,
                 RoomTitle = roomToEdit.Title,
-                Subjects = subjects
+                Subjects = subjects,
+                Id = _roomIdToEdit
             };
 
             return View(vm);
@@ -104,7 +118,7 @@ namespace FroumSite.Areas.Admin.Controllers
                 .Include(u => u.Subject)
                 .FirstOrDefault(o => o.Id == id);
 
-            
+
             RoomsViewModel vm = new RoomsViewModel
             {
                 Id = id,
@@ -118,13 +132,50 @@ namespace FroumSite.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed()
         {
-            var roomToDelete = _context.Rooms.Find(_roomIdToDelete);
+            try
+            {
+                var roomToDelete = _context.Rooms
+                    .Include(t => t.Topics)
+                    .FirstOrDefault(r => r.Id == _roomIdToDelete);
 
-            _context.Rooms.Remove(roomToDelete);
+                var hasAnyTopics = roomToDelete.Topics.Any();
 
-            await _context.SaveChangesAsync();
+                if (hasAnyTopics)
+                {
+                    var errorTag = "<h3 class=\"bg-danger text-white p-2 mb-2 mt-2 col-12\">" +
+                    "این تالار دارای تاپیک هایی می باشد بنابراین نمی توان آنرا حذف نمود" +
+                    "</h3>";
+                    var jsonResult = new { isValid = false, error = errorTag };
 
-            return RedirectToAction("Rooms", "Home");
+                    return Json(jsonResult);
+                }
+
+                _context.Rooms.Remove(roomToDelete);
+
+                await _context.SaveChangesAsync();
+
+                var rooms = await _context.Rooms
+                    .Include(r => r.Subject)
+                    .ToListAsync();
+
+                RoomsViewModel roomsViewModel = new RoomsViewModel
+                {
+                    Rooms = rooms
+                };
+
+                var json = new { isValid = true, html = Helper.RenderRazorViewToString(this, "_RoomsPartial", roomsViewModel) };
+
+                return Json(json);
+            }
+            catch
+            {
+                var errorTag = "<h3 class=\"bg-danger text-white p-2 mb-2 mt-2 col-12\">" +
+                    "خطا!" +
+                    "</h3>";
+                var json = new { isValid = false, error = errorTag };
+
+                return Json(json);
+            }
         }
     }
 }

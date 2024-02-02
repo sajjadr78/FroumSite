@@ -4,8 +4,8 @@ namespace FroumSite.Models.ViewModels
 {
     public class LikePostViewModel
     {
-        public int id { get; set; }
-        public List<UserLikePost> UserLikePosts { get; set; }
-        public int postLikeCount { get; set; }
+        public Post Post { get; set; }
+        public bool IsPostLikedByUser { get; set; } = false;
+        public int LikeCount { get; set; }
     }
 }

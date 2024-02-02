@@ -1,14 +1,14 @@
-﻿@model Subject
+﻿ @model Subject
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = null;
 }
 
-<form asp-action="Save" method="post">
+<form class="col-12" asp-action="Save" onsubmit="return jQueryAjaxPost(this,'subjects-admin-panel')">
 
     <div class="form-group">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" />
+        @Html.DisplayNameFor(model=>model.Title) : <input asp-for="Title" class="form-control"/>
         <span asp-validation-for="Title"></span>
     </div>
 

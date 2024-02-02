@@ -50,11 +50,12 @@ namespace FroumSite.Models.ViewModels
         [Display(Name = "تکرار کلمه عبور")]
         public string RePassword { get; set; }
 
+        [Display(Name="ادمین باشد؟")]
         public bool IsAdmin { get; set; }
 
         [Display(Name = "تاریخ ثبت نام")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید ")]
-        public DateTime RegisterDate { get; internal set; }
+        public DateTime RegisterDate { get; set; }
     }
 
     public class LoginViewModel

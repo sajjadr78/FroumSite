@@ -2,9 +2,10 @@
 @model User
 @{
     ViewData["Title"] = "حذف کاربر";
+    Layout = null;
 }
 
-<form method="post" asp-action="DeleteConfirmed">
+<form method="post" asp-action="DeleteConfirmed" onsubmit="return DeleteEntityByAdmin(this,'users-admin-panel',@Model.Id)">
 
     <label class=" form-control">
         @Html.DisplayNameFor(model=>model.Name) : @Html.DisplayFor(model=>model.Name)
@@ -42,8 +43,8 @@
         @Html.DisplayNameFor(model=>model.Birthday) : @Model.Birthday.ToShamsi()
     </label>
 
-    <h3 class="bg-danger text-white p-2 mb-2 mt-2 col-6">
-        آیا می خواهید کاربر بالا حذف شود ؟
+    <h3 class="bg-danger text-white p-2 mb-2 mt-2 col-12">
+        آیا می خواهید کاربر با مشخصات بالا حذف شود ؟
     </h3>
 
     <input type="submit" class="btn btn-danger" value="بله" />
